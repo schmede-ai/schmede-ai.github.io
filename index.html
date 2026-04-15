@@ -91,6 +91,13 @@
     border-radius: 3px;
     color: var(--ink-dim);
     background: var(--bg-2);
+    text-decoration: none;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  a.partner-badge:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    opacity: 1;
   }
   .partner-badge.label { color: var(--accent-2); border-color: var(--accent-2); }
 
@@ -466,11 +473,11 @@
     </div>
     <div class="partners">
       <span class="partner-badge label">Creative Partner</span>
-      <span class="partner-badge">Vidu</span>
-      <span class="partner-badge">Veespark</span>
-      <span class="partner-badge">Floyo</span>
-      <span class="partner-badge">Pollo</span>
-      <span class="partner-badge">Slop.Club</span>
+      <a class="partner-badge" href="https://www.vidu.com/" target="_blank" rel="noopener">Vidu</a>
+      <a class="partner-badge" href="https://veespark.com/" target="_blank" rel="noopener">Veespark</a>
+      <a class="partner-badge" href="https://www.floyo.ai/" target="_blank" rel="noopener">Floyo</a>
+      <a class="partner-badge" href="https://pollo.ai/" target="_blank" rel="noopener">Pollo</a>
+      <a class="partner-badge" href="https://slop.club/" target="_blank" rel="noopener">Slop.Club</a>
     </div>
   </div>
 </header>
