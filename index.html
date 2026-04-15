@@ -897,19 +897,36 @@
   (async function loadCivitaiStats() {
     const username = 'schmede';
     const statusEl = document.getElementById('stats-status');
-    const CACHE_KEY = 'schmede_civitai_stats_v6';
+    const CACHE_KEY = 'schmede_civitai_stats_v7';
     // civitai.red returns full data (images, articles); civitai.com's public API strips
     // cover media and 404s on /articles. Use .red as the data source, link to .com.
     const HOSTS = ['https://civitai.red', 'https://civitai.com'];
     const LINK_BASE = 'https://civitai.com';
 
-    // Manual snapshots (public API doesn't expose user-level follower/generation totals)
-    // Last updated: 2026-04-15
+    // Manual snapshots. Public API doesn't expose:
+    //  - user-level follower / generation totals
+    //  - articles (/api/v1/articles 404s; /api/trpc has no CORS header from github.io)
+    // Update these when the profile moves meaningfully. Last updated: 2026-04-15.
     const MANUAL = {
       followers: 13400,
       generations: 296100,
+      articleCount: 28,
+      articleViews: 27026,
+      articleLikes: 637,
       asOf: 'Apr 2026'
     };
+
+    // Hand-picked top articles (sorted by views) — covers resolved via Civitai CDN.
+    const BAKED_ARTICLES = [
+      { id: 9775,  title: 'Training Flux LoRas for Stubborn Concepts', views: 6899, likes: 47, cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/9aecf308-0bed-4f4f-bc78-6ce2f0078ff7/width=600/cover.jpeg' },
+      { id: 14977, title: 'How I make videos and how you can too, for free*', views: 6447, likes: 64, cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/dd148ced-03cc-48c0-9fbf-e81e41c83002/width=600/cover.jpeg' },
+      { id: 11864, title: 'GPT for Illustrious prompting for people who come from Flux', views: 3103, likes: 33, cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/036ffee7-3d62-44d2-835c-06762787df8b/width=600/cover.jpeg' },
+      { id: 14622, title: 'Tags I like / Bidding on my favorite Illustrious checkpoint', views: 1502, likes: 41, cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/0a0c05cf-afd2-4b44-9eb7-c2c51b01f83d/width=600/cover.jpeg' },
+      { id: 10312, title: 'Project Odyssey — "Nip, Cheese, and Chaos" / 3K Followers', views: 1151, likes: 8,  cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/93c9a422-b62d-46a5-96fe-135598b8975e/width=600/cover.jpeg' },
+      { id: 8585,  title: 'Custom GPT for CogVideo Prompts / 1,000 Followers', views: 1040, likes: 10, cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/3e32ae75-d221-4c4e-b059-4909ac34669d/width=600/cover.jpeg' },
+      { id: 12510, title: 'Flux Prompting GPT', views: 653, likes: 26, cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/4dd99bc5-5525-4592-ad9c-b8946e911ffc/width=600/cover.jpeg' },
+      { id: 19971, title: 'High-effort video creation — tips & tricks / Vidu Q2', views: 568, likes: 8,  cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/d011a9aa-b877-4105-9ab2-0a7030cc23c7/width=600/cover.jpeg' }
+    ];
 
     const fetchModels = async (host) => {
       const res = await fetch(`${host}/api/v1/models?username=${username}&limit=100`, {
@@ -1031,34 +1048,29 @@
       }
     };
 
-    // Articles are only returned by civitai.red's API right now (civitai.com 404s).
-    // So fetch articles independently from .red regardless of where models came from.
-    const ARTICLE_HOSTS = ['https://civitai.red', 'https://civitai.com'];
-    let articlesAll = [];
-    for (const host of ARTICLE_HOSTS) {
-      try {
-        const arts = await fetchArticles(host);
-        if (arts.length) { articlesAll = arts; break; }
-      } catch {}
-    }
+    // Articles aren't fetchable from the browser (REST endpoint 404s, tRPC has no CORS).
+    // So use the hand-curated BAKED_ARTICLES list + MANUAL totals for the articles section.
+    const bakedArticles = BAKED_ARTICLES.map(a => ({
+      title: a.title,
+      url: `${LINK_BASE}/articles/${a.id}`,
+      cover: a.cover,
+      coverType: 'image',
+      views: a.views,
+      likes: a.likes
+    }));
 
     let liveSnap = null;
     for (const host of HOSTS) {
       try {
         const models = await fetchModels(host);
         if (!models.length) continue;
-        const articles = articlesAll;
-        let downloads = 0, likes = 0, articleViews = 0;
+        let downloads = 0, likes = 0;
         models.forEach(m => {
           const s = m.stats || {};
           downloads += s.downloadCount || 0;
           likes += (s.thumbsUpCount || 0) + (s.favoriteCount || 0);
         });
-        articles.forEach(a => {
-          const s = a.stats || {};
-          articleViews += s.viewCount || 0;
-          likes += (s.likeCount || 0) + (s.heartCount || 0);
-        });
+        likes += MANUAL.articleLikes || 0;
         const topModels = [...models]
           .sort((a, b) => (b.stats?.downloadCount || 0) - (a.stats?.downloadCount || 0))
           .map(m => {
@@ -1071,23 +1083,13 @@
               downloads: m.stats?.downloadCount || 0
             };
           });
-        const topArticles = [...articles]
-          .sort((a, b) => (b.stats?.viewCount || 0) - (a.stats?.viewCount || 0))
-          .map(a => ({
-            title: a.title || 'Untitled',
-            url: `${LINK_BASE}/articles/${a.id}`,
-            cover: a.cover?.url || a.coverImage?.url || '',
-            coverType: a.cover?.type || a.coverImage?.type || 'image',
-            views: a.stats?.viewCount || 0,
-            likes: (a.stats?.likeCount || 0) + (a.stats?.heartCount || 0)
-          }));
         liveSnap = {
           downloads, likes,
           modelCount: models.length,
-          articleCount: articles.length,
-          articleViews,
+          articleCount: MANUAL.articleCount || 0,
+          articleViews: MANUAL.articleViews || 0,
           topModels,
-          topArticles,
+          topArticles: bakedArticles,
           source: host.replace('https://', ''),
           fetchedAt: Date.now()
         };
