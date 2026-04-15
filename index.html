@@ -56,10 +56,10 @@
   }
   .hero h1 {
     font-family: var(--mono);
-    font-size: clamp(48px, 10vw, 112px);
+    font-size: clamp(44px, 8vw, 88px);
     font-weight: 700;
-    line-height: 0.95;
-    letter-spacing: -2px;
+    line-height: 0.9;
+    letter-spacing: -5px;
     margin-bottom: 16px;
   }
   .hero h1 .glitch { color: var(--accent); }
@@ -67,7 +67,15 @@
     font-size: clamp(18px, 2.2vw, 22px);
     color: var(--ink);
     max-width: 640px;
-    margin-bottom: 28px;
+    margin-bottom: 14px;
+  }
+  .hero .origin {
+    font-size: 16px;
+    font-style: italic;
+    color: var(--ink-dim);
+    max-width: 640px;
+    margin-bottom: 24px;
+    line-height: 1.55;
   }
   .partners {
     display: flex;
@@ -109,7 +117,7 @@
 
   /* Hero craft lines — compact block under the tagline */
   .hero-craft {
-    max-width: 640px;
+    max-width: 820px;
     margin-top: -8px;
     margin-bottom: 24px;
     border-left: 2px solid var(--accent);
@@ -121,6 +129,7 @@
     line-height: 1.55;
     color: var(--ink);
     margin-bottom: 4px;
+    text-wrap: pretty;
   }
   .craft-line.dim { color: var(--ink-dim); }
   .craft-line.burn { color: var(--accent-2); margin-top: 8px; }
@@ -449,6 +458,7 @@
       </div>
     </div>
     <p class="lede">I make unregistered axolotls and anti-HOA propaganda.</p>
+    <p class="origin">All I wanted to do was make funny axolotl pictures. They wouldn't let me. So I learned how to train my own models.</p>
     <div class="hero-craft">
       <p class="craft-line">LoRA training, ComfyUI workflows, inpainting. My best work is under NDA.</p>
       <p class="craft-line dim">Everything shown here was done solo.</p>
@@ -472,7 +482,6 @@
       <span class="section-num">01 //</span>
       <div>
         <div class="section-title">Featured Work</div>
-        <div class="section-desc">Three recent pieces showing range: musicals, trailers, and satire.</div>
       </div>
     </div>
 
