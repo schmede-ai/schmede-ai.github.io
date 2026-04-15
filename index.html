@@ -250,9 +250,15 @@
   }
   .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 24px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
+  }
+  .stats-grid.secondary {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    gap: 20px;
   }
   .stat-num {
     font-family: var(--mono);
@@ -261,6 +267,7 @@
     color: var(--accent);
     line-height: 1;
   }
+  .stat-num.small { font-size: 22px; color: var(--accent-2); }
   .stat-label {
     font-family: var(--mono);
     font-size: 11px;
@@ -314,6 +321,59 @@
   .model-body { padding: 10px; }
   .model-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
   .model-stats { font-family: var(--mono); font-size: 11px; color: var(--ink-dim); }
+
+  /* Articles grid */
+  .articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .article-card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .article-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .article-thumb {
+    aspect-ratio: 16/10;
+    background: #000 center/cover no-repeat;
+    position: relative;
+    overflow: hidden;
+  }
+  .article-thumb video, .article-thumb img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+  }
+  .article-body { padding: 14px; display: flex; flex-direction: column; flex: 1; }
+  .article-title {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.35;
+    margin-bottom: 10px;
+    color: var(--ink);
+    flex: 1;
+  }
+  .article-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    display: flex;
+    gap: 12px;
+  }
+  .article-meta .views { color: var(--accent); }
+  .articles-loading {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-dim);
+    padding: 32px;
+    text-align: center;
+    grid-column: 1 / -1;
+  }
 
   /* Invite codes */
   .codes-grid {
@@ -689,39 +749,63 @@
 <section id="civitai">
   <div class="container">
     <div class="section-header">
-      <span class="section-num">05 //</span>
+      <span class="section-num">04 //</span>
       <div>
-        <div class="section-title">Civitai Stats</div>
-        <div class="section-desc">Live numbers from my Civitai profile: models, articles, downloads, and views. Cached locally so returning visitors always see data.</div>
+        <div class="section-title">Civitai</div>
+        <div class="section-desc">Live numbers from my <a href="https://civitai.com/user/schmede" target="_blank" rel="noopener">profile</a>. Cached locally so returning visitors always see data.</div>
       </div>
     </div>
 
     <div class="stats-wrap">
-      <div class="stats-grid">
+      <div class="stats-grid primary">
         <div>
-          <div class="stat-num" id="stat-downloads">—</div>
-          <div class="stat-label">Total Downloads</div>
+          <div class="stat-num" id="stat-followers">—</div>
+          <div class="stat-label">Followers</div>
         </div>
         <div>
           <div class="stat-num" id="stat-likes">—</div>
-          <div class="stat-label">Total Likes</div>
+          <div class="stat-label">Likes</div>
         </div>
         <div>
-          <div class="stat-num" id="stat-models">—</div>
+          <div class="stat-num" id="stat-downloads">—</div>
+          <div class="stat-label">Downloads</div>
+        </div>
+        <div>
+          <div class="stat-num" id="stat-generations">—</div>
+          <div class="stat-label">Generations</div>
+        </div>
+      </div>
+      <div class="stats-grid secondary">
+        <div>
+          <div class="stat-num small" id="stat-models">—</div>
           <div class="stat-label">Models</div>
         </div>
         <div>
-          <div class="stat-num" id="stat-articles">—</div>
+          <div class="stat-num small" id="stat-articles">—</div>
           <div class="stat-label">Articles</div>
         </div>
         <div>
-          <div class="stat-num" id="stat-article-views">—</div>
+          <div class="stat-num small" id="stat-article-views">—</div>
           <div class="stat-label">Article Views</div>
         </div>
       </div>
       <div class="stats-status" id="stats-status"><span class="dot"></span>Loading live data from Civitai…</div>
       <div class="models-grid" id="models-grid"></div>
     </div>
+  </div>
+</section>
+
+<!-- ARTICLES -->
+<section id="articles">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">05 //</span>
+      <div>
+        <div class="section-title">Articles &amp; Guides</div>
+        <div class="section-desc">Tutorials, workflow breakdowns, and process writeups on Civitai.</div>
+      </div>
+    </div>
+    <div class="articles-grid" id="articles-grid"></div>
   </div>
 </section>
 
@@ -784,7 +868,7 @@
   <div class="container">
     <div class="socials">
       <a href="https://www.youtube.com/@schmede_AI" target="_blank" rel="noopener">YouTube</a>
-      <a href="https://civitai.red/user/schmede" target="_blank" rel="noopener">Civitai</a>
+      <a href="https://civitai.com/user/schmede" target="_blank" rel="noopener">Civitai</a>
       <a href="https://www.vidu.com/" target="_blank" rel="noopener">Vidu</a>
       <a href="#contact">Contact</a>
     </div>
@@ -807,15 +891,24 @@
 
 <script>
   // Civitai stats loader
-  // 1. Try civitai.red API (all-inclusive post-migration)
-  // 2. Fall back to civitai.com API
-  // 3. On success, cache to localStorage so returning visitors see data even if the API is down
-  // 4. On failure, use cached snapshot; show freshness timestamp
+  // Prefer civitai.com (main site) for both data and outbound links.
+  // civitai.red kept as a fallback in case .com is down.
+  // Follower and generation counts aren't in the public API; kept as
+  // manually-maintained snapshots (update these when you want).
   (async function loadCivitaiStats() {
     const username = 'schmede';
     const statusEl = document.getElementById('stats-status');
-    const CACHE_KEY = 'schmede_civitai_stats_v2';
-    const HOSTS = ['https://civitai.red', 'https://civitai.com'];
+    const CACHE_KEY = 'schmede_civitai_stats_v3';
+    const HOSTS = ['https://civitai.com', 'https://civitai.red'];
+    const LINK_BASE = 'https://civitai.com';
+
+    // Manual snapshots (public API doesn't expose user-level follower/generation totals)
+    // Last updated: 2026-04-15
+    const MANUAL = {
+      followers: 13400,
+      generations: 296100,
+      asOf: 'Apr 2026'
+    };
 
     const fetchModels = async (host) => {
       const res = await fetch(`${host}/api/v1/models?username=${username}&limit=100`, {
@@ -835,12 +928,20 @@
       } catch { return []; }
     };
 
+    const fmt = (n) => {
+      if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+      if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+      return n.toLocaleString();
+    };
+
     const render = (snap, live) => {
-      document.getElementById('stat-downloads').textContent = snap.downloads.toLocaleString();
-      document.getElementById('stat-likes').textContent = snap.likes.toLocaleString();
+      document.getElementById('stat-followers').textContent = fmt(MANUAL.followers);
+      document.getElementById('stat-generations').textContent = fmt(MANUAL.generations);
+      document.getElementById('stat-downloads').textContent = fmt(snap.downloads);
+      document.getElementById('stat-likes').textContent = fmt(snap.likes);
       document.getElementById('stat-models').textContent = snap.modelCount.toLocaleString();
       document.getElementById('stat-articles').textContent = snap.articleCount.toLocaleString();
-      document.getElementById('stat-article-views').textContent = snap.articleViews.toLocaleString();
+      document.getElementById('stat-article-views').textContent = fmt(snap.articleViews);
 
       const grid = document.getElementById('models-grid');
       grid.innerHTML = '';
@@ -864,11 +965,41 @@
         grid.appendChild(card);
       });
 
+      const articlesGrid = document.getElementById('articles-grid');
+      articlesGrid.innerHTML = '';
+      const topArticles = (snap.topArticles || []).slice(0, 6);
+      if (topArticles.length === 0) {
+        articlesGrid.innerHTML = '<div class="articles-loading">No articles loaded.</div>';
+      } else {
+        topArticles.forEach(a => {
+          const card = document.createElement('a');
+          card.className = 'article-card';
+          card.href = a.url;
+          card.target = '_blank';
+          card.rel = 'noopener';
+          const media = a.cover
+            ? (a.coverType === 'video'
+                ? `<video src="${a.cover}" autoplay loop muted playsinline preload="metadata"></video>`
+                : `<img src="${a.cover}" alt="" loading="lazy">`)
+            : '';
+          card.innerHTML = `
+            <div class="article-thumb">${media}</div>
+            <div class="article-body">
+              <div class="article-title">${a.title}</div>
+              <div class="article-meta">
+                <span class="views">${fmt(a.views)} views</span>
+                <span>${fmt(a.likes)} likes</span>
+              </div>
+            </div>`;
+          articlesGrid.appendChild(card);
+        });
+      }
+
       const ts = new Date(snap.fetchedAt);
       const fresh = ts.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
       if (live) {
         statusEl.classList.remove('down');
-        statusEl.innerHTML = `<span class="dot"></span>Live &middot; synced from ${snap.source} just now`;
+        statusEl.innerHTML = `<span class="dot"></span>Live &middot; synced from ${snap.source} &middot; follower/generation counts as of ${MANUAL.asOf}`;
       } else {
         statusEl.classList.add('down');
         statusEl.innerHTML = `<span class="dot"></span>API unreachable &middot; showing cached snapshot from ${fresh}`;
@@ -897,18 +1028,29 @@
             const cover = m.modelVersions?.[0]?.images?.[0] || {};
             return {
               name: m.name,
-              url: `${host}/models/${m.id}`,
+              url: `${LINK_BASE}/models/${m.id}`,
               thumb: cover.url || '',
               thumbType: cover.type || 'image',
               downloads: m.stats?.downloadCount || 0
             };
           });
+        const topArticles = [...articles]
+          .sort((a, b) => (b.stats?.viewCount || 0) - (a.stats?.viewCount || 0))
+          .map(a => ({
+            title: a.title || 'Untitled',
+            url: `${LINK_BASE}/articles/${a.id}`,
+            cover: a.cover?.url || a.coverImage?.url || '',
+            coverType: a.cover?.type || a.coverImage?.type || 'image',
+            views: a.stats?.viewCount || 0,
+            likes: (a.stats?.likeCount || 0) + (a.stats?.heartCount || 0)
+          }));
         liveSnap = {
           downloads, likes,
           modelCount: models.length,
           articleCount: articles.length,
           articleViews,
           topModels,
+          topArticles,
           source: host.replace('https://', ''),
           fetchedAt: Date.now()
         };
