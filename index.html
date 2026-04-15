@@ -897,8 +897,10 @@
   (async function loadCivitaiStats() {
     const username = 'schmede';
     const statusEl = document.getElementById('stats-status');
-    const CACHE_KEY = 'schmede_civitai_stats_v4';
-    const HOSTS = ['https://civitai.com', 'https://civitai.red'];
+    const CACHE_KEY = 'schmede_civitai_stats_v6';
+    // civitai.red returns full data (images, articles); civitai.com's public API strips
+    // cover media and 404s on /articles. Use .red as the data source, link to .com.
+    const HOSTS = ['https://civitai.red', 'https://civitai.com'];
     const LINK_BASE = 'https://civitai.com';
 
     // Manual snapshots (public API doesn't expose user-level follower/generation totals)
@@ -968,7 +970,7 @@
 
       const grid = document.getElementById('models-grid');
       grid.innerHTML = '';
-      (snap.topModels || []).slice(0, 8).forEach(m => {
+      (snap.topModels || []).slice(0, 10).forEach(m => {
         const card = document.createElement('a');
         card.className = 'model-card';
         card.href = m.url;
