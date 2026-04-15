@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>schmede // AI filmmaker</title>
-<meta name="description" content="schmede — AI-generated musicals, fake trailers, and dark satire. Creative Partner at Vidu, Veespark, Floyo, Pollo, and Slop.Club." />
+<meta name="description" content="schmede // AI-generated musicals, fake trailers, and dark satire. Creative Partner at Vidu, Veespark, Floyo, Pollo, and Slop.Club." />
 <style>
   :root {
     --bg: #0a0a0b;
@@ -106,6 +106,24 @@
     letter-spacing: -0.5px;
   }
   .section-desc { color: var(--ink-dim); font-size: 14px; margin-top: 4px; }
+
+  /* Hero craft lines — compact block under the tagline */
+  .hero-craft {
+    max-width: 640px;
+    margin-top: -8px;
+    margin-bottom: 24px;
+    border-left: 2px solid var(--accent);
+    padding-left: 16px;
+  }
+  .craft-line {
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .craft-line.dim { color: var(--ink-dim); }
+  .craft-line.burn { color: var(--accent-2); margin-top: 8px; }
 
   /* Awards grid */
   .awards-grid {
@@ -319,6 +337,45 @@
   .code-btn:hover { opacity: 0.85; }
   .code-note { font-size: 11px; color: var(--ink-dim); margin-top: 8px; font-style: italic; }
 
+  /* Contact */
+  .contact-wrap {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 40px;
+    text-align: center;
+  }
+  .contact-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .contact-email {
+    font-family: var(--mono);
+    font-size: clamp(20px, 3vw, 32px);
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    display: inline-block;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .contact-email:hover {
+    border-bottom-color: var(--accent);
+    opacity: 1;
+  }
+  .contact-note {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    margin-top: 20px;
+    font-style: italic;
+  }
+
   /* Socials / footer */
   footer {
     padding: 48px 0;
@@ -392,6 +449,11 @@
       </div>
     </div>
     <p class="lede">I make unregistered axolotls and anti-HOA propaganda.</p>
+    <div class="hero-craft">
+      <p class="craft-line">LoRA training, ComfyUI workflows, inpainting. My best work is under NDA.</p>
+      <p class="craft-line dim">Everything shown here was done solo.</p>
+      <p class="craft-line burn">When you need more control than the guy who only knows how to type prompts in English.</p>
+    </div>
     <div class="partners">
       <span class="partner-badge label">Creative Partner</span>
       <span class="partner-badge">Vidu</span>
@@ -403,11 +465,46 @@
   </div>
 </header>
 
+<!-- FEATURED WORK -->
+<section id="work">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">01 //</span>
+      <div>
+        <div class="section-title">Featured Work</div>
+        <div class="section-desc">Three recent pieces showing range: musicals, trailers, and satire.</div>
+      </div>
+    </div>
+
+    <div class="video-grid">
+      <div>
+        <div class="video-wrap">
+          <iframe src="https://www.youtube.com/embed/NwMVHjgSSSE" title="Featured Work 01" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-label">featured // 01</div>
+      </div>
+      <div>
+        <div class="video-wrap">
+          <iframe src="https://www.youtube.com/embed/oY-X9vwLRtY" title="Featured Work 02" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-label">featured // 02</div>
+      </div>
+      <div>
+        <div class="video-wrap">
+          <iframe src="https://www.youtube.com/embed/_6YD1V-w9Fc" title="Featured Work 03" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-label">featured // 03</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- AWARDS -->
 <section id="awards">
   <div class="container">
     <div class="section-header">
-      <span class="section-num">01 //</span>
+      <span class="section-num">02 //</span>
       <div>
         <div class="section-title">Awards & Recognition</div>
         <div class="section-desc">Contest wins, festival recognition, and featured work.</div>
@@ -422,7 +519,7 @@
         </div>
         <div class="award-body">
           <div class="award-event">Arca Gidan II</div>
-          <div class="award-title">3rd Place — Ridge Winner</div>
+          <div class="award-title">3rd Place // Ridge Winner</div>
           <div class="award-prize">Top of the Ridge category.</div>
           <div class="award-links">
             <a href="https://youtu.be/8HmmqGNrPr4" target="_blank" rel="noopener">Watch</a>
@@ -438,8 +535,8 @@
         </div>
         <div class="award-body">
           <div class="award-event">The Chroma Awards</div>
-          <div class="award-title">Honorable Mention — Music Video / Pop</div>
-          <div class="award-prize">Recognized in the Music Video — Pop category.</div>
+          <div class="award-title">Honorable Mention // Music Video / Pop</div>
+          <div class="award-prize">Recognized in the Music Video / Pop category.</div>
           <div class="award-links">
             <a href="https://youtu.be/4f4fP7pB2QI" target="_blank" rel="noopener">Watch</a>
           </div>
@@ -469,7 +566,7 @@
         </div>
         <div class="award-body">
           <div class="award-event">Vidu x Civitai Q1ntessential</div>
-          <div class="award-title">1st Place — 60-Second+ Film</div>
+          <div class="award-title">1st Place // 60-Second+ Film</div>
           <div class="award-prize">Top prize in the long-form AI short film category.</div>
           <div class="award-links">
             <a href="https://youtu.be/ogyKlYApenc" target="_blank" rel="noopener">Watch</a>
@@ -485,8 +582,8 @@
           <span class="award-medal">&#129353;</span>
         </div>
         <div class="award-body">
-          <div class="award-event">Project Odyssey — Season 2</div>
-          <div class="award-title">3rd Place — Civitai Title Sponsor Track</div>
+          <div class="award-event">Project Odyssey // Season 2</div>
+          <div class="award-title">3rd Place // Civitai Title Sponsor Track</div>
           <div class="award-prize">Podium finish in the Civitai-sponsored category.</div>
           <div class="award-links">
             <a href="https://youtu.be/YMS30o2RIsY" target="_blank" rel="noopener">Watch</a>
@@ -537,7 +634,7 @@
 <section id="featured">
   <div class="container">
     <div class="section-header">
-      <span class="section-num">02 //</span>
+      <span class="section-num">03 //</span>
       <div>
         <div class="section-title">As Seen On</div>
         <div class="section-desc">Guest appearances and interviews.</div>
@@ -565,10 +662,10 @@
 <section id="civitai">
   <div class="container">
     <div class="section-header">
-      <span class="section-num">03 //</span>
+      <span class="section-num">05 //</span>
       <div>
         <div class="section-title">Civitai Stats</div>
-        <div class="section-desc">Live numbers from my Civitai profile — models, articles, downloads, and views. Cached locally so returning visitors always see data.</div>
+        <div class="section-desc">Live numbers from my Civitai profile: models, articles, downloads, and views. Cached locally so returning visitors always see data.</div>
       </div>
     </div>
 
@@ -601,32 +698,13 @@
   </div>
 </section>
 
-<!-- RECENT WORK -->
-<section id="work">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-num">04 //</span>
-      <div>
-        <div class="section-title">Recent Work</div>
-        <div class="section-desc">Long-form videos, musicals, trailers, and more.</div>
-      </div>
-    </div>
-
-    <div class="channel-cta">
-      <h3>Full catalog lives on YouTube</h3>
-      <p>Musicals, fake trailers, and the occasional piece of cursed satire.</p>
-      <a class="btn" href="https://www.youtube.com/@schmede_AI" target="_blank" rel="noopener">Visit @schmede_AI &rarr;</a>
-    </div>
-  </div>
-</section>
-
 <!-- INVITE CODES -->
 <section id="codes">
   <div class="container">
     <div class="section-header">
-      <span class="section-num">05 //</span>
+      <span class="section-num">06 //</span>
       <div>
-        <div class="section-title">Free Credits & Perks</div>
+        <div class="section-title">Free Credits &amp; Perks</div>
         <div class="section-desc">Using my invite codes helps me out. You get free stuff too.</div>
       </div>
     </div>
@@ -657,6 +735,23 @@
   </div>
 </section>
 
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">07 //</span>
+      <div>
+        <div class="section-title">Contact</div>
+        <div class="section-desc">Business inquiries, collaborations, sponsorships, and commissions.</div>
+      </div>
+    </div>
+
+    <div class="contact-wrap">
+      <a id="contact-email" class="contact-email" href="#">loading&hellip;</a>
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div class="container">
@@ -664,10 +759,24 @@
       <a href="https://www.youtube.com/@schmede_AI" target="_blank" rel="noopener">YouTube</a>
       <a href="https://civitai.red/user/schmede" target="_blank" rel="noopener">Civitai</a>
       <a href="https://www.vidu.com/" target="_blank" rel="noopener">Vidu</a>
+      <a href="#contact">Contact</a>
     </div>
     <div class="footer-note">&copy; schmede // built with spite and HTML</div>
   </div>
 </footer>
+
+<script>
+  // Contact email: assembled at runtime to deter scrapers
+  (function () {
+    const el = document.getElementById('contact-email');
+    if (!el) return;
+    const u = ['sc', 'hm', 'ede', '.', 'ai'].join('');
+    const d = ['g', 'ma', 'il', '.', 'com'].join('');
+    const addr = u + String.fromCharCode(64) + d;
+    el.textContent = addr;
+    el.setAttribute('href', 'mai' + 'lto:' + addr + '?subject=Business%20Inquiry');
+  })();
+</script>
 
 <script>
   // Civitai stats loader
@@ -777,13 +886,13 @@
       return;
     }
 
-    // No live data — try cached snapshot
+    // No live data. Try cached snapshot.
     try {
       const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
       if (cached) { render(cached, false); return; }
     } catch {}
 
-    // Ultimate fallback — friendly message, no fake numbers
+    // Ultimate fallback: friendly message, no fake numbers
     statusEl.classList.add('down');
     statusEl.innerHTML = '<span class="dot"></span>Civitai API unreachable (site migrating to civitai.red). Stats will populate once it\'s back.';
   })();
