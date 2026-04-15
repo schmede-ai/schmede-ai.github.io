@@ -752,7 +752,6 @@
       <span class="section-num">04 //</span>
       <div>
         <div class="section-title">Civitai</div>
-        <div class="section-desc">Live numbers from my <a href="https://civitai.com/user/schmede" target="_blank" rel="noopener">profile</a>. Cached locally so returning visitors always see data.</div>
       </div>
     </div>
 
@@ -898,7 +897,7 @@
   (async function loadCivitaiStats() {
     const username = 'schmede';
     const statusEl = document.getElementById('stats-status');
-    const CACHE_KEY = 'schmede_civitai_stats_v3';
+    const CACHE_KEY = 'schmede_civitai_stats_v4';
     const HOSTS = ['https://civitai.com', 'https://civitai.red'];
     const LINK_BASE = 'https://civitai.com';
 
@@ -943,6 +942,30 @@
       document.getElementById('stat-articles').textContent = snap.articleCount.toLocaleString();
       document.getElementById('stat-article-views').textContent = fmt(snap.articleViews);
 
+      // Build a media element (video or img) with explicit property setup so autoplay actually fires.
+      const buildMedia = (url, type) => {
+        if (!url) return null;
+        if (type === 'video') {
+          const v = document.createElement('video');
+          v.src = url;
+          v.autoplay = true;
+          v.loop = true;
+          v.muted = true;
+          v.defaultMuted = true;
+          v.playsInline = true;
+          v.setAttribute('playsinline', '');
+          v.setAttribute('webkit-playsinline', '');
+          v.preload = 'auto';
+          v.addEventListener('loadeddata', () => { v.play().catch(() => {}); });
+          return v;
+        }
+        const img = document.createElement('img');
+        img.src = url;
+        img.loading = 'lazy';
+        img.alt = '';
+        return img;
+      };
+
       const grid = document.getElementById('models-grid');
       grid.innerHTML = '';
       (snap.topModels || []).slice(0, 8).forEach(m => {
@@ -951,17 +974,17 @@
         card.href = m.url;
         card.target = '_blank';
         card.rel = 'noopener';
-        const media = m.thumb
-          ? (m.thumbType === 'video'
-              ? `<video src="${m.thumb}" autoplay loop muted playsinline preload="metadata"></video>`
-              : `<img src="${m.thumb}" alt="" loading="lazy">`)
-          : '';
-        card.innerHTML = `
-          <div class="model-thumb">${media}</div>
-          <div class="model-body">
-            <div class="model-name">${m.name}</div>
-            <div class="model-stats">${m.downloads.toLocaleString()} dl</div>
-          </div>`;
+        const thumb = document.createElement('div');
+        thumb.className = 'model-thumb';
+        const media = buildMedia(m.thumb, m.thumbType);
+        if (media) thumb.appendChild(media);
+        const body = document.createElement('div');
+        body.className = 'model-body';
+        body.innerHTML = `
+          <div class="model-name">${m.name}</div>
+          <div class="model-stats">${m.downloads.toLocaleString()} dl</div>`;
+        card.appendChild(thumb);
+        card.appendChild(body);
         grid.appendChild(card);
       });
 
@@ -977,20 +1000,20 @@
           card.href = a.url;
           card.target = '_blank';
           card.rel = 'noopener';
-          const media = a.cover
-            ? (a.coverType === 'video'
-                ? `<video src="${a.cover}" autoplay loop muted playsinline preload="metadata"></video>`
-                : `<img src="${a.cover}" alt="" loading="lazy">`)
-            : '';
-          card.innerHTML = `
-            <div class="article-thumb">${media}</div>
-            <div class="article-body">
-              <div class="article-title">${a.title}</div>
-              <div class="article-meta">
-                <span class="views">${fmt(a.views)} views</span>
-                <span>${fmt(a.likes)} likes</span>
-              </div>
+          const thumb = document.createElement('div');
+          thumb.className = 'article-thumb';
+          const media = buildMedia(a.cover, a.coverType);
+          if (media) thumb.appendChild(media);
+          const body = document.createElement('div');
+          body.className = 'article-body';
+          body.innerHTML = `
+            <div class="article-title">${a.title}</div>
+            <div class="article-meta">
+              <span class="views">${fmt(a.views)} views</span>
+              <span>${fmt(a.likes)} likes</span>
             </div>`;
+          card.appendChild(thumb);
+          card.appendChild(body);
           articlesGrid.appendChild(card);
         });
       }
@@ -1006,11 +1029,23 @@
       }
     };
 
+    // Articles are only returned by civitai.red's API right now (civitai.com 404s).
+    // So fetch articles independently from .red regardless of where models came from.
+    const ARTICLE_HOSTS = ['https://civitai.red', 'https://civitai.com'];
+    let articlesAll = [];
+    for (const host of ARTICLE_HOSTS) {
+      try {
+        const arts = await fetchArticles(host);
+        if (arts.length) { articlesAll = arts; break; }
+      } catch {}
+    }
+
     let liveSnap = null;
     for (const host of HOSTS) {
       try {
-        const [models, articles] = await Promise.all([fetchModels(host), fetchArticles(host)]);
-        if (!models.length && !articles.length) continue;
+        const models = await fetchModels(host);
+        if (!models.length) continue;
+        const articles = articlesAll;
         let downloads = 0, likes = 0, articleViews = 0;
         models.forEach(m => {
           const s = m.stats || {};
