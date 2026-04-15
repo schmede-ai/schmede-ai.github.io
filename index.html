@@ -302,7 +302,15 @@
     transition: border-color 0.2s;
   }
   .model-card:hover { border-color: var(--accent); }
-  .model-thumb { aspect-ratio: 1/1; background: #000 center/cover no-repeat; }
+  .model-thumb { aspect-ratio: 1/1; background: #000 center/cover no-repeat; position: relative; overflow: hidden; }
+  .model-thumb video, .model-thumb img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
   .model-body { padding: 10px; }
   .model-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
   .model-stats { font-family: var(--mono); font-size: 11px; color: var(--ink-dim); }
@@ -806,7 +814,7 @@
   (async function loadCivitaiStats() {
     const username = 'schmede';
     const statusEl = document.getElementById('stats-status');
-    const CACHE_KEY = 'schmede_civitai_stats_v1';
+    const CACHE_KEY = 'schmede_civitai_stats_v2';
     const HOSTS = ['https://civitai.red', 'https://civitai.com'];
 
     const fetchModels = async (host) => {
@@ -842,8 +850,13 @@
         card.href = m.url;
         card.target = '_blank';
         card.rel = 'noopener';
+        const media = m.thumb
+          ? (m.thumbType === 'video'
+              ? `<video src="${m.thumb}" autoplay loop muted playsinline preload="metadata"></video>`
+              : `<img src="${m.thumb}" alt="" loading="lazy">`)
+          : '';
         card.innerHTML = `
-          <div class="model-thumb" style="background-image:url('${m.thumb || ''}')"></div>
+          <div class="model-thumb">${media}</div>
           <div class="model-body">
             <div class="model-name">${m.name}</div>
             <div class="model-stats">${m.downloads.toLocaleString()} dl</div>
@@ -880,12 +893,16 @@
         });
         const topModels = [...models]
           .sort((a, b) => (b.stats?.downloadCount || 0) - (a.stats?.downloadCount || 0))
-          .map(m => ({
-            name: m.name,
-            url: `${host}/models/${m.id}`,
-            thumb: m.modelVersions?.[0]?.images?.[0]?.url || '',
-            downloads: m.stats?.downloadCount || 0
-          }));
+          .map(m => {
+            const cover = m.modelVersions?.[0]?.images?.[0] || {};
+            return {
+              name: m.name,
+              url: `${host}/models/${m.id}`,
+              thumb: cover.url || '',
+              thumbType: cover.type || 'image',
+              downloads: m.stats?.downloadCount || 0
+            };
+          });
         liveSnap = {
           downloads, likes,
           modelCount: models.length,
