@@ -647,6 +647,38 @@
         </div>
       </div>
 
+      <!-- Vidu 1st BDay -->
+      <div class="award-card">
+        <div class="award-thumb" style="background-image:url('https://img.youtube.com/vi/Pe5fDqo6b54/maxresdefault.jpg')">
+          <span class="award-medal">&#129353;</span>
+        </div>
+        <div class="award-body">
+          <div class="award-event">#Vidu1stBDay</div>
+          <div class="award-title">3rd Place</div>
+          <div class="award-prize">Podium finish at Vidu's 1st Birthday contest.</div>
+          <div class="award-links">
+            <a href="https://youtu.be/Pe5fDqo6b54" target="_blank" rel="noopener">Watch</a>
+            <a href="https://www.vidu.com/activity?id=2915306453786642" target="_blank" rel="noopener">Vidu post</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vidu Q1 R2V -->
+      <div class="award-card">
+        <div class="award-thumb" style="background-image:url('https://img.youtube.com/vi/OSM-IelZYhI/maxresdefault.jpg')">
+          <span class="award-medal">&#129352;</span>
+        </div>
+        <div class="award-body">
+          <div class="award-event">#ViduQ1R2V</div>
+          <div class="award-title">2nd Place</div>
+          <div class="award-prize">Runner-up in the Q1 R2V contest.</div>
+          <div class="award-links">
+            <a href="https://youtu.be/OSM-IelZYhI" target="_blank" rel="noopener">Watch</a>
+            <a href="https://www.vidu.com/activity?id=2883970269875621" target="_blank" rel="noopener">Vidu post</a>
+          </div>
+        </div>
+      </div>
+
       <!-- Vidu x Civitai Q1ntessential -->
       <div class="award-card">
         <div class="award-thumb" style="background-image:url('https://img.youtube.com/vi/ogyKlYApenc/maxresdefault.jpg')">
@@ -664,7 +696,7 @@
         </div>
       </div>
 
-      <!-- Project Odyssey S2 -->
+      <!-- Project Odyssey S2 // Civitai Title Sponsor -->
       <div class="award-card">
         <div class="award-thumb" style="background-image:url('https://img.youtube.com/vi/YMS30o2RIsY/maxresdefault.jpg')">
           <span class="award-medal">&#129353;</span>
@@ -681,36 +713,18 @@
         </div>
       </div>
 
-      <!-- Vidu Q1 R2V -->
+      <!-- Project Odyssey S2 // Advertising -->
       <div class="award-card">
-        <div class="award-thumb" style="background-image:url('https://img.youtube.com/vi/OSM-IelZYhI/maxresdefault.jpg')">
-          <span class="award-medal">&#129352;</span>
+        <div class="award-thumb" style="background-image:url('https://img.youtube.com/vi/x8uau8GuTHA/maxresdefault.jpg')">
+          <span class="award-medal">&#11088;</span>
         </div>
         <div class="award-body">
-          <div class="award-event">#ViduQ1R2V</div>
-          <div class="award-title">2nd Place</div>
-          <div class="award-prize">Runner-up in the Q1 R2V contest.</div>
+          <div class="award-event">Project Odyssey // Season 2</div>
+          <div class="award-title">Honorable Mention // Advertising</div>
+          <div class="award-prize">Recognized in the Advertising category.</div>
           <div class="award-links">
-            <a href="https://youtu.be/OSM-IelZYhI" target="_blank" rel="noopener">Watch</a>
-            <a href="https://www.vidu.com/activity?id=2883970269875621" target="_blank" rel="noopener">Vidu post</a>
-            <a href="https://civitai.com/images/87779223" target="_blank" rel="noopener">Entry</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Vidu 1st BDay -->
-      <div class="award-card">
-        <div class="award-thumb" style="background-image:url('https://img.youtube.com/vi/Pe5fDqo6b54/maxresdefault.jpg')">
-          <span class="award-medal">&#129353;</span>
-        </div>
-        <div class="award-body">
-          <div class="award-event">#Vidu1stBDay</div>
-          <div class="award-title">3rd Place</div>
-          <div class="award-prize">Podium finish at Vidu's 1st Birthday contest.</div>
-          <div class="award-links">
-            <a href="https://youtu.be/Pe5fDqo6b54" target="_blank" rel="noopener">Watch</a>
-            <a href="https://www.vidu.com/activity?id=2915306453786642" target="_blank" rel="noopener">Vidu post</a>
-            <a href="https://civitai.com/images/97149305" target="_blank" rel="noopener">Entry</a>
+            <a href="https://youtu.be/x8uau8GuTHA" target="_blank" rel="noopener">Watch</a>
+            <a href="https://www.projectodyssey.ai/season-2-awards" target="_blank" rel="noopener">Awards page</a>
           </div>
         </div>
       </div>
@@ -1041,7 +1055,7 @@
       const fresh = ts.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
       if (live) {
         statusEl.classList.remove('down');
-        statusEl.innerHTML = `<span class="dot"></span>Live &middot; synced from ${snap.source} &middot; follower/generation counts as of ${MANUAL.asOf}`;
+        statusEl.innerHTML = `<span class="dot"></span>Live &middot; synced from civitai.com &middot; follower/generation counts as of ${MANUAL.asOf}`;
       } else {
         statusEl.classList.add('down');
         statusEl.innerHTML = `<span class="dot"></span>API unreachable &middot; showing cached snapshot from ${fresh}`;
