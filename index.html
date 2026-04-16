@@ -47,9 +47,23 @@
 <link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
 <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+<!-- Performance: warm up connections to every third-party host we hit during load.
+     Preconnect opens TCP+TLS early; dns-prefetch is a cheaper fallback for older browsers. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<link rel="preconnect" href="https://image.civitai.com" crossorigin>
+<link rel="preconnect" href="https://i.ytimg.com" crossorigin>
+<link rel="preconnect" href="https://img.youtube.com" crossorigin>
+<link rel="preconnect" href="https://www.youtube.com">
+<link rel="dns-prefetch" href="https://civitai.red">
+<link rel="dns-prefetch" href="https://civitai.com">
+
+<!-- LCP hint: avatar.png is the hero image, prioritize its fetch -->
+<link rel="preload" as="image" href="avatar.png" fetchpriority="high">
+
+<!-- Dropped Inter 700 (wasn't used in CSS); Inter 400/600/900 + JetBrains Mono 400/600/700 only -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=JetBrains+Mono:wght@400;600;700&display=swap">
 <style>
   :root {
     --bg: #0a0a0b;
@@ -848,19 +862,19 @@
     <div class="video-grid">
       <div>
         <div class="video-wrap">
-          <iframe src="https://www.youtube.com/embed/NwMVHjgSSSE" title="Featured Work 01" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe src="https://www.youtube.com/embed/NwMVHjgSSSE" title="Featured Work 01" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         <div class="video-label">featured // 01</div>
       </div>
       <div>
         <div class="video-wrap">
-          <iframe src="https://www.youtube.com/embed/oY-X9vwLRtY" title="Featured Work 02" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe src="https://www.youtube.com/embed/oY-X9vwLRtY" title="Featured Work 02" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         <div class="video-label">featured // 02</div>
       </div>
       <div>
         <div class="video-wrap">
-          <iframe src="https://www.youtube.com/embed/_6YD1V-w9Fc" title="Featured Work 03" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe src="https://www.youtube.com/embed/_6YD1V-w9Fc" title="Featured Work 03" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         <div class="video-label">featured // 03</div>
       </div>
@@ -921,7 +935,7 @@
     <div class="awards-grid">
       <!-- Arca Gidan II -->
       <div class="award-card">
-        <a class="award-thumb" href="https://youtu.be/8HmmqGNrPr4" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/8HmmqGNrPr4/maxresdefault.jpg')">
+        <a class="award-thumb" href="https://youtu.be/8HmmqGNrPr4" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/8HmmqGNrPr4/hqdefault.jpg')">
           <span class="award-medal">&#129353;</span>
         </a>
         <div class="award-body">
@@ -937,7 +951,7 @@
 
       <!-- Chroma Awards -->
       <div class="award-card">
-        <a class="award-thumb" href="https://youtu.be/4f4fP7pB2QI" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/4f4fP7pB2QI/maxresdefault.jpg')">
+        <a class="award-thumb" href="https://youtu.be/4f4fP7pB2QI" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/4f4fP7pB2QI/hqdefault.jpg')">
           <span class="award-medal">&#11088;</span>
         </a>
         <div class="award-body">
@@ -952,7 +966,7 @@
 
       <!-- Vidu Q2 On Stage -->
       <div class="award-card">
-        <a class="award-thumb" href="https://youtu.be/lyczP_FJ7m0" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/lyczP_FJ7m0/maxresdefault.jpg')">
+        <a class="award-thumb" href="https://youtu.be/lyczP_FJ7m0" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/lyczP_FJ7m0/hqdefault.jpg')">
           <span class="award-medal">&#127910;</span>
         </a>
         <div class="award-body">
@@ -968,7 +982,7 @@
 
       <!-- Vidu 1st BDay -->
       <div class="award-card">
-        <a class="award-thumb" href="https://youtu.be/Pe5fDqo6b54" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/Pe5fDqo6b54/maxresdefault.jpg')">
+        <a class="award-thumb" href="https://youtu.be/Pe5fDqo6b54" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/Pe5fDqo6b54/hqdefault.jpg')">
           <span class="award-medal">&#129353;</span>
         </a>
         <div class="award-body">
@@ -984,7 +998,7 @@
 
       <!-- Vidu Q1 R2V -->
       <div class="award-card">
-        <a class="award-thumb" href="https://youtu.be/OSM-IelZYhI" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/OSM-IelZYhI/maxresdefault.jpg')">
+        <a class="award-thumb" href="https://youtu.be/OSM-IelZYhI" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/OSM-IelZYhI/hqdefault.jpg')">
           <span class="award-medal">&#129352;</span>
         </a>
         <div class="award-body">
@@ -1000,7 +1014,7 @@
 
       <!-- Vidu x Civitai Q1ntessential -->
       <div class="award-card">
-        <a class="award-thumb" href="https://youtu.be/ogyKlYApenc" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/ogyKlYApenc/maxresdefault.jpg')">
+        <a class="award-thumb" href="https://youtu.be/ogyKlYApenc" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/ogyKlYApenc/hqdefault.jpg')">
           <span class="award-medal">&#129351;</span>
         </a>
         <div class="award-body">
@@ -1017,7 +1031,7 @@
 
       <!-- Project Odyssey S2 // Civitai Title Sponsor -->
       <div class="award-card">
-        <a class="award-thumb" href="https://youtu.be/YMS30o2RIsY" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/YMS30o2RIsY/maxresdefault.jpg')">
+        <a class="award-thumb" href="https://youtu.be/YMS30o2RIsY" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/YMS30o2RIsY/hqdefault.jpg')">
           <span class="award-medal">&#129353;</span>
         </a>
         <div class="award-body">
@@ -1034,7 +1048,7 @@
 
       <!-- Project Odyssey S2 // Advertising -->
       <div class="award-card">
-        <a class="award-thumb" href="https://youtu.be/x8uau8GuTHA" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/x8uau8GuTHA/maxresdefault.jpg')">
+        <a class="award-thumb" href="https://youtu.be/x8uau8GuTHA" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/x8uau8GuTHA/hqdefault.jpg')">
           <span class="award-medal">&#11088;</span>
         </a>
         <div class="award-body">
@@ -1255,8 +1269,9 @@
     });
 
     // Double-buffer state: two <video> elements, we crossfade between them.
-    // `activeEl` is the one currently visible; `hiddenEl` preloads the next src
-    // and only gets faded in once its first frame is loaded (no black flash).
+    // Optimization: after each successful swap, prefetch the *next* rotation
+    // target into the now-idle buffer so the following rotation is instant
+    // (no wait for first-frame decode). Saves ~500ms-1.5s per rotation.
     const buffers = [videoA, videoB];
     let activeBuf = 0;
     let idx = 0;
@@ -1269,6 +1284,19 @@
       slot.setAttribute('href', 'https://civitai.com/models/' + m.id);
       slot.setAttribute('aria-label', m.name + ' on Civitai');
       dots.forEach((d, j) => d.classList.toggle('active', j === i));
+    }
+
+    // Warm up the idle buffer with whatever will be shown after `currentIdx`.
+    // Called after init + after every successful crossfade. Cheap if the
+    // idle buffer already has the right src (no-op).
+    function prefetchNext(currentIdx) {
+      const targetIdx = (currentIdx + 1) % models.length;
+      const idleBuf = buffers[1 - activeBuf];
+      const targetM = models[targetIdx];
+      if (idleBuf.src !== targetM.url) {
+        idleBuf.src = targetM.url;
+        idleBuf.load();
+      }
     }
 
     function show(i) {
@@ -1291,6 +1319,8 @@
         nextEl.classList.add('active');
         curEl.classList.remove('active');
         activeBuf = 1 - activeBuf;
+        // After successful swap, warm up the idle buffer for the following rotation
+        prefetchNext(i);
       };
 
       nextEl.addEventListener('loadeddata', onReady, { once: true });
@@ -1299,7 +1329,7 @@
         nextEl.src = m.url;
         nextEl.load();
       } else if (nextEl.readyState >= 2) {
-        // Already buffered — fire handler manually
+        // Already buffered (from prefetch) — fire handler manually
         onReady();
       }
     }
@@ -1313,7 +1343,7 @@
     wrap.addEventListener('mouseenter', stop);
     wrap.addEventListener('mouseleave', start);
 
-    // Initial load: put the first video in buffer A, mark it active immediately
+    // Initial load: put the first video in buffer A, mark it active immediately.
     (function init() {
       const m = models[0];
       setMeta(0);
@@ -1322,6 +1352,10 @@
       videoA.play().catch(() => {});
     })();
     start();
+
+    // Kick off first prefetch after the main page/video is up — 2s delay so we
+    // don't fight videoA for bandwidth during the critical first-paint window.
+    setTimeout(() => prefetchNext(0), 2000);
   })();
 </script>
 
