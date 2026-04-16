@@ -1268,7 +1268,15 @@
       const b = document.createElement('button');
       b.className = 'axo-dot' + (i === 0 ? ' active' : '');
       b.setAttribute('aria-label', m.name);
-      b.addEventListener('click', () => { show(i); restart(); });
+      // stop() cancels the pending timer; onReady() will schedule the next
+      // rotation off the newly-active clip's duration once the crossfade lands.
+      // If the user clicks the already-active dot (show() no-ops), restart
+      // the schedule off the current playhead so we don't freeze.
+      b.addEventListener('click', () => {
+        stop();
+        if (i === idx && buffers[activeBuf].src) { start(); return; }
+        show(i);
+      });
       dotsEl.appendChild(b);
       return b;
     });
@@ -1350,6 +1358,10 @@
         nextEl.classList.add('active');
         curEl.classList.remove('active');
         activeBuf = 1 - activeBuf;
+        // Schedule the NEXT rotation based on this new clip's actual duration,
+        // so the crossfade lands at the loop seam instead of mid-playthrough
+        // (which would make the clip visibly restart on screen = "jumpy").
+        scheduleNextRotation();
         // After successful swap, warm up the idle buffer for the following rotation.
         // Defer this until after the crossfade fully completes, otherwise reassigning
         // src on the just-faded-out buffer blanks its visible frame mid-fade — which
@@ -1376,8 +1388,29 @@
     }
 
     function next()    { show((idx + 1) % models.length); }
-    function start()   { stop(); timer = setInterval(next, ROTATE_MS); }
-    function stop()    { if (timer) { clearInterval(timer); timer = null; } }
+    function stop()    { if (timer) { clearTimeout(timer); timer = null; } }
+    // Schedule the NEXT rotation so the crossfade fires just before the
+    // currently-active clip loops. Clips are different lengths (5s / 10s / 23s),
+    // so a fixed interval would land mid-playthrough and show a visible "jump"
+    // when the clip seams back to frame 0. We target `remaining - FADE_MS` so
+    // the fade-out begins right as the loop point arrives.
+    // Floor at 4s so an ultra-short clip doesn't thrash; fall back to ROTATE_MS
+    // if duration isn't known yet (metadata still loading or network hiccup).
+    function scheduleNextRotation() {
+      stop();
+      const cur = buffers[activeBuf];
+      const dur = cur.duration;
+      const pos = cur.currentTime || 0;
+      let dwellMs;
+      if (Number.isFinite(dur) && dur > 0) {
+        const remaining = Math.max(0, dur - pos);
+        dwellMs = Math.max(4000, remaining * 1000 - FADE_MS);
+      } else {
+        dwellMs = ROTATE_MS;
+      }
+      timer = setTimeout(next, dwellMs);
+    }
+    function start()   { scheduleNextRotation(); }
     function restart() { stop(); start(); }
 
     // Pause on hover, resume on leave
@@ -1385,6 +1418,9 @@
     wrap.addEventListener('mouseleave', start);
 
     // Initial load: put the first video in buffer A, mark it active immediately.
+    // Wait for metadata before scheduling the first rotation — otherwise
+    // duration is NaN and we'd fall back to the fixed ROTATE_MS, reintroducing
+    // the loop-seam jump on the very first transition.
     (function init() {
       const m = models[0];
       setMeta(0);
@@ -1393,8 +1429,18 @@
       videoA.src = m.url;
       videoA.classList.add('active');
       videoA.play().catch(() => {});
+      const kickoff = () => {
+        videoA.removeEventListener('loadedmetadata', kickoff);
+        start();
+      };
+      if (videoA.readyState >= 1) {
+        start();
+      } else {
+        videoA.addEventListener('loadedmetadata', kickoff, { once: true });
+        // Safety net: if metadata never fires (unlikely), start anyway after 3s
+        setTimeout(() => { if (!timer) start(); }, 3000);
+      }
     })();
-    start();
 
     // Kick off first prefetch after the main page/video is up — 2s delay so we
     // don't fight videoA for bandwidth during the critical first-paint window.
