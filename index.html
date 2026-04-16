@@ -1283,6 +1283,13 @@
     let timer = null;
     let loadingFor = -1;               // guard against races when dots are clicked fast
 
+    // Pre-resolve to absolute URLs. video.src (the DOM property) always returns
+    // an absolute URL, so comparing against our config strings (which are
+    // relative for local files) would never match and we'd reload needlessly,
+    // causing a visible flash mid-crossfade. Resolve once up front.
+    const absPrimary = models.map(m => new URL(m.url,    location.href).href);
+    const absBackup  = models.map(m => new URL(m.backup, location.href).href);
+
     function setMeta(i) {
       const m = models[i];
       name.textContent = m.name;
@@ -1297,11 +1304,12 @@
     function prefetchNext(currentIdx) {
       const targetIdx = (currentIdx + 1) % models.length;
       const idleBuf = buffers[1 - activeBuf];
-      const targetM = models[targetIdx];
-      if (!idleBuf.src.endsWith(targetM.url) && idleBuf.src !== targetM.url) {
+      // Skip if the idle buffer is already loaded with either the primary or backup
+      // for the target model. Compare against resolved absolute URLs.
+      if (idleBuf.src !== absPrimary[targetIdx] && idleBuf.src !== absBackup[targetIdx]) {
         idleBuf.dataset.modelIdx = targetIdx;
         idleBuf.dataset.fellBack = '';
-        idleBuf.src = targetM.url;
+        idleBuf.src = models[targetIdx].url;
         idleBuf.load();
       }
     }
@@ -1348,8 +1356,9 @@
 
       nextEl.addEventListener('loadeddata', onReady, { once: true });
       // Only reassign src if it's actually different — avoids a reload flicker
-      const wantPrimary = nextEl.src !== m.url && nextEl.src !== m.backup;
-      if (wantPrimary) {
+      // mid-crossfade. Compare against resolved absolute URLs, not config strings.
+      const alreadyLoaded = nextEl.src === absPrimary[i] || nextEl.src === absBackup[i];
+      if (!alreadyLoaded) {
         nextEl.dataset.modelIdx = i;
         nextEl.dataset.fellBack = '';
         nextEl.src = m.url;
