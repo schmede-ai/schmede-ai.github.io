@@ -1253,7 +1253,7 @@
       { id: 1203823, name: 'AxoModel Illustrious',  url: 'backup/axomodel-illustrious-1203823.mp4', backup: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/6d2f9ee3-73b8-4d04-9a81-3a0819e8ff08/original=true/60848824.mp4' },
       { id: 367876,  name: 'AxoModel XL',           url: 'backup/axomodel-xl-367876.mp4',           backup: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1281ce4e-b2ec-42ee-a91d-e78b7bc4f2d9/original=true/48613275.mp4' }
     ];
-    const ROTATE_MS = 8000;           // was 4000 — doubled, felt too quick before
+    const ROTATE_MS = 10000;          // 10s per slide
     const FADE_MS   = 500;             // must match .axo-slot video transition duration
     const slot    = document.getElementById('axo-slot');
     const videoA  = document.getElementById('axo-video-a');
@@ -1350,8 +1350,14 @@
         nextEl.classList.add('active');
         curEl.classList.remove('active');
         activeBuf = 1 - activeBuf;
-        // After successful swap, warm up the idle buffer for the following rotation
-        prefetchNext(i);
+        // After successful swap, warm up the idle buffer for the following rotation.
+        // Defer this until after the crossfade fully completes, otherwise reassigning
+        // src on the just-faded-out buffer blanks its visible frame mid-fade — which
+        // reads as a flash during the transition. Small margin added for CSS timing.
+        setTimeout(() => {
+          if (loadToken !== loadingFor) return;
+          prefetchNext(i);
+        }, FADE_MS + 50);
       };
 
       nextEl.addEventListener('loadeddata', onReady, { once: true });
