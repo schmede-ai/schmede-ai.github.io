@@ -44,7 +44,9 @@
 }
 </script>
 
-<link rel="icon" type="image/png" href="favicon.png">
+<link rel="icon" type="image/png" sizes="256x256" href="favicon.png">
+<link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap">
@@ -188,6 +190,16 @@
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+  /* Double-buffered carousel videos: both stacked in the slot, crossfade via opacity.
+     Incoming video is only set to .active once its first frame is loaded, so you
+     never see the black flash from a reloading <video> element. */
+  .axo-slot video {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .axo-slot video.active {
+    opacity: 1;
   }
   .axo-name {
     font-family: var(--mono);
@@ -800,7 +812,8 @@
       <p class="origin">All I wanted to do was make funny axolotl pictures. They wouldn't let me. So I learned how to train my own models.</p>
       <div class="axo-carousel" id="axo-carousel">
         <a class="axo-slot" id="axo-slot" href="https://civitai.com/models/666780" target="_blank" rel="noopener" aria-label="AxoModel Flux on Civitai">
-          <video id="axo-video" autoplay loop muted playsinline preload="auto"></video>
+          <video id="axo-video-a" autoplay loop muted playsinline preload="auto"></video>
+          <video id="axo-video-b" autoplay loop muted playsinline preload="auto"></video>
         </a>
         <div class="axo-name" id="axo-name">&nbsp;</div>
         <div class="axo-dots" id="axo-dots"></div>
@@ -1221,13 +1234,15 @@
       { id: 1203823, name: 'AxoModel Illustrious',  url: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/6d2f9ee3-73b8-4d04-9a81-3a0819e8ff08/original=true/60848824.mp4' },
       { id: 367876,  name: 'AxoModel XL',           url: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1281ce4e-b2ec-42ee-a91d-e78b7bc4f2d9/original=true/48613275.mp4' }
     ];
-    const ROTATE_MS = 4000;
-    const slot   = document.getElementById('axo-slot');
-    const video  = document.getElementById('axo-video');
-    const name   = document.getElementById('axo-name');
-    const dotsEl = document.getElementById('axo-dots');
-    const wrap   = document.getElementById('axo-carousel');
-    if (!slot || !video || !name || !dotsEl || !wrap) return;
+    const ROTATE_MS = 8000;           // was 4000 — doubled, felt too quick before
+    const FADE_MS   = 500;             // must match .axo-slot video transition duration
+    const slot    = document.getElementById('axo-slot');
+    const videoA  = document.getElementById('axo-video-a');
+    const videoB  = document.getElementById('axo-video-b');
+    const name    = document.getElementById('axo-name');
+    const dotsEl  = document.getElementById('axo-dots');
+    const wrap    = document.getElementById('axo-carousel');
+    if (!slot || !videoA || !videoB || !name || !dotsEl || !wrap) return;
 
     // Build dots
     const dots = models.map((m, i) => {
@@ -1239,29 +1254,73 @@
       return b;
     });
 
+    // Double-buffer state: two <video> elements, we crossfade between them.
+    // `activeEl` is the one currently visible; `hiddenEl` preloads the next src
+    // and only gets faded in once its first frame is loaded (no black flash).
+    const buffers = [videoA, videoB];
+    let activeBuf = 0;
     let idx = 0;
     let timer = null;
+    let loadingFor = -1;               // guard against races when dots are clicked fast
 
-    function show(i) {
-      idx = i;
+    function setMeta(i) {
       const m = models[i];
-      video.src = m.url;
-      video.play().catch(() => {});
       name.textContent = m.name;
       slot.setAttribute('href', 'https://civitai.com/models/' + m.id);
       slot.setAttribute('aria-label', m.name + ' on Civitai');
       dots.forEach((d, j) => d.classList.toggle('active', j === i));
     }
-    function next() { show((idx + 1) % models.length); }
-    function start() { stop(); timer = setInterval(next, ROTATE_MS); }
-    function stop()  { if (timer) { clearInterval(timer); timer = null; } }
+
+    function show(i) {
+      if (i === idx && buffers[activeBuf].src) return;   // nothing to do
+      idx = i;
+      setMeta(i);
+
+      const m = models[i];
+      const nextEl = buffers[1 - activeBuf];
+      const curEl  = buffers[activeBuf];
+      loadingFor = i;
+      const loadToken = i;
+
+      const onReady = () => {
+        nextEl.removeEventListener('loadeddata', onReady);
+        // Bail if a newer show() call has already superseded this load
+        if (loadToken !== loadingFor) return;
+        nextEl.play().catch(() => {});
+        // Crossfade: reveal next, hide current
+        nextEl.classList.add('active');
+        curEl.classList.remove('active');
+        activeBuf = 1 - activeBuf;
+      };
+
+      nextEl.addEventListener('loadeddata', onReady, { once: true });
+      // Only reassign src if it's actually different — avoids a reload flicker
+      if (nextEl.src !== m.url) {
+        nextEl.src = m.url;
+        nextEl.load();
+      } else if (nextEl.readyState >= 2) {
+        // Already buffered — fire handler manually
+        onReady();
+      }
+    }
+
+    function next()    { show((idx + 1) % models.length); }
+    function start()   { stop(); timer = setInterval(next, ROTATE_MS); }
+    function stop()    { if (timer) { clearInterval(timer); timer = null; } }
     function restart() { stop(); start(); }
 
     // Pause on hover, resume on leave
     wrap.addEventListener('mouseenter', stop);
     wrap.addEventListener('mouseleave', start);
 
-    show(0);
+    // Initial load: put the first video in buffer A, mark it active immediately
+    (function init() {
+      const m = models[0];
+      setMeta(0);
+      videoA.src = m.url;
+      videoA.classList.add('active');
+      videoA.play().catch(() => {});
+    })();
     start();
   })();
 </script>
