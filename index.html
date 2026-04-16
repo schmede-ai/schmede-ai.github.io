@@ -3,8 +3,47 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>schmede // AI filmmaker</title>
-<meta name="description" content="schmede // AI-generated musicals, fake trailers, and dark satire. Creative Partner at Vidu, Veespark, Floyo, Pollo, and Slop.Club." />
+<title>schmede_ai // AI Filmmaker & Generative Artist</title>
+<meta name="description" content="schmede_ai — AI filmmaker and generative artist. LoRA training, ComfyUI workflows, AI-generated musicals, fake trailers, and dark satire. Award-winning creator on Civitai." />
+<meta name="author" content="schmede_ai" />
+<meta name="keywords" content="schmede_ai, schmede, AI filmmaker, generative artist, LoRA training, ComfyUI, AI video, Civitai, Vidu" />
+<link rel="canonical" href="https://schmede-ai.github.io/" />
+
+<!-- Open Graph / social sharing -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="schmede_ai" />
+<meta property="og:title" content="schmede_ai // AI Filmmaker & Generative Artist" />
+<meta property="og:description" content="AI filmmaker and generative artist. LoRA training, ComfyUI workflows, AI-generated musicals, fake trailers, and dark satire." />
+<meta property="og:url" content="https://schmede-ai.github.io/" />
+<meta property="og:image" content="https://schmede-ai.github.io/avatar.png" />
+
+<!-- Twitter card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@schmede_AI" />
+<meta name="twitter:creator" content="@schmede_AI" />
+<meta name="twitter:title" content="schmede_ai // AI Filmmaker & Generative Artist" />
+<meta name="twitter:description" content="AI filmmaker and generative artist. LoRA training, ComfyUI workflows, AI-generated musicals, fake trailers, and dark satire." />
+<meta name="twitter:image" content="https://schmede-ai.github.io/avatar.png" />
+
+<!-- Structured data (Person schema) — helps Google build a knowledge panel for 'schmede_ai' -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "schmede",
+  "alternateName": ["schmede_ai", "schmede_AI", "Schmede"],
+  "url": "https://schmede-ai.github.io/",
+  "image": "https://schmede-ai.github.io/avatar.png",
+  "jobTitle": "AI Filmmaker & Generative Artist",
+  "description": "AI filmmaker and generative artist. LoRA training, ComfyUI workflows, AI-generated musicals, fake trailers, and dark satire.",
+  "sameAs": [
+    "https://www.youtube.com/@schmede_AI",
+    "https://x.com/schmede_AI",
+    "https://civitai.com/user/schmede"
+  ]
+}
+</script>
+
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -561,19 +600,21 @@
   .socials {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 12px;
     flex-wrap: wrap;
+    align-items: center;
     margin-bottom: 16px;
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.5px;
   }
   .socials a {
-    font-family: var(--mono);
-    font-size: 14px;
-    padding: 8px 16px;
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    color: var(--ink);
+    color: var(--ink-dim);
+    text-decoration: none;
+    transition: color 0.15s;
   }
-  .socials a:hover { border-color: var(--accent); color: var(--accent); }
+  .socials a:hover { color: var(--accent); }
+  .socials .sep { color: var(--border); user-select: none; }
   .footer-note {
     font-family: var(--mono);
     font-size: 11px;
@@ -720,7 +761,7 @@
     <div class="hero-top">
       <img src="avatar.png" alt="schmede avatar" class="avatar" onerror="this.style.display='none'">
       <div>
-        <div class="tag">// AI FILMMAKER · GEN ARTIST</div>
+        <div class="tag">@schmede_ai // AI FILMMAKER · GEN ARTIST</div>
         <h1>schm<span class="glitch">e</span>de</h1>
       </div>
     </div>
@@ -1116,10 +1157,13 @@
 <footer>
   <div class="container">
     <div class="socials">
-      <a href="https://www.youtube.com/@schmede_AI" target="_blank" rel="noopener">YouTube</a>
-      <a href="https://civitai.com/user/schmede" target="_blank" rel="noopener">Civitai</a>
-      <a href="https://www.vidu.com/" target="_blank" rel="noopener">Vidu</a>
-      <a href="#contact">Contact</a>
+      <a href="https://www.youtube.com/@schmede_AI" target="_blank" rel="noopener">youtube</a>
+      <span class="sep">//</span>
+      <a href="https://x.com/schmede_AI" target="_blank" rel="noopener">x</a>
+      <span class="sep">//</span>
+      <a href="https://civitai.com/user/schmede" target="_blank" rel="noopener">civitai</a>
+      <span class="sep">//</span>
+      <a href="#contact">contact</a>
     </div>
     <div class="footer-note">&copy; schmede // built with spite and HTML</div>
   </div>
