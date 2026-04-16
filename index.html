@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>schmede // AI filmmaker</title>
 <meta name="description" content="schmede // AI-generated musicals, fake trailers, and dark satire. Creative Partner at Vidu, Veespark, Floyo, Pollo, and Slop.Club." />
+<link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap">
@@ -762,8 +763,8 @@
           <div class="stat-label">Followers</div>
         </div>
         <div>
-          <div class="stat-num" id="stat-likes">—</div>
-          <div class="stat-label">Likes</div>
+          <div class="stat-num" id="stat-reactions">—</div>
+          <div class="stat-label">Reactions</div>
         </div>
         <div>
           <div class="stat-num" id="stat-downloads">—</div>
@@ -910,9 +911,9 @@
     const MANUAL = {
       followers: 13400,
       generations: 296100,
+      reactions: 776300,
       articleCount: 28,
       articleViews: 27026,
-      articleLikes: 637,
       asOf: 'Apr 2026'
     };
 
@@ -956,7 +957,7 @@
       document.getElementById('stat-followers').textContent = fmt(MANUAL.followers);
       document.getElementById('stat-generations').textContent = fmt(MANUAL.generations);
       document.getElementById('stat-downloads').textContent = fmt(snap.downloads);
-      document.getElementById('stat-likes').textContent = fmt(snap.likes);
+      document.getElementById('stat-reactions').textContent = fmt(MANUAL.reactions);
       document.getElementById('stat-models').textContent = snap.modelCount.toLocaleString();
       document.getElementById('stat-articles').textContent = snap.articleCount.toLocaleString();
       document.getElementById('stat-article-views').textContent = fmt(snap.articleViews);
@@ -1029,7 +1030,6 @@
             <div class="article-title">${a.title}</div>
             <div class="article-meta">
               <span class="views">${fmt(a.views)} views</span>
-              <span>${fmt(a.likes)} likes</span>
             </div>`;
           card.appendChild(thumb);
           card.appendChild(body);
@@ -1064,13 +1064,10 @@
       try {
         const models = await fetchModels(host);
         if (!models.length) continue;
-        let downloads = 0, likes = 0;
+        let downloads = 0;
         models.forEach(m => {
-          const s = m.stats || {};
-          downloads += s.downloadCount || 0;
-          likes += (s.thumbsUpCount || 0) + (s.favoriteCount || 0);
+          downloads += (m.stats || {}).downloadCount || 0;
         });
-        likes += MANUAL.articleLikes || 0;
         const topModels = [...models]
           .sort((a, b) => (b.stats?.downloadCount || 0) - (a.stats?.downloadCount || 0))
           .map(m => {
@@ -1084,7 +1081,7 @@
             };
           });
         liveSnap = {
-          downloads, likes,
+          downloads,
           modelCount: models.length,
           articleCount: MANUAL.articleCount || 0,
           articleViews: MANUAL.articleViews || 0,
