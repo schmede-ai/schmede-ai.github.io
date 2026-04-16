@@ -252,7 +252,12 @@
     aspect-ratio: 16/9;
     background: #000 center/cover no-repeat;
     position: relative;
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
   }
+  a.award-thumb:hover { opacity: 0.88; }
   .award-thumb.placeholder {
     background: linear-gradient(135deg, #1a1a22, #0f0f14);
     display: flex;
@@ -625,6 +630,58 @@
     aspect-ratio: 16/9;
     background: #000 center/cover no-repeat;
     border-bottom: 1px solid var(--border);
+    cursor: zoom-in;
+  }
+
+  /* Lightbox (used for workflow thumbnails — click to enlarge) */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    z-index: 1000;
+    cursor: zoom-out;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    cursor: default;
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
+  }
+  .lightbox-close:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: scale(1.05);
+  }
+  @media (max-width: 600px) {
+    .lightbox { padding: 16px; }
+    .lightbox-close { top: 12px; right: 12px; width: 36px; height: 36px; font-size: 18px; }
   }
   .workflow-body {
     padding: 14px 16px;
@@ -780,9 +837,9 @@
     <div class="awards-grid">
       <!-- Arca Gidan II -->
       <div class="award-card">
-        <div class="award-thumb" style="background-image:url('https://img.youtube.com/vi/8HmmqGNrPr4/maxresdefault.jpg')">
+        <a class="award-thumb" href="https://youtu.be/8HmmqGNrPr4" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/8HmmqGNrPr4/maxresdefault.jpg')">
           <span class="award-medal">&#129353;</span>
-        </div>
+        </a>
         <div class="award-body">
           <div class="award-event">Arca Gidan II</div>
           <div class="award-title">3rd Place // Ridge Winner</div>
@@ -796,9 +853,9 @@
 
       <!-- Chroma Awards -->
       <div class="award-card">
-        <div class="award-thumb" style="background-image:url('https://img.youtube.com/vi/4f4fP7pB2QI/maxresdefault.jpg')">
+        <a class="award-thumb" href="https://youtu.be/4f4fP7pB2QI" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/4f4fP7pB2QI/maxresdefault.jpg')">
           <span class="award-medal">&#11088;</span>
-        </div>
+        </a>
         <div class="award-body">
           <div class="award-event">The Chroma Awards</div>
           <div class="award-title">Honorable Mention // Music Video / Pop</div>
@@ -811,9 +868,9 @@
 
       <!-- Vidu Q2 On Stage -->
       <div class="award-card">
-        <div class="award-thumb" style="background-image:url('https://img.youtube.com/vi/lyczP_FJ7m0/maxresdefault.jpg')">
+        <a class="award-thumb" href="https://youtu.be/lyczP_FJ7m0" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/lyczP_FJ7m0/maxresdefault.jpg')">
           <span class="award-medal">&#127910;</span>
-        </div>
+        </a>
         <div class="award-body">
           <div class="award-event">#ViduQ2OnStage</div>
           <div class="award-title">Best in Camera Flow</div>
@@ -827,9 +884,9 @@
 
       <!-- Vidu 1st BDay -->
       <div class="award-card">
-        <div class="award-thumb" style="background-image:url('https://img.youtube.com/vi/Pe5fDqo6b54/maxresdefault.jpg')">
+        <a class="award-thumb" href="https://youtu.be/Pe5fDqo6b54" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/Pe5fDqo6b54/maxresdefault.jpg')">
           <span class="award-medal">&#129353;</span>
-        </div>
+        </a>
         <div class="award-body">
           <div class="award-event">#Vidu1stBDay</div>
           <div class="award-title">3rd Place</div>
@@ -843,9 +900,9 @@
 
       <!-- Vidu Q1 R2V -->
       <div class="award-card">
-        <div class="award-thumb" style="background-image:url('https://img.youtube.com/vi/OSM-IelZYhI/maxresdefault.jpg')">
+        <a class="award-thumb" href="https://youtu.be/OSM-IelZYhI" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/OSM-IelZYhI/maxresdefault.jpg')">
           <span class="award-medal">&#129352;</span>
-        </div>
+        </a>
         <div class="award-body">
           <div class="award-event">#ViduQ1R2V</div>
           <div class="award-title">2nd Place</div>
@@ -859,9 +916,9 @@
 
       <!-- Vidu x Civitai Q1ntessential -->
       <div class="award-card">
-        <div class="award-thumb" style="background-image:url('https://img.youtube.com/vi/ogyKlYApenc/maxresdefault.jpg')">
+        <a class="award-thumb" href="https://youtu.be/ogyKlYApenc" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/ogyKlYApenc/maxresdefault.jpg')">
           <span class="award-medal">&#129351;</span>
-        </div>
+        </a>
         <div class="award-body">
           <div class="award-event">Vidu x Civitai Q1ntessential</div>
           <div class="award-title">1st Place // 60-Second+ Film</div>
@@ -876,9 +933,9 @@
 
       <!-- Project Odyssey S2 // Civitai Title Sponsor -->
       <div class="award-card">
-        <div class="award-thumb" style="background-image:url('https://img.youtube.com/vi/YMS30o2RIsY/maxresdefault.jpg')">
+        <a class="award-thumb" href="https://youtu.be/YMS30o2RIsY" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/YMS30o2RIsY/maxresdefault.jpg')">
           <span class="award-medal">&#129353;</span>
-        </div>
+        </a>
         <div class="award-body">
           <div class="award-event">Project Odyssey // Season 2</div>
           <div class="award-title">3rd Place // Civitai Title Sponsor Track</div>
@@ -893,9 +950,9 @@
 
       <!-- Project Odyssey S2 // Advertising -->
       <div class="award-card">
-        <div class="award-thumb" style="background-image:url('https://img.youtube.com/vi/x8uau8GuTHA/maxresdefault.jpg')">
+        <a class="award-thumb" href="https://youtu.be/x8uau8GuTHA" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/x8uau8GuTHA/maxresdefault.jpg')">
           <span class="award-medal">&#11088;</span>
-        </div>
+        </a>
         <div class="award-body">
           <div class="award-event">Project Odyssey // Season 2</div>
           <div class="award-title">Honorable Mention // Advertising</div>
@@ -1355,6 +1412,55 @@
     // Ultimate fallback: friendly message, no fake numbers
     statusEl.classList.add('down');
     statusEl.innerHTML = '<span class="dot"></span>Civitai API unreachable (site migrating to civitai.red). Stats will populate once it\'s back.';
+  })();
+</script>
+
+<!-- Lightbox overlay (used by workflow thumbnails) -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+  <img class="lightbox-img" id="lightbox-img" alt="">
+</div>
+
+<script>
+  // Lightbox: click a workflow thumbnail to enlarge; click overlay / X / Escape to close.
+  (function () {
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightbox-img');
+    const lbClose = document.getElementById('lightbox-close');
+    if (!lb || !lbImg || !lbClose) return;
+
+    function openLB(src, alt) {
+      lbImg.src = src;
+      lbImg.alt = alt || '';
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLB() {
+      lb.classList.remove('open');
+      lbImg.removeAttribute('src');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.workflow-thumb').forEach(el => {
+      el.addEventListener('click', () => {
+        const bg = el.style.backgroundImage || '';
+        const m = bg.match(/url\(["']?([^"')]+)["']?\)/);
+        if (m && m[1]) {
+          const caption = el.parentElement?.querySelector('.workflow-caption')?.textContent || '';
+          openLB(m[1], caption);
+        }
+      });
+    });
+
+    lb.addEventListener('click', e => {
+      // Only close when clicking the backdrop or the close button, not the image itself.
+      if (e.target === lb || e.target === lbClose) closeLB();
+    });
+    lbClose.addEventListener('click', closeLB);
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && lb.classList.contains('open')) closeLB();
+    });
   })();
 </script>
 
