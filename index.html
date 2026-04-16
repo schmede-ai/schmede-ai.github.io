@@ -518,6 +518,58 @@
     text-transform: uppercase;
   }
 
+  /* Under the Hood — workflow showcase */
+  .workflow-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .workflow-card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+  .workflow-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+  }
+  .workflow-card.hero { grid-column: 1 / -1; }
+  .workflow-thumb {
+    aspect-ratio: 16/9;
+    background: #000 center/cover no-repeat;
+    border-bottom: 1px solid var(--border);
+  }
+  .workflow-body {
+    padding: 14px 16px;
+  }
+  .workflow-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .workflow-caption {
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+  .workflow-note {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-dim);
+    margin-top: 16px;
+    text-align: right;
+  }
+  @media (max-width: 600px) {
+    .workflow-grid { grid-template-columns: 1fr; }
+  }
+
   @media (max-width: 600px) {
     .hero { padding: 60px 0 40px; }
     section { padding: 48px 0; }
@@ -588,11 +640,49 @@
   </div>
 </section>
 
+<!-- UNDER THE HOOD -->
+<section id="workflows">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">02 //</span>
+      <div>
+        <div class="section-title">Under the Hood</div>
+        <div class="section-desc">Sometimes, typing prompts just doesn't cut it.</div>
+      </div>
+    </div>
+
+    <div class="workflow-grid">
+      <div class="workflow-card hero">
+        <div class="workflow-thumb" style="background-image:url('workflow-1.png')"></div>
+        <div class="workflow-body">
+          <div class="workflow-tag">body-part detection</div>
+          <div class="workflow-caption">Detects every body part in the frame, masks them separately, and runs a targeted detail pass on each one.</div>
+        </div>
+      </div>
+      <div class="workflow-card">
+        <div class="workflow-thumb" style="background-image:url('workflow-2.png')"></div>
+        <div class="workflow-body">
+          <div class="workflow-tag">audio + image &rarr; video</div>
+          <div class="workflow-caption">Driving lip-sync and performance from a still frame plus a recorded audio track.</div>
+        </div>
+      </div>
+      <div class="workflow-card">
+        <div class="workflow-thumb" style="background-image:url('workflow-3.png')"></div>
+        <div class="workflow-body">
+          <div class="workflow-tag">pose + face retargeting</div>
+          <div class="workflow-caption">Animating a character reference sheet to match a driving video&rsquo;s body pose and facial performance.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- AWARDS -->
 <section id="awards">
   <div class="container">
     <div class="section-header">
-      <span class="section-num">02 //</span>
+      <span class="section-num">03 //</span>
       <div>
         <div class="section-title">Awards & Recognition</div>
         <div class="section-desc">Contest wins, festival recognition, and featured work.</div>
@@ -736,7 +826,7 @@
 <section id="featured">
   <div class="container">
     <div class="section-header">
-      <span class="section-num">03 //</span>
+      <span class="section-num">04 //</span>
       <div>
         <div class="section-title">As Seen On</div>
         <div class="section-desc">Guest appearances and interviews.</div>
@@ -764,7 +854,7 @@
 <section id="civitai">
   <div class="container">
     <div class="section-header">
-      <span class="section-num">04 //</span>
+      <span class="section-num">05 //</span>
       <div>
         <div class="section-title">Civitai</div>
       </div>
@@ -813,7 +903,7 @@
 <section id="articles">
   <div class="container">
     <div class="section-header">
-      <span class="section-num">05 //</span>
+      <span class="section-num">06 //</span>
       <div>
         <div class="section-title">Articles &amp; Guides</div>
         <div class="section-desc">Tutorials, workflow breakdowns, and process writeups on Civitai.</div>
@@ -827,7 +917,7 @@
 <section id="codes">
   <div class="container">
     <div class="section-header">
-      <span class="section-num">06 //</span>
+      <span class="section-num">07 //</span>
       <div>
         <div class="section-title">Free Credits &amp; Perks</div>
         <div class="section-desc">Using my invite codes helps me out. You get free stuff too.</div>
@@ -864,7 +954,7 @@
 <section id="contact">
   <div class="container">
     <div class="section-header">
-      <span class="section-num">07 //</span>
+      <span class="section-num">08 //</span>
       <div>
         <div class="section-title">Contact</div>
         <div class="section-desc">Business inquiries, collaborations, sponsorships, and commissions.</div>
