@@ -1242,11 +1242,16 @@
 <script>
   // Axolotl model carousel — rotates through 4 AxoModel releases
   (function () {
+    // Local-first: these AxoModel previews are static (old models, won't change),
+    // so we serve the local copies as primary for speed (no cross-origin handshake
+    // to image.civitai.com, bytes come from the same origin as the HTML).
+    // Civitai URL kept as `backup` purely as belt-and-suspenders in case the local
+    // file is ever missing from the repo — the 'error' handler below swaps to it.
     const models = [
-      { id: 666780,  name: 'AxoModel Flux',         url: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e52690f5-216b-48b2-b8f2-d646ee813d99/original=true/50199958.mp4' },
-      { id: 617439,  name: 'AxoModel PDXL',         url: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/51c1e274-d55a-49dd-8365-c227e6bd26c0/original=true/48609238.mp4' },
-      { id: 1203823, name: 'AxoModel Illustrious',  url: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/6d2f9ee3-73b8-4d04-9a81-3a0819e8ff08/original=true/60848824.mp4' },
-      { id: 367876,  name: 'AxoModel XL',           url: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1281ce4e-b2ec-42ee-a91d-e78b7bc4f2d9/original=true/48613275.mp4' }
+      { id: 666780,  name: 'AxoModel Flux',         url: 'backup/axomodel-flux-666780.mp4',         backup: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e52690f5-216b-48b2-b8f2-d646ee813d99/original=true/50199958.mp4' },
+      { id: 617439,  name: 'AxoModel PDXL',         url: 'backup/axomodel-pdxl-617439.mp4',         backup: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/51c1e274-d55a-49dd-8365-c227e6bd26c0/original=true/48609238.mp4' },
+      { id: 1203823, name: 'AxoModel Illustrious',  url: 'backup/axomodel-illustrious-1203823.mp4', backup: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/6d2f9ee3-73b8-4d04-9a81-3a0819e8ff08/original=true/60848824.mp4' },
+      { id: 367876,  name: 'AxoModel XL',           url: 'backup/axomodel-xl-367876.mp4',           backup: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1281ce4e-b2ec-42ee-a91d-e78b7bc4f2d9/original=true/48613275.mp4' }
     ];
     const ROTATE_MS = 8000;           // was 4000 — doubled, felt too quick before
     const FADE_MS   = 500;             // must match .axo-slot video transition duration
@@ -1293,11 +1298,29 @@
       const targetIdx = (currentIdx + 1) % models.length;
       const idleBuf = buffers[1 - activeBuf];
       const targetM = models[targetIdx];
-      if (idleBuf.src !== targetM.url) {
+      if (!idleBuf.src.endsWith(targetM.url) && idleBuf.src !== targetM.url) {
+        idleBuf.dataset.modelIdx = targetIdx;
+        idleBuf.dataset.fellBack = '';
         idleBuf.src = targetM.url;
         idleBuf.load();
       }
     }
+
+    // Failover: if a Civitai URL fails to load (CDN down, DNS failure, etc.),
+    // quietly swap to the local backup copy. One retry per source; no loops.
+    function attachFallback(el) {
+      el.addEventListener('error', () => {
+        const mi = Number(el.dataset.modelIdx);
+        if (!Number.isFinite(mi)) return;
+        const m = models[mi];
+        if (!m || !m.backup || el.dataset.fellBack === '1') return;
+        el.dataset.fellBack = '1';
+        el.src = m.backup;
+        el.load();
+      });
+    }
+    attachFallback(videoA);
+    attachFallback(videoB);
 
     function show(i) {
       if (i === idx && buffers[activeBuf].src) return;   // nothing to do
@@ -1325,7 +1348,10 @@
 
       nextEl.addEventListener('loadeddata', onReady, { once: true });
       // Only reassign src if it's actually different — avoids a reload flicker
-      if (nextEl.src !== m.url) {
+      const wantPrimary = nextEl.src !== m.url && nextEl.src !== m.backup;
+      if (wantPrimary) {
+        nextEl.dataset.modelIdx = i;
+        nextEl.dataset.fellBack = '';
         nextEl.src = m.url;
         nextEl.load();
       } else if (nextEl.readyState >= 2) {
@@ -1347,6 +1373,8 @@
     (function init() {
       const m = models[0];
       setMeta(0);
+      videoA.dataset.modelIdx = 0;
+      videoA.dataset.fellBack = '';
       videoA.src = m.url;
       videoA.classList.add('active');
       videoA.play().catch(() => {});
@@ -1378,25 +1406,51 @@
     //  - user-level follower / generation totals
     //  - articles (/api/v1/articles 404s; /api/trpc has no CORS header from github.io)
     // Update these when the profile moves meaningfully. Last updated: 2026-04-15.
+    // downloads/modelCount are used as ultimate fallback if both live API
+    // AND localStorage cache are unavailable (e.g. first-time visitor during outage).
     const MANUAL = {
       followers: 13400,
       generations: 296100,
       reactions: 776300,
+      downloads: 62500,       // ultimate fallback — snapshot of total model downloads
+      modelCount: 42,         // ultimate fallback — snapshot of published model count
       articleCount: 28,
       articleViews: 27026,
       asOf: 'Apr 2026'
     };
 
-    // Hand-picked top articles (sorted by views) — covers resolved via Civitai CDN.
+    // Hand-curated top models — snapshot of the top 10 by downloads at the time
+    // of the last backup refresh. Each entry has a local thumb in /backup, used
+    // two ways: (1) if a live API model card matches by id, we pass localThumb
+    // as onerror fallback so the thumb still loads when Civitai CDN is down;
+    // (2) if both the live API AND localStorage cache are unavailable, we render
+    // the models grid directly from this list. Refresh occasionally to stay current.
+    const BAKED_MODELS = [
+      { id: 1727659, name: 'Clear_Note', downloads: 2793, thumbType: 'video', localThumb: 'backup/model-1727659.mp4' },
+      { id: 1050834, name: 'cheats.safetensors (enhancer/detailer)', downloads: 2487, thumbType: 'video', localThumb: 'backup/model-1050834.mp4' },
+      { id: 1221363, name: 'Untitled Goose Game Style - Illustrious', downloads: 2173, thumbType: 'video', localThumb: 'backup/model-1221363.mp4' },
+      { id: 1307940, name: 'Animal Crossing Style - Illustrious', downloads: 1416, thumbType: 'video', localThumb: 'backup/model-1307940.mp4' },
+      { id: 1228196, name: 'Cybernetic Enhancer - Illustrious', downloads: 1287, thumbType: 'image', localThumb: 'backup/model-1228196.jpeg' },
+      { id: 1250850, name: 'Scene Queen - Illustrious', downloads: 1186, thumbType: 'video', localThumb: 'backup/model-1250850.mp4' },
+      { id: 1290767, name: 'AK-47 (AKM w/ Fixed Stock) - Illustrious', downloads: 1036, thumbType: 'image', localThumb: 'backup/model-1290767.jpeg' },
+      { id: 1260133, name: 'Pikaole Style - Illustrious', downloads: 977, thumbType: 'video', localThumb: 'backup/model-1260133.mp4' },
+      { id: 1331015, name: 'Realism Shift - Illustrious', downloads: 773, thumbType: 'video', localThumb: 'backup/model-1331015.mp4' },
+      { id: 1242942, name: 'FN P90 (Classic) - Illustrious', downloads: 732, thumbType: 'video', localThumb: 'backup/model-1242942.mp4' }
+    ];
+    // Fast lookup: model id -> local backup file
+    const MODEL_BACKUP_BY_ID = Object.fromEntries(BAKED_MODELS.map(m => [m.id, m.localThumb]));
+
+    // Hand-picked top articles (sorted by views) — covers resolved via Civitai CDN,
+    // with local backup copies in /backup (used by onerror fallback if CDN is down).
     const BAKED_ARTICLES = [
-      { id: 9775,  title: 'Training Flux LoRas for Stubborn Concepts', views: 6899, likes: 47, cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/9aecf308-0bed-4f4f-bc78-6ce2f0078ff7/width=600/cover.jpeg' },
-      { id: 14977, title: 'How I make videos and how you can too, for free*', views: 6447, likes: 64, cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/dd148ced-03cc-48c0-9fbf-e81e41c83002/width=600/cover.jpeg' },
-      { id: 11864, title: 'GPT for Illustrious prompting for people who come from Flux', views: 3103, likes: 33, cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/036ffee7-3d62-44d2-835c-06762787df8b/width=600/cover.jpeg' },
-      { id: 14622, title: 'Tags I like / Bidding on my favorite Illustrious checkpoint', views: 1502, likes: 41, cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/0a0c05cf-afd2-4b44-9eb7-c2c51b01f83d/width=600/cover.jpeg' },
-      { id: 10312, title: 'Project Odyssey — "Nip, Cheese, and Chaos" / 3K Followers', views: 1151, likes: 8,  cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/93c9a422-b62d-46a5-96fe-135598b8975e/width=600/cover.jpeg' },
-      { id: 8585,  title: 'Custom GPT for CogVideo Prompts / 1,000 Followers', views: 1040, likes: 10, cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/3e32ae75-d221-4c4e-b059-4909ac34669d/width=600/cover.jpeg' },
-      { id: 12510, title: 'Flux Prompting GPT', views: 653, likes: 26, cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/4dd99bc5-5525-4592-ad9c-b8946e911ffc/width=600/cover.jpeg' },
-      { id: 19971, title: 'High-effort video creation — tips & tricks / Vidu Q2', views: 568, likes: 8,  cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/d011a9aa-b877-4105-9ab2-0a7030cc23c7/width=600/cover.jpeg' }
+      { id: 9775,  title: 'Training Flux LoRas for Stubborn Concepts', views: 6899, likes: 47, cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/9aecf308-0bed-4f4f-bc78-6ce2f0078ff7/width=600/cover.jpeg', backupCover: 'backup/article-9775.jpeg' },
+      { id: 14977, title: 'How I make videos and how you can too, for free*', views: 6447, likes: 64, cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/dd148ced-03cc-48c0-9fbf-e81e41c83002/width=600/cover.jpeg', backupCover: 'backup/article-14977.jpeg' },
+      { id: 11864, title: 'GPT for Illustrious prompting for people who come from Flux', views: 3103, likes: 33, cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/036ffee7-3d62-44d2-835c-06762787df8b/width=600/cover.jpeg', backupCover: 'backup/article-11864.jpeg' },
+      { id: 14622, title: 'Tags I like / Bidding on my favorite Illustrious checkpoint', views: 1502, likes: 41, cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/0a0c05cf-afd2-4b44-9eb7-c2c51b01f83d/width=600/cover.jpeg', backupCover: 'backup/article-14622.jpeg' },
+      { id: 10312, title: 'Project Odyssey — "Nip, Cheese, and Chaos" / 3K Followers', views: 1151, likes: 8,  cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/93c9a422-b62d-46a5-96fe-135598b8975e/width=600/cover.jpeg', backupCover: 'backup/article-10312.jpeg' },
+      { id: 8585,  title: 'Custom GPT for CogVideo Prompts / 1,000 Followers', views: 1040, likes: 10, cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/3e32ae75-d221-4c4e-b059-4909ac34669d/width=600/cover.jpeg', backupCover: 'backup/article-8585.jpeg' },
+      { id: 12510, title: 'Flux Prompting GPT', views: 653, likes: 26, cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/4dd99bc5-5525-4592-ad9c-b8946e911ffc/width=600/cover.jpeg', backupCover: 'backup/article-12510.jpeg' },
+      { id: 19971, title: 'High-effort video creation — tips & tricks / Vidu Q2', views: 568, likes: 8,  cover: 'https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/d011a9aa-b877-4105-9ab2-0a7030cc23c7/width=600/cover.jpeg', backupCover: 'backup/article-19971.jpeg' }
     ];
 
     const fetchModels = async (host) => {
@@ -1433,7 +1487,9 @@
       document.getElementById('stat-article-views').textContent = fmt(snap.articleViews);
 
       // Build a media element (video or img) with explicit property setup so autoplay actually fires.
-      const buildMedia = (url, type) => {
+      // Accepts an optional backupUrl — if the primary src fails to load (CDN outage),
+      // the element silently swaps to the backup. One-shot; won't loop.
+      const buildMedia = (url, type, backupUrl) => {
         if (!url) return null;
         if (type === 'video') {
           const v = document.createElement('video');
@@ -1447,18 +1503,34 @@
           v.setAttribute('webkit-playsinline', '');
           v.preload = 'auto';
           v.addEventListener('loadeddata', () => { v.play().catch(() => {}); });
+          if (backupUrl) {
+            v.addEventListener('error', function onErr() {
+              v.removeEventListener('error', onErr);
+              v.src = backupUrl;
+              v.load();
+            }, { once: true });
+          }
           return v;
         }
         const img = document.createElement('img');
         img.src = url;
         img.loading = 'lazy';
         img.alt = '';
+        if (backupUrl) {
+          img.addEventListener('error', function onErr() {
+            img.removeEventListener('error', onErr);
+            img.src = backupUrl;
+          }, { once: true });
+        }
         return img;
       };
 
       const grid = document.getElementById('models-grid');
       grid.innerHTML = '';
       (snap.topModels || []).slice(0, 10).forEach(m => {
+        // Inject a backup thumb if we have one baked for this model id.
+        // Covers both live data and older cached snapshots saved before backups existed.
+        if (!m.backupThumb && MODEL_BACKUP_BY_ID[m.id]) m.backupThumb = MODEL_BACKUP_BY_ID[m.id];
         const card = document.createElement('a');
         card.className = 'model-card';
         card.href = m.url;
@@ -1466,7 +1538,7 @@
         card.rel = 'noopener';
         const thumb = document.createElement('div');
         thumb.className = 'model-thumb';
-        const media = buildMedia(m.thumb, m.thumbType);
+        const media = buildMedia(m.thumb, m.thumbType, m.backupThumb);
         if (media) thumb.appendChild(media);
         const body = document.createElement('div');
         body.className = 'model-body';
@@ -1492,7 +1564,7 @@
           card.rel = 'noopener';
           const thumb = document.createElement('div');
           thumb.className = 'article-thumb';
-          const media = buildMedia(a.cover, a.coverType);
+          const media = buildMedia(a.cover, a.coverType, a.backupCover);
           if (media) thumb.appendChild(media);
           const body = document.createElement('div');
           body.className = 'article-body';
@@ -1525,9 +1597,17 @@
       url: `${LINK_BASE}/articles/${a.id}`,
       cover: a.cover,
       coverType: 'image',
+      backupCover: a.backupCover,
       views: a.views,
       likes: a.likes
     }));
+
+    // Stale-while-revalidate: paint cached snapshot immediately (if any),
+    // then try live in the background and re-render on success. Keeps the
+    // page fast even when Civitai is slow, and preserves content when it's down.
+    let cachedSnap = null;
+    try { cachedSnap = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); } catch {}
+    if (cachedSnap) render(cachedSnap, false);
 
     let liveSnap = null;
     for (const host of HOSTS) {
@@ -1543,10 +1623,12 @@
           .map(m => {
             const cover = m.modelVersions?.[0]?.images?.[0] || {};
             return {
+              id: m.id,
               name: m.name,
               url: `${LINK_BASE}/models/${m.id}`,
               thumb: cover.url || '',
               thumbType: cover.type || 'image',
+              backupThumb: MODEL_BACKUP_BY_ID[m.id] || '',
               downloads: m.stats?.downloadCount || 0
             };
           });
@@ -1570,15 +1652,35 @@
       return;
     }
 
-    // No live data. Try cached snapshot.
-    try {
-      const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
-      if (cached) { render(cached, false); return; }
-    } catch {}
+    // No live data + we already rendered cache (if any). Done.
+    if (cachedSnap) return;
 
-    // Ultimate fallback: friendly message, no fake numbers
+    // No live, no cache — ultimate fallback. Render MANUAL snapshot so the
+    // stats section still has meaningful numbers, plus the baked articles
+    // (which have local backup covers) AND the baked model grid (which uses
+    // local-only thumbs). Site stays fully populated even during total Civitai outage.
+    const bakedModelsAsTop = BAKED_MODELS.map(m => ({
+      id: m.id,
+      name: m.name,
+      url: `${LINK_BASE}/models/${m.id}`,
+      thumb: m.localThumb,           // primary = local (no CDN attempt)
+      thumbType: m.thumbType,
+      backupThumb: '',               // no secondary backup needed
+      downloads: m.downloads
+    }));
+    const fallbackSnap = {
+      downloads:    MANUAL.downloads    || 0,
+      modelCount:   MANUAL.modelCount   || 0,
+      articleCount: MANUAL.articleCount || 0,
+      articleViews: MANUAL.articleViews || 0,
+      topModels:    bakedModelsAsTop,
+      topArticles:  bakedArticles,
+      source:       'manual-snapshot',
+      fetchedAt:    Date.now()
+    };
+    render(fallbackSnap, false);
     statusEl.classList.add('down');
-    statusEl.innerHTML = '<span class="dot"></span>Civitai API unreachable (site migrating to civitai.red). Stats will populate once it\'s back.';
+    statusEl.innerHTML = '<span class="dot"></span>Civitai API unreachable &middot; showing manual snapshot from ' + MANUAL.asOf;
   })();
 </script>
 
