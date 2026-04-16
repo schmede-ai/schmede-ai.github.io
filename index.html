@@ -521,7 +521,7 @@
   /* Under the Hood — workflow showcase */
   .workflow-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 16px;
   }
   .workflow-card {
@@ -537,7 +537,6 @@
     transform: translateY(-2px);
     border-color: var(--accent);
   }
-  .workflow-card.hero { grid-column: 1 / -1; }
   .workflow-thumb {
     aspect-ratio: 16/9;
     background: #000 center/cover no-repeat;
@@ -566,10 +565,6 @@
     margin-top: 16px;
     text-align: right;
   }
-  @media (max-width: 600px) {
-    .workflow-grid { grid-template-columns: 1fr; }
-  }
-
   @media (max-width: 600px) {
     .hero { padding: 60px 0 40px; }
     section { padding: 48px 0; }
@@ -652,7 +647,7 @@
     </div>
 
     <div class="workflow-grid">
-      <div class="workflow-card hero">
+      <div class="workflow-card">
         <div class="workflow-thumb" style="background-image:url('workflow-1.png')"></div>
         <div class="workflow-body">
           <div class="workflow-tag">body-part detection</div>
