@@ -15,7 +15,12 @@
 <meta property="og:title" content="schmede_ai // AI Filmmaker & Generative Artist" />
 <meta property="og:description" content="AI filmmaker and generative artist. LoRA training, ComfyUI workflows, AI-generated musicals, fake trailers, and dark satire." />
 <meta property="og:url" content="https://schmede-ai.github.io/" />
-<meta property="og:image" content="https://schmede-ai.github.io/avatar.png" />
+<meta property="og:image" content="https://schmede-ai.github.io/og-card.jpg" />
+<meta property="og:image:secure_url" content="https://schmede-ai.github.io/og-card.jpg" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="schmede_ai — AI filmmaker and generative artist" />
 
 <!-- Twitter card -->
 <meta name="twitter:card" content="summary_large_image" />
@@ -23,7 +28,8 @@
 <meta name="twitter:creator" content="@schmede_AI" />
 <meta name="twitter:title" content="schmede_ai // AI Filmmaker & Generative Artist" />
 <meta name="twitter:description" content="AI filmmaker and generative artist. LoRA training, ComfyUI workflows, AI-generated musicals, fake trailers, and dark satire." />
-<meta name="twitter:image" content="https://schmede-ai.github.io/avatar.png" />
+<meta name="twitter:image" content="https://schmede-ai.github.io/og-card.jpg" />
+<meta name="twitter:image:alt" content="schmede_ai — AI filmmaker and generative artist" />
 
 <!-- Structured data (Person schema) — helps Google build a knowledge panel for 'schmede_ai' -->
 <script type="application/ld+json">
@@ -114,7 +120,15 @@
     mix-blend-mode: screen;
   }
   a { color: var(--accent-2); text-decoration: none; transition: opacity 0.2s; }
-  a:hover { opacity: 0.7; }
+  /* Only dim plain inline text links on hover. Component links (cards, thumbs, nav)
+     manage their own hover states so we don't fight them. */
+  p a:hover, li a:hover, .section-desc a:hover, .footer-note a:hover { opacity: 0.7; }
+  /* Keyboard focus: consistent accent ring across all interactive elements */
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent-2);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
 
   .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
@@ -802,6 +816,248 @@
     .hero { padding: 60px 0 40px; }
     section { padding: 48px 0; }
   }
+
+  /* =========================================================================
+     PREVIEW ADDITIONS — isolated block so the diff vs the live site is easy to scan.
+     ========================================================================= */
+
+  /* Sticky top nav: thin mono bar, frosted so glows bleed through subtly */
+  .topnav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10, 10, 11, 0.78);
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    border-bottom: 1px solid var(--border);
+  }
+  .topnav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .topnav-brand {
+    color: var(--ink);
+    font-weight: 700;
+    margin-right: auto;
+    letter-spacing: 2px;
+  }
+  .topnav-brand .accent { color: var(--accent); }
+  .topnav-links {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .topnav-links a {
+    color: var(--ink-dim);
+    transition: color 0.15s;
+  }
+  .topnav-links a:hover,
+  .topnav-links a.active { color: var(--accent); opacity: 1; }
+  .topnav-cta {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 7px 14px;
+    background: var(--accent);
+    color: var(--ink);
+    border-radius: 3px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .topnav-cta:hover {
+    opacity: 1;
+    color: var(--ink);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(255, 46, 99, 0.3);
+  }
+  @media (max-width: 720px) {
+    .topnav-links { display: none; }
+    .topnav-inner { gap: 12px; padding: 10px 20px; }
+    .topnav-cta { font-size: 10px; padding: 6px 10px; }
+  }
+
+  /* Hero primary CTA */
+  .hero-cta-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    margin-bottom: 24px;
+  }
+  .btn-primary {
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 14px 28px;
+    background: var(--accent);
+    color: var(--ink);
+    border-radius: 4px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: transform 0.15s, box-shadow 0.15s;
+    display: inline-block;
+  }
+  .btn-primary:hover {
+    opacity: 1;
+    color: var(--ink);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(255, 46, 99, 0.4);
+  }
+
+  /* Partners block: kicker label + chip row instead of mixed pill treatment */
+  .partners-block { margin-top: 8px; }
+  .partners-kicker {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .partners-kicker .accent { color: var(--accent-2); }
+
+  /* Pull-quote treatment for the burn line */
+  .burn-quote {
+    max-width: 880px;
+    margin: 28px 0 24px;
+    padding: 20px 24px;
+    border-left: 3px solid var(--accent);
+    background: linear-gradient(90deg, rgba(255, 46, 99, 0.06), transparent 60%);
+    font-family: var(--sans);
+    font-size: clamp(18px, 2.4vw, 24px);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+    letter-spacing: -0.3px;
+  }
+  .burn-quote .ink-dim { color: var(--ink-dim); font-weight: 400; }
+
+  /* Bumped section-title size so H2s outrank stat numbers in hierarchy */
+  .section-title { font-size: clamp(28px, 4vw, 38px); }
+
+  /* Section rhythm: alternate tonal shift so the page has tempo */
+  section.alt-bg {
+    background: linear-gradient(180deg, rgba(19, 19, 26, 0.4), rgba(19, 19, 26, 0));
+  }
+
+  /* Click-to-load Featured Work thumbs */
+  .feat-thumb {
+    position: relative;
+    aspect-ratio: 16/9;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: #000 center/cover no-repeat;
+    cursor: pointer;
+    display: block;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .feat-thumb:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    opacity: 1;
+  }
+  .feat-thumb::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.5) 100%);
+    pointer-events: none;
+  }
+  .feat-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: rgba(255, 46, 99, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background 0.2s;
+    z-index: 2;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+  }
+  .feat-thumb:hover .feat-play {
+    transform: translate(-50%, -50%) scale(1.1);
+    background: var(--accent);
+  }
+  .feat-play svg { width: 24px; height: 24px; fill: var(--ink); margin-left: 3px; }
+  .feat-meta {
+    position: absolute;
+    bottom: 12px;
+    left: 14px;
+    right: 14px;
+    z-index: 2;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .feat-meta-title {
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: -0.2px;
+    margin-bottom: 2px;
+  }
+  .feat-meta-sub { color: var(--ink-dim); }
+
+  /* Back-to-top floating button: fades in after scrolling past the hero */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 90;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(19, 19, 26, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.15s, border-color 0.15s, color 0.15s;
+    padding: 0;
+  }
+  .back-to-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .back-to-top:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+    opacity: 1;
+  }
+  @media (max-width: 600px) {
+    .back-to-top { bottom: 16px; right: 16px; width: 40px; height: 40px; font-size: 18px; }
+  }
 </style>
 </head>
 <body>
@@ -811,8 +1067,23 @@
 <!-- Fixed grain overlay: film-grain texture pinned to the viewport -->
 <div class="grain-overlay" aria-hidden="true"></div>
 
+<!-- STICKY TOP NAV — scrollspy wired in JS at bottom -->
+<nav class="topnav" aria-label="Primary">
+  <div class="topnav-inner">
+    <a href="#top" class="topnav-brand">schm<span class="accent">e</span>de_ai</a>
+    <div class="topnav-links">
+      <a href="#work">Work</a>
+      <a href="#workflows">Workflows</a>
+      <a href="#awards">Awards</a>
+      <a href="#civitai">Models</a>
+      <a href="#articles">Writing</a>
+    </div>
+    <a href="#contact" class="topnav-cta">Contact</a>
+  </div>
+</nav>
+
 <!-- HERO -->
-<header class="hero">
+<header class="hero" id="top">
   <div class="container">
     <div class="hero-top">
       <img src="avatar.png" alt="schmede avatar" class="avatar" onerror="this.style.display='none'">
@@ -836,15 +1107,25 @@
     <div class="hero-craft">
       <p class="craft-line">LoRA training, ComfyUI workflows, inpainting. My best work is under NDA.</p>
       <p class="craft-line dim">Everything shown here was done solo.</p>
-      <p class="craft-line burn">I deliver the consistency and precision your overpaid prompt-typer can't.</p>
     </div>
-    <div class="partners">
-      <span class="partner-badge label">Creative Partner</span>
-      <a class="partner-badge" href="https://www.vidu.com/" target="_blank" rel="noopener">Vidu</a>
-      <a class="partner-badge" href="https://veespark.com/" target="_blank" rel="noopener">Veespark</a>
-      <a class="partner-badge" href="https://www.floyo.ai/" target="_blank" rel="noopener">Floyo</a>
-      <a class="partner-badge" href="https://pollo.ai/" target="_blank" rel="noopener">Pollo</a>
-      <a class="partner-badge" href="https://slop.club/" target="_blank" rel="noopener">Slop.Club</a>
+
+    <p class="burn-quote">
+      I deliver the consistency and precision <span class="ink-dim">your overpaid prompt-typer can't.</span>
+    </p>
+
+    <div class="hero-cta-row">
+      <a class="btn-primary" href="#contact">Contact</a>
+    </div>
+
+    <div class="partners-block">
+      <span class="partners-kicker"><span class="accent">//</span> Creative partner with</span>
+      <div class="partners">
+        <a class="partner-badge" href="https://www.vidu.com/" target="_blank" rel="noopener">Vidu</a>
+        <a class="partner-badge" href="https://veespark.com/" target="_blank" rel="noopener">Veespark</a>
+        <a class="partner-badge" href="https://www.floyo.ai/" target="_blank" rel="noopener">Floyo</a>
+        <a class="partner-badge" href="https://pollo.ai/" target="_blank" rel="noopener">Pollo</a>
+        <a class="partner-badge" href="https://slop.club/" target="_blank" rel="noopener">Slop.Club</a>
+      </div>
     </div>
   </div>
 </header>
@@ -859,24 +1140,28 @@
       </div>
     </div>
 
+    <!-- Click-to-load pattern: poster images load instantly, iframe only mounts on click. -->
     <div class="video-grid">
-      <div>
-        <div class="video-wrap">
-          <iframe src="https://www.youtube.com/embed/NwMVHjgSSSE" title="Featured Work 01" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <div class="feat-thumb" data-yt="NwMVHjgSSSE" style="background-image:url('https://img.youtube.com/vi/NwMVHjgSSSE/maxresdefault.jpg')" role="button" tabindex="0" aria-label="Play Featured Work 01">
+        <div class="feat-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <div class="feat-meta">
+          <div class="feat-meta-title">Featured // 01</div>
+          <div class="feat-meta-sub">replace me · YYYY · stack</div>
         </div>
-        <div class="video-label">featured // 01</div>
       </div>
-      <div>
-        <div class="video-wrap">
-          <iframe src="https://www.youtube.com/embed/oY-X9vwLRtY" title="Featured Work 02" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <div class="feat-thumb" data-yt="oY-X9vwLRtY" style="background-image:url('https://img.youtube.com/vi/oY-X9vwLRtY/maxresdefault.jpg')" role="button" tabindex="0" aria-label="Play Featured Work 02">
+        <div class="feat-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <div class="feat-meta">
+          <div class="feat-meta-title">Featured // 02</div>
+          <div class="feat-meta-sub">replace me · YYYY · stack</div>
         </div>
-        <div class="video-label">featured // 02</div>
       </div>
-      <div>
-        <div class="video-wrap">
-          <iframe src="https://www.youtube.com/embed/_6YD1V-w9Fc" title="Featured Work 03" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <div class="feat-thumb" data-yt="_6YD1V-w9Fc" style="background-image:url('https://img.youtube.com/vi/_6YD1V-w9Fc/maxresdefault.jpg')" role="button" tabindex="0" aria-label="Play Featured Work 03">
+        <div class="feat-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <div class="feat-meta">
+          <div class="feat-meta-title">Featured // 03</div>
+          <div class="feat-meta-sub">replace me · YYYY · stack</div>
         </div>
-        <div class="video-label">featured // 03</div>
       </div>
     </div>
 
@@ -884,7 +1169,7 @@
 </section>
 
 <!-- UNDER THE HOOD -->
-<section id="workflows">
+<section id="workflows" class="alt-bg">
   <div class="container">
     <div class="section-header">
       <span class="section-num">02 //</span>
@@ -1094,12 +1379,12 @@
 </section>
 
 <!-- CIVITAI STATS -->
-<section id="civitai">
+<section id="civitai" class="alt-bg">
   <div class="container">
     <div class="section-header">
       <span class="section-num">05 //</span>
       <div>
-        <div class="section-title">Civitai</div>
+        <div class="section-title">Models</div>
       </div>
     </div>
 
@@ -1148,7 +1433,7 @@
     <div class="section-header">
       <span class="section-num">06 //</span>
       <div>
-        <div class="section-title">Articles &amp; Guides</div>
+        <div class="section-title">Writing</div>
         <div class="section-desc">Tutorials, workflow breakdowns, and process writeups on Civitai.</div>
       </div>
     </div>
@@ -1157,7 +1442,7 @@
 </section>
 
 <!-- INVITE CODES -->
-<section id="codes">
+<section id="codes" class="alt-bg">
   <div class="container">
     <div class="section-header">
       <span class="section-num">07 //</span>
@@ -1791,6 +2076,84 @@
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && lb.classList.contains('open')) closeLB();
     });
+  })();
+</script>
+
+<!-- Back-to-top floating button -->
+<button class="back-to-top" id="back-to-top" aria-label="Back to top" type="button">↑</button>
+
+<script>
+  // Click-to-load YouTube embeds for Featured Work thumbs.
+  // Keeps initial page weight down (no iframes until the user commits).
+  (function () {
+    const thumbs = document.querySelectorAll('.feat-thumb');
+    if (!thumbs.length) return;
+    const loadVideo = (el) => {
+      const id = el.getAttribute('data-yt');
+      if (!id || el.dataset.loaded === '1') return;
+      el.dataset.loaded = '1';
+      const iframe = document.createElement('iframe');
+      iframe.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0';
+      iframe.title = el.getAttribute('aria-label') || 'YouTube video';
+      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+      iframe.setAttribute('allowfullscreen', '');
+      iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;';
+      el.innerHTML = '';
+      el.appendChild(iframe);
+      el.classList.add('loaded');
+    };
+    thumbs.forEach(el => {
+      el.addEventListener('click', () => loadVideo(el));
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); loadVideo(el); }
+      });
+    });
+  })();
+</script>
+
+<script>
+  // Scrollspy: highlight the current nav link as sections enter the viewport.
+  (function () {
+    const links = document.querySelectorAll('.topnav-links a[href^="#"]');
+    if (!links.length) return;
+    const map = new Map();
+    links.forEach(a => {
+      const id = a.getAttribute('href').slice(1);
+      const sec = document.getElementById(id);
+      if (sec) map.set(sec, a);
+    });
+    if (!map.size) return;
+    const clearAll = () => links.forEach(a => a.classList.remove('active'));
+    const io = new IntersectionObserver((entries) => {
+      // Pick the entry closest to the top edge of the root margin band.
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (!visible.length) return;
+      const link = map.get(visible[0].target);
+      if (!link) return;
+      clearAll();
+      link.classList.add('active');
+    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+    map.forEach((_, sec) => io.observe(sec));
+  })();
+</script>
+
+<script>
+  // Back-to-top: fade the button in after scrolling past the hero.
+  (function () {
+    const btn = document.getElementById('back-to-top');
+    if (!btn) return;
+    const threshold = () => Math.min(window.innerHeight * 0.9, 700);
+    const onScroll = () => {
+      if (window.scrollY > threshold()) btn.classList.add('visible');
+      else btn.classList.remove('visible');
+    };
+    btn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
   })();
 </script>
 
