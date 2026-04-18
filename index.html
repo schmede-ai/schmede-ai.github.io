@@ -361,7 +361,11 @@
     cursor: pointer;
     transition: opacity 0.2s;
   }
-  a.award-thumb:hover { opacity: 0.88; }
+  .award-thumb:hover { opacity: 0.88; }
+  .award-thumb:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
   .award-thumb.placeholder {
     background: linear-gradient(135deg, #1a1a22, #0f0f14);
     display: flex;
@@ -973,30 +977,17 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.5) 100%);
+    background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,0.35) 100%);
     pointer-events: none;
+    transition: background 0.2s;
   }
-  .feat-play {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 68px;
-    height: 68px;
-    border-radius: 50%;
-    background: rgba(255, 46, 99, 0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s, background 0.2s;
-    z-index: 2;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+  .feat-thumb:hover::after {
+    background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,0.15) 100%);
   }
-  .feat-thumb:hover .feat-play {
-    transform: translate(-50%, -50%) scale(1.1);
-    background: var(--accent);
+  .feat-thumb:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
-  .feat-play svg { width: 24px; height: 24px; fill: var(--ink); margin-left: 3px; }
 
   /* Video modal: dim the page, float a 16:9 frame that fills most of the viewport */
   .video-modal {
@@ -1192,15 +1183,9 @@
 
     <!-- Click opens a modal; iframe only mounts when the user commits. -->
     <div class="video-grid">
-      <div class="feat-thumb" data-yt="NwMVHjgSSSE" style="background-image:url('https://img.youtube.com/vi/NwMVHjgSSSE/maxresdefault.jpg')" role="button" tabindex="0" aria-label="Play Featured Work 01">
-        <div class="feat-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-      </div>
-      <div class="feat-thumb" data-yt="oY-X9vwLRtY" style="background-image:url('https://img.youtube.com/vi/oY-X9vwLRtY/maxresdefault.jpg')" role="button" tabindex="0" aria-label="Play Featured Work 02">
-        <div class="feat-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-      </div>
-      <div class="feat-thumb" data-yt="_6YD1V-w9Fc" style="background-image:url('https://img.youtube.com/vi/_6YD1V-w9Fc/maxresdefault.jpg')" role="button" tabindex="0" aria-label="Play Featured Work 03">
-        <div class="feat-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-      </div>
+      <div class="feat-thumb" data-yt="NwMVHjgSSSE" style="background-image:url('https://img.youtube.com/vi/NwMVHjgSSSE/maxresdefault.jpg')" role="button" tabindex="0" aria-label="Play Featured Work 01"></div>
+      <div class="feat-thumb" data-yt="oY-X9vwLRtY" style="background-image:url('https://img.youtube.com/vi/oY-X9vwLRtY/maxresdefault.jpg')" role="button" tabindex="0" aria-label="Play Featured Work 02"></div>
+      <div class="feat-thumb" data-yt="_6YD1V-w9Fc" style="background-image:url('https://img.youtube.com/vi/_6YD1V-w9Fc/maxresdefault.jpg')" role="button" tabindex="0" aria-label="Play Featured Work 03"></div>
     </div>
 
   </div>
@@ -1258,9 +1243,9 @@
     <div class="awards-grid">
       <!-- Arca Gidan II -->
       <div class="award-card">
-        <a class="award-thumb" href="https://youtu.be/8HmmqGNrPr4" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/8HmmqGNrPr4/hqdefault.jpg')">
+        <div class="award-thumb" data-yt="8HmmqGNrPr4" role="button" tabindex="0" aria-label="Play: Arca Gidan II entry" style="background-image:url('https://img.youtube.com/vi/8HmmqGNrPr4/hqdefault.jpg')">
           <span class="award-medal">&#129353;</span>
-        </a>
+        </div>
         <div class="award-body">
           <div class="award-event">Arca Gidan II</div>
           <div class="award-title">3rd Place // Ridge Winner</div>
@@ -1274,9 +1259,9 @@
 
       <!-- Chroma Awards -->
       <div class="award-card">
-        <a class="award-thumb" href="https://youtu.be/4f4fP7pB2QI" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/4f4fP7pB2QI/hqdefault.jpg')">
+        <div class="award-thumb" data-yt="4f4fP7pB2QI" role="button" tabindex="0" aria-label="Play: Chroma Awards entry" style="background-image:url('https://img.youtube.com/vi/4f4fP7pB2QI/hqdefault.jpg')">
           <span class="award-medal">&#11088;</span>
-        </a>
+        </div>
         <div class="award-body">
           <div class="award-event">The Chroma Awards</div>
           <div class="award-title">Honorable Mention // Music Video / Pop</div>
@@ -1289,9 +1274,9 @@
 
       <!-- Vidu Q2 On Stage -->
       <div class="award-card">
-        <a class="award-thumb" href="https://youtu.be/lyczP_FJ7m0" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/lyczP_FJ7m0/hqdefault.jpg')">
+        <div class="award-thumb" data-yt="lyczP_FJ7m0" role="button" tabindex="0" aria-label="Play: Vidu Q2 On Stage entry" style="background-image:url('https://img.youtube.com/vi/lyczP_FJ7m0/hqdefault.jpg')">
           <span class="award-medal">&#127910;</span>
-        </a>
+        </div>
         <div class="award-body">
           <div class="award-event">#ViduQ2OnStage</div>
           <div class="award-title">Best in Camera Flow</div>
@@ -1305,9 +1290,9 @@
 
       <!-- Vidu 1st BDay -->
       <div class="award-card">
-        <a class="award-thumb" href="https://youtu.be/Pe5fDqo6b54" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/Pe5fDqo6b54/hqdefault.jpg')">
+        <div class="award-thumb" data-yt="Pe5fDqo6b54" role="button" tabindex="0" aria-label="Play: Vidu 1st BDay entry" style="background-image:url('https://img.youtube.com/vi/Pe5fDqo6b54/hqdefault.jpg')">
           <span class="award-medal">&#129353;</span>
-        </a>
+        </div>
         <div class="award-body">
           <div class="award-event">#Vidu1stBDay</div>
           <div class="award-title">3rd Place</div>
@@ -1321,9 +1306,9 @@
 
       <!-- Vidu Q1 R2V -->
       <div class="award-card">
-        <a class="award-thumb" href="https://youtu.be/OSM-IelZYhI" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/OSM-IelZYhI/hqdefault.jpg')">
+        <div class="award-thumb" data-yt="OSM-IelZYhI" role="button" tabindex="0" aria-label="Play: Vidu Q1 R2V entry" style="background-image:url('https://img.youtube.com/vi/OSM-IelZYhI/hqdefault.jpg')">
           <span class="award-medal">&#129352;</span>
-        </a>
+        </div>
         <div class="award-body">
           <div class="award-event">#ViduQ1R2V</div>
           <div class="award-title">2nd Place</div>
@@ -1337,9 +1322,9 @@
 
       <!-- Vidu x Civitai Q1ntessential -->
       <div class="award-card">
-        <a class="award-thumb" href="https://youtu.be/ogyKlYApenc" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/ogyKlYApenc/hqdefault.jpg')">
+        <div class="award-thumb" data-yt="ogyKlYApenc" role="button" tabindex="0" aria-label="Play: Vidu x Civitai Q1ntessential entry" style="background-image:url('https://img.youtube.com/vi/ogyKlYApenc/hqdefault.jpg')">
           <span class="award-medal">&#129351;</span>
-        </a>
+        </div>
         <div class="award-body">
           <div class="award-event">Vidu x Civitai Q1ntessential</div>
           <div class="award-title">1st Place // 60-Second+ Film</div>
@@ -1354,9 +1339,9 @@
 
       <!-- Project Odyssey S2 // Civitai Title Sponsor -->
       <div class="award-card">
-        <a class="award-thumb" href="https://youtu.be/YMS30o2RIsY" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/YMS30o2RIsY/hqdefault.jpg')">
+        <div class="award-thumb" data-yt="YMS30o2RIsY" role="button" tabindex="0" aria-label="Play: Project Odyssey S2 Civitai Title Sponsor entry" style="background-image:url('https://img.youtube.com/vi/YMS30o2RIsY/hqdefault.jpg')">
           <span class="award-medal">&#129353;</span>
-        </a>
+        </div>
         <div class="award-body">
           <div class="award-event">Project Odyssey // Season 2</div>
           <div class="award-title">3rd Place // Civitai Title Sponsor Track</div>
@@ -1371,9 +1356,9 @@
 
       <!-- Project Odyssey S2 // Advertising -->
       <div class="award-card">
-        <a class="award-thumb" href="https://youtu.be/x8uau8GuTHA" target="_blank" rel="noopener" aria-label="Watch on YouTube" style="background-image:url('https://img.youtube.com/vi/x8uau8GuTHA/hqdefault.jpg')">
+        <div class="award-thumb" data-yt="x8uau8GuTHA" role="button" tabindex="0" aria-label="Play: Project Odyssey S2 Advertising entry" style="background-image:url('https://img.youtube.com/vi/x8uau8GuTHA/hqdefault.jpg')">
           <span class="award-medal">&#11088;</span>
-        </a>
+        </div>
         <div class="award-body">
           <div class="award-event">Project Odyssey // Season 2</div>
           <div class="award-title">Honorable Mention // Advertising</div>
@@ -1401,15 +1386,11 @@
 
     <div class="video-grid">
       <div>
-        <div class="video-wrap">
-          <iframe src="https://www.youtube.com/embed/CljzZTiem8A" title="Civitai Stream Appearance" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
+        <div class="feat-thumb" data-yt="CljzZTiem8A" style="background-image:url('https://img.youtube.com/vi/CljzZTiem8A/maxresdefault.jpg')" role="button" tabindex="0" aria-label="Play: Civitai Stream Interview 1"></div>
         <div class="video-label">Civitai Stream // Interview</div>
       </div>
       <div>
-        <div class="video-wrap">
-          <iframe src="https://www.youtube.com/embed/ZXrs8vdqeVU" title="Civitai Stream Appearance" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
+        <div class="feat-thumb" data-yt="ZXrs8vdqeVU" style="background-image:url('https://img.youtube.com/vi/ZXrs8vdqeVU/maxresdefault.jpg')" role="button" tabindex="0" aria-label="Play: Civitai Stream Interview 2"></div>
         <div class="video-label">Civitai Stream // Interview</div>
       </div>
     </div>
@@ -2131,7 +2112,7 @@
   // Click a Featured Work thumb → open a dimmed modal with a 16:9 YouTube embed.
   // Iframe is built on open and torn down on close so audio stops cleanly.
   (function () {
-    const thumbs = document.querySelectorAll('.feat-thumb');
+    const thumbs = document.querySelectorAll('.feat-thumb[data-yt], .award-thumb[data-yt]');
     const modal = document.getElementById('video-modal');
     const frame = document.getElementById('video-modal-frame');
     const closeBtn = document.getElementById('video-modal-close');
