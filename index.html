@@ -997,27 +997,77 @@
     background: var(--accent);
   }
   .feat-play svg { width: 24px; height: 24px; fill: var(--ink); margin-left: 3px; }
-  .feat-meta {
+
+  /* Video modal: dim the page, float a 16:9 frame that fills most of the viewport */
+  .video-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .video-modal.open { opacity: 1; pointer-events: auto; }
+  .video-modal-frame {
+    position: relative;
+    width: 100%;
+    max-width: min(1280px, 92vw);
+    aspect-ratio: 16 / 9;
+    max-height: calc(100vh - 96px);
+    background: #000;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    transform: scale(0.97);
+    transition: transform 0.2s ease;
+  }
+  .video-modal.open .video-modal-frame { transform: scale(1); }
+  .video-modal-frame iframe {
     position: absolute;
-    bottom: 12px;
-    left: 14px;
-    right: 14px;
-    z-index: 2;
-    font-family: var(--mono);
-    font-size: 11px;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .video-modal-close {
+    position: absolute;
+    top: -44px;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(19, 19, 26, 0.9);
+    border: 1px solid var(--border);
     color: var(--ink);
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    font-family: var(--mono);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: border-color 0.15s, color 0.15s, transform 0.15s;
   }
-  .feat-meta-title {
-    font-family: var(--sans);
-    font-size: 16px;
-    font-weight: 700;
-    text-transform: none;
-    letter-spacing: -0.2px;
-    margin-bottom: 2px;
+  .video-modal-close:hover,
+  .video-modal-close:focus-visible {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: scale(1.05);
+    outline: none;
   }
-  .feat-meta-sub { color: var(--ink-dim); }
+  @media (max-width: 700px) {
+    .video-modal { padding: 16px; }
+    .video-modal-close { top: -40px; right: 0; }
+  }
 
   /* Back-to-top floating button: fades in after scrolling past the hero */
   .back-to-top {
@@ -1140,28 +1190,16 @@
       </div>
     </div>
 
-    <!-- Click-to-load pattern: poster images load instantly, iframe only mounts on click. -->
+    <!-- Click opens a modal; iframe only mounts when the user commits. -->
     <div class="video-grid">
       <div class="feat-thumb" data-yt="NwMVHjgSSSE" style="background-image:url('https://img.youtube.com/vi/NwMVHjgSSSE/maxresdefault.jpg')" role="button" tabindex="0" aria-label="Play Featured Work 01">
         <div class="feat-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-        <div class="feat-meta">
-          <div class="feat-meta-title">Featured // 01</div>
-          <div class="feat-meta-sub">replace me · YYYY · stack</div>
-        </div>
       </div>
       <div class="feat-thumb" data-yt="oY-X9vwLRtY" style="background-image:url('https://img.youtube.com/vi/oY-X9vwLRtY/maxresdefault.jpg')" role="button" tabindex="0" aria-label="Play Featured Work 02">
         <div class="feat-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-        <div class="feat-meta">
-          <div class="feat-meta-title">Featured // 02</div>
-          <div class="feat-meta-sub">replace me · YYYY · stack</div>
-        </div>
       </div>
       <div class="feat-thumb" data-yt="_6YD1V-w9Fc" style="background-image:url('https://img.youtube.com/vi/_6YD1V-w9Fc/maxresdefault.jpg')" role="button" tabindex="0" aria-label="Play Featured Work 03">
         <div class="feat-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-        <div class="feat-meta">
-          <div class="feat-meta-title">Featured // 03</div>
-          <div class="feat-meta-sub">replace me · YYYY · stack</div>
-        </div>
       </div>
     </div>
 
@@ -2082,31 +2120,69 @@
 <!-- Back-to-top floating button -->
 <button class="back-to-top" id="back-to-top" aria-label="Back to top" type="button">↑</button>
 
+<!-- Video modal: mounted once, iframe swapped in/out on open/close -->
+<div class="video-modal" id="video-modal" role="dialog" aria-modal="true" aria-label="Video player" hidden>
+  <div class="video-modal-frame" id="video-modal-frame">
+    <button class="video-modal-close" id="video-modal-close" aria-label="Close video" type="button">✕</button>
+  </div>
+</div>
+
 <script>
-  // Click-to-load YouTube embeds for Featured Work thumbs.
-  // Keeps initial page weight down (no iframes until the user commits).
+  // Click a Featured Work thumb → open a dimmed modal with a 16:9 YouTube embed.
+  // Iframe is built on open and torn down on close so audio stops cleanly.
   (function () {
     const thumbs = document.querySelectorAll('.feat-thumb');
-    if (!thumbs.length) return;
-    const loadVideo = (el) => {
+    const modal = document.getElementById('video-modal');
+    const frame = document.getElementById('video-modal-frame');
+    const closeBtn = document.getElementById('video-modal-close');
+    if (!thumbs.length || !modal || !frame || !closeBtn) return;
+
+    let lastTrigger = null;
+
+    const openVideo = (el) => {
       const id = el.getAttribute('data-yt');
-      if (!id || el.dataset.loaded === '1') return;
-      el.dataset.loaded = '1';
+      if (!id) return;
+      lastTrigger = el;
+      // Remove any previous iframe (keep the close button as the first child).
+      frame.querySelectorAll('iframe').forEach(n => n.remove());
       const iframe = document.createElement('iframe');
       iframe.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0';
       iframe.title = el.getAttribute('aria-label') || 'YouTube video';
       iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
       iframe.setAttribute('allowfullscreen', '');
-      iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;';
-      el.innerHTML = '';
-      el.appendChild(iframe);
-      el.classList.add('loaded');
+      frame.appendChild(iframe);
+      modal.hidden = false;
+      // Next frame so the transition fires.
+      requestAnimationFrame(() => modal.classList.add('open'));
+      document.documentElement.style.overflow = 'hidden';
+      closeBtn.focus();
     };
+
+    const closeVideo = () => {
+      modal.classList.remove('open');
+      document.documentElement.style.overflow = '';
+      // Wait for the fade-out before tearing down + hiding.
+      setTimeout(() => {
+        frame.querySelectorAll('iframe').forEach(n => n.remove());
+        modal.hidden = true;
+        if (lastTrigger) { lastTrigger.focus(); lastTrigger = null; }
+      }, 200);
+    };
+
     thumbs.forEach(el => {
-      el.addEventListener('click', () => loadVideo(el));
+      el.addEventListener('click', () => openVideo(el));
       el.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); loadVideo(el); }
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openVideo(el); }
       });
+    });
+
+    closeBtn.addEventListener('click', closeVideo);
+    modal.addEventListener('click', (e) => {
+      // Click on the dimmed backdrop (not the frame) closes.
+      if (e.target === modal) closeVideo();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.hidden) closeVideo();
     });
   })();
 </script>
