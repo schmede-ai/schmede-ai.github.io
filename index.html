@@ -12,22 +12,30 @@
 <!-- Open Graph / social sharing -->
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="schmede_ai" />
-<meta property="og:title" content="schmede_ai // AI Filmmaker & Generative Artist" />
-<meta property="og:description" content="AI filmmaker and generative artist. LoRA training, ComfyUI workflows, AI-generated musicals, fake trailers, and dark satire." />
+<meta property="og:title" content="schmede_ai // AI Filmmaker · Gen Artist" />
+<meta property="og:description" content="@schmede_ai // AI Filmmaker · Gen Artist" />
 <meta property="og:url" content="https://schmede-ai.github.io/" />
+<!-- Primary banner card: 1.91:1 for Telegram, Discord, LinkedIn, FB, Twitter -->
 <meta property="og:image" content="https://schmede-ai.github.io/og-card.jpg" />
 <meta property="og:image:secure_url" content="https://schmede-ai.github.io/og-card.jpg" />
 <meta property="og:image:type" content="image/jpeg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="schmede_ai — AI filmmaker and generative artist" />
+<!-- Secondary square card: 1:1 for Slack summary, iMessage, WhatsApp thumbs -->
+<meta property="og:image" content="https://schmede-ai.github.io/og-card-square.jpg" />
+<meta property="og:image:secure_url" content="https://schmede-ai.github.io/og-card-square.jpg" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="1200" />
+<meta property="og:image:alt" content="schmede_ai — AI filmmaker and generative artist" />
 
 <!-- Twitter card -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@schmede_AI" />
 <meta name="twitter:creator" content="@schmede_AI" />
-<meta name="twitter:title" content="schmede_ai // AI Filmmaker & Generative Artist" />
-<meta name="twitter:description" content="AI filmmaker and generative artist. LoRA training, ComfyUI workflows, AI-generated musicals, fake trailers, and dark satire." />
+<meta name="twitter:title" content="schmede_ai // AI Filmmaker · Gen Artist" />
+<meta name="twitter:description" content="@schmede_ai // AI Filmmaker · Gen Artist" />
 <meta name="twitter:image" content="https://schmede-ai.github.io/og-card.jpg" />
 <meta name="twitter:image:alt" content="schmede_ai — AI filmmaker and generative artist" />
 
@@ -885,9 +893,23 @@
     box-shadow: 0 4px 16px rgba(255, 46, 99, 0.3);
   }
   @media (max-width: 720px) {
-    .topnav-links { display: none; }
-    .topnav-inner { gap: 12px; padding: 10px 20px; }
+    .topnav-inner { gap: 10px; padding: 10px 16px; flex-wrap: wrap; }
+    .topnav-brand { flex: 1 0 auto; font-size: 12px; letter-spacing: 1.5px; }
+    .topnav-links {
+      order: 3;
+      flex: 1 0 100%;
+      gap: 14px;
+      justify-content: space-between;
+      font-size: 10px;
+      letter-spacing: 1px;
+      padding-top: 4px;
+      border-top: 1px solid var(--border);
+    }
+    .topnav-links a { white-space: nowrap; }
     .topnav-cta { font-size: 10px; padding: 6px 10px; }
+  }
+  @media (max-width: 380px) {
+    .topnav-links { font-size: 9px; gap: 10px; letter-spacing: 0.5px; }
   }
 
   /* Hero primary CTA */
@@ -1056,8 +1078,38 @@
     outline: none;
   }
   @media (max-width: 700px) {
-    .video-modal { padding: 16px; }
-    .video-modal-close { top: -40px; right: 0; }
+    /* Phone: go edge-to-edge. Frame fills the viewport width; video sits
+       as a letterboxed 16:9 band in the middle with black above and below.
+       User can tap YouTube's fullscreen button to flip into native landscape. */
+    .video-modal { padding: 0; background: #000; }
+    .video-modal-frame {
+      width: 100vw;
+      max-width: 100vw;
+      height: 100vh;
+      max-height: 100vh;
+      aspect-ratio: auto;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+    }
+    .video-modal-frame iframe {
+      position: static;
+      width: 100vw;
+      height: calc(100vw * 9 / 16);
+      max-height: 100vh;
+    }
+    .video-modal-close {
+      top: 12px;
+      right: 12px;
+      background: rgba(0, 0, 0, 0.6);
+      width: 40px;
+      height: 40px;
+      z-index: 3;
+    }
   }
 
   /* Back-to-top floating button: fades in after scrolling past the hero */
