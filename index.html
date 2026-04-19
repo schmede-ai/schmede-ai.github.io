@@ -790,6 +790,19 @@
     transition: transform 0.2s ease;
   }
   .lightbox.open .lightbox-img { transform: scale(1); }
+  .lightbox-video {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    background: #000;
+    cursor: default;
+    transform: scale(0.97);
+    transition: transform 0.2s ease;
+  }
+  .lightbox.open .lightbox-video { transform: scale(1); }
   .lightbox-close {
     position: absolute;
     top: 20px;
@@ -2168,9 +2181,10 @@
 </script>
 
 <!-- Lightbox overlay (used by workflow thumbnails) -->
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Workflow viewer">
   <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
-  <img class="lightbox-img" id="lightbox-img" alt="">
+  <img class="lightbox-img" id="lightbox-img" alt="" hidden>
+  <video class="lightbox-video" id="lightbox-video" muted loop playsinline controls hidden></video>
 </div>
 
 <script>
@@ -2178,29 +2192,50 @@
   (function () {
     const lb = document.getElementById('lightbox');
     const lbImg = document.getElementById('lightbox-img');
+    const lbVid = document.getElementById('lightbox-video');
     const lbClose = document.getElementById('lightbox-close');
-    if (!lb || !lbImg || !lbClose) return;
+    if (!lb || !lbImg || !lbVid || !lbClose) return;
 
-    function openLB(src, alt) {
-      lbImg.src = src;
-      lbImg.alt = alt || '';
+    function openLB(src, alt, isVideo) {
+      if (isVideo) {
+        lbVid.src = src;
+        lbVid.hidden = false;
+        lbImg.hidden = true;
+        lbVid.play().catch(() => {});
+      } else {
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lbImg.hidden = false;
+        lbVid.hidden = true;
+      }
       lb.classList.add('open');
       document.body.style.overflow = 'hidden';
     }
     function closeLB() {
       lb.classList.remove('open');
       lbImg.removeAttribute('src');
+      lbVid.pause();
+      lbVid.removeAttribute('src');
+      lbVid.load();
       document.body.style.overflow = '';
     }
 
     document.querySelectorAll('.workflow-thumb').forEach(el => {
       el.addEventListener('click', () => {
+        const caption = el.parentElement?.querySelector('.workflow-caption')?.textContent || '';
+        const v = el.querySelector('.workflow-video');
+        if (v && v.dataset.src) {
+          // Stop the hover preview cleanly, then open the video in the lightbox.
+          v.pause();
+          v.currentTime = 0;
+          el.classList.remove('is-previewing');
+          openLB(v.dataset.src, caption, true);
+          return;
+        }
+        // No video attached — fall back to showing the poster image.
         const bg = el.style.backgroundImage || '';
         const m = bg.match(/url\(["']?([^"')]+)["']?\)/);
-        if (m && m[1]) {
-          const caption = el.parentElement?.querySelector('.workflow-caption')?.textContent || '';
-          openLB(m[1], caption);
-        }
+        if (m && m[1]) openLB(m[1], caption, false);
       });
 
       // Hover-to-preview: load + play on pointer enter, pause + reset on leave.
