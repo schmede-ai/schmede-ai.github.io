@@ -738,10 +738,26 @@
     border-color: var(--accent);
   }
   .workflow-thumb {
+    position: relative;
     aspect-ratio: 16/9;
     background: #000 center/cover no-repeat;
     border-bottom: 1px solid var(--border);
     cursor: zoom-in;
+    overflow: hidden;
+  }
+  .workflow-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 260ms ease;
+    pointer-events: none;
+    background: #000;
+  }
+  .workflow-thumb.is-previewing .workflow-video {
+    opacity: 1;
   }
 
   /* Lightbox (used for workflow thumbnails — click to enlarge)
@@ -1300,21 +1316,27 @@
 
     <div class="workflow-grid">
       <div class="workflow-card">
-        <div class="workflow-thumb" style="background-image:url('workflow-1.png')"></div>
+        <div class="workflow-thumb" style="background-image:url('workflow-1.png')">
+          <video class="workflow-video" data-src="workflow-1.mp4" muted loop playsinline preload="none"></video>
+        </div>
         <div class="workflow-body">
           <div class="workflow-tag">body-part detection</div>
           <div class="workflow-caption">Detects every body part in the frame, masks them separately, and runs a targeted detail pass on each one.</div>
         </div>
       </div>
       <div class="workflow-card">
-        <div class="workflow-thumb" style="background-image:url('workflow-2.png')"></div>
+        <div class="workflow-thumb" style="background-image:url('workflow-2.png')">
+          <video class="workflow-video" data-src="workflow-2.mp4" muted loop playsinline preload="none"></video>
+        </div>
         <div class="workflow-body">
           <div class="workflow-tag">audio + image &rarr; video</div>
           <div class="workflow-caption">Driving lip-sync and performance from a still frame plus a recorded audio track.</div>
         </div>
       </div>
       <div class="workflow-card">
-        <div class="workflow-thumb" style="background-image:url('workflow-3.png')"></div>
+        <div class="workflow-thumb" style="background-image:url('workflow-3.png')">
+          <video class="workflow-video" data-src="workflow-3.mp4" muted loop playsinline preload="none"></video>
+        </div>
         <div class="workflow-body">
           <div class="workflow-tag">pose + face retargeting</div>
           <div class="workflow-caption">Animating a character reference sheet to match a driving video&rsquo;s body pose and facial performance.</div>
@@ -2180,6 +2202,24 @@
           openLB(m[1], caption);
         }
       });
+
+      // Hover-to-preview: load + play on pointer enter, pause + reset on leave.
+      // Touch falls through to the click-to-lightbox handler above.
+      const video = el.querySelector('.workflow-video');
+      if (video && video.dataset.src) {
+        const play = () => {
+          if (!video.src) video.src = video.dataset.src;
+          video.play().catch(() => {});
+          el.classList.add('is-previewing');
+        };
+        const stop = () => {
+          video.pause();
+          video.currentTime = 0;
+          el.classList.remove('is-previewing');
+        };
+        el.addEventListener('pointerenter', e => { if (e.pointerType !== 'touch') play(); });
+        el.addEventListener('pointerleave', e => { if (e.pointerType !== 'touch') stop(); });
+      }
     });
 
     lb.addEventListener('click', e => {
