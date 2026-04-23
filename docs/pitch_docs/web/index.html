@@ -1,0 +1,1655 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Wrath — A Pitch</title>
+<meta name="description" content="Wrath — a cosmology in contemporary collapse. Volume I pitch.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+:root {
+  color-scheme: light only;
+  --shadow:      #120e08;
+  --shadow-soft: #1a150f;
+  --shadow-ink:  #2a2016;
+  --vellum-text: #d8c9a8;
+  --vellum-muted:#9a8968;
+  --vellum-high: #e8d9b8;
+  --rubric-soft: #9a2a2a;
+  --gilt:        #a07a24;
+  --gilt-bright: #d9b56a;
+  --border-dark: rgba(0,0,0,0.6);
+  --fraktur:     "Cinzel", "Trajan Pro", "EB Garamond", Garamond, serif;
+  --serif-web:   "EB Garamond", "Garamond", Georgia, serif;
+}
+
+html { scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body { background: #14100c; }
+
+/* Override the source's body padding/background — we handle layout in the shell */
+body { padding: 0 !important; background: var(--shadow-soft) !important; }
+
+/* Skip link */
+.skip-link {
+  position: absolute; left: -9999px; top: 0;
+  background: var(--shadow-ink); color: var(--gilt-bright);
+  padding: 10px 16px; font-variant: small-caps; letter-spacing: 0.2em;
+  font-size: 12px; z-index: 200;
+}
+.skip-link:focus { left: 0; }
+
+/* ————————————————————————————————————
+   Top running bar
+   ———————————————————————————————————— */
+.cw-topbar {
+  position: sticky; top: 0; z-index: 30;
+  background: var(--shadow-ink);
+  border-bottom: 1px solid var(--border-dark);
+  color: var(--vellum-text);
+  font-family: var(--serif-web);
+}
+.cw-topbar-inner {
+  display: grid;
+  grid-template-columns: 300px 1fr auto;
+  align-items: center;
+  height: 56px;
+  gap: 24px;
+  padding-right: 24px;
+}
+.cw-volume {
+  font-family: var(--fraktur);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: var(--gilt-bright);
+  text-transform: uppercase;
+  padding-left: 32px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cw-runhead {
+  text-align: center;
+  font-variant: small-caps;
+  letter-spacing: 0.22em;
+  font-size: 12px;
+  color: var(--vellum-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cw-topbar-right {
+  display: flex; align-items: center; gap: 20px;
+}
+.cw-slide-count {
+  font-variant: small-caps;
+  letter-spacing: 0.18em;
+  font-size: 11px;
+  color: var(--vellum-muted);
+}
+.cw-slide-count b { color: var(--vellum-high); font-weight: 500; }
+.cw-progress {
+  width: 140px; height: 2px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+.cw-progress-bar {
+  height: 100%; width: 0%;
+  background: var(--gilt-bright);
+  transition: width 120ms linear;
+}
+.cw-nav-toggle {
+  display: none;
+  background: none; border: none;
+  color: var(--gilt-bright);
+  font-size: 22px; line-height: 1;
+  cursor: pointer;
+  padding: 6px 10px;
+  font-family: var(--serif-web);
+}
+
+/* ————————————————————————————————————
+   Shell layout
+   ———————————————————————————————————— */
+.cw-shell {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  background: var(--shadow-soft);
+  min-height: calc(100vh - 56px);
+}
+
+/* Left sidebar */
+.cw-nav {
+  position: sticky;
+  top: 56px;
+  height: calc(100vh - 56px);
+  align-self: start;
+  background: var(--shadow);
+  border-right: 1px solid var(--border-dark);
+  color: var(--vellum-text);
+  padding: 28px 24px 24px;
+  overflow-y: auto;
+  z-index: 20;
+  font-family: var(--serif-web);
+}
+.cw-nav-head {
+  display: flex; align-items: flex-start; gap: 14px;
+  margin-bottom: 14px;
+}
+.cw-tau {
+  font-family: var(--fraktur);
+  font-size: 30px;
+  color: var(--rubric-soft);
+  line-height: 1;
+}
+.cw-nav-title {
+  font-family: var(--fraktur);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--vellum-high);
+  line-height: 1;
+}
+.cw-nav-sub {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--vellum-muted);
+  margin-top: 3px;
+}
+.cw-nav-rule {
+  height: 1px;
+  background: var(--gilt);
+  opacity: 0.5;
+  margin: 14px 0;
+}
+.cw-nav-rule--bot { margin-top: 20px; }
+.cw-nav-label {
+  font-variant: small-caps;
+  letter-spacing: 0.28em;
+  font-size: 10px;
+  color: var(--gilt-bright);
+  margin: 18px 0 10px;
+}
+.cw-nav-list {
+  list-style: none;
+  padding: 0; margin: 0 0 4px;
+}
+.cw-nav-item a {
+  display: block;
+  padding: 6px 0 6px 8px;
+  font-size: 12.5px;
+  color: var(--vellum-text);
+  text-decoration: none;
+  transition: color 150ms linear;
+  font-variant: small-caps;
+  letter-spacing: 0.10em;
+  border-left: 2px solid transparent;
+  padding-left: 10px;
+}
+.cw-nav-item a:hover { color: var(--gilt-bright); }
+.cw-nav-item.is-active a {
+  color: var(--gilt-bright);
+  border-left-color: var(--rubric-soft);
+}
+.cw-nav-foot {
+  color: var(--gilt);
+  opacity: 0.7;
+  letter-spacing: 0.6em;
+  font-size: 11px;
+  text-align: center;
+  margin-top: 12px;
+}
+.cw-nav-imprint {
+  margin-top: 20px;
+  text-align: center;
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: 11px;
+  color: var(--vellum-muted);
+  line-height: 1.5;
+}
+.cw-nav-imprint a { color: var(--gilt-bright); text-decoration: none; }
+.cw-nav-imprint a:hover { color: #f0cc80; }
+
+/* Main — stack slides */
+.cw-main {
+  background: var(--shadow-soft);
+  padding: 36px 0 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+  min-width: 0;
+}
+
+/* ————————————————————————————————————
+   Slide frame — preserves the fixed 792pt x 445.5pt aspect
+   ———————————————————————————————————— */
+.allpages-slot {
+  margin: 0 auto !important;
+  width: 792pt;          /* = 1056px at 96dpi */
+  box-shadow: 0 8px 36px rgba(0,0,0,0.55);
+  outline: 1px solid #2e2a24;
+  background: #0a0908;
+  transform-origin: top center;
+  transition: transform 180ms ease, margin-bottom 180ms ease;
+}
+.allpages-slot .page {
+  page-break-after: auto !important;
+  display: block;
+}
+
+/* Scroll-offset so anchor scrolls don't hide behind the sticky top bar */
+.page[id^="s"] { scroll-margin-top: 76px; }
+.allpages-slot { scroll-margin-top: 76px; }
+
+/* Responsive slide scaling — we scale the whole slot and compensate
+   margin-bottom to reclaim the lost height */
+@media (max-width: 1180px) {
+  .allpages-slot { transform: scale(0.85); margin-bottom: -66px !important; }
+}
+@media (max-width: 1020px) {
+  .allpages-slot { transform: scale(0.72); margin-bottom: -124px !important; }
+}
+@media (max-width: 860px) {
+  .allpages-slot { transform: scale(0.58); margin-bottom: -186px !important; }
+}
+@media (max-width: 700px) {
+  .allpages-slot { transform: scale(0.46); margin-bottom: -240px !important; }
+}
+@media (max-width: 560px) {
+  .allpages-slot { transform: scale(0.34); margin-bottom: -294px !important; }
+}
+
+/* ————————————————————————————————————
+   Responsive — collapse sidebar to drawer
+   ———————————————————————————————————— */
+@media (max-width: 960px) {
+  .cw-topbar-inner {
+    grid-template-columns: auto 1fr auto;
+    padding-right: 16px;
+  }
+  .cw-volume { padding-left: 16px; font-size: 11px; }
+  .cw-progress { width: 80px; }
+  .cw-nav-toggle { display: inline-block; }
+
+  .cw-shell { grid-template-columns: 1fr; }
+  .cw-nav {
+    position: fixed;
+    top: 56px; left: 0;
+    width: 280px;
+    max-width: 80vw;
+    height: calc(100vh - 56px);
+    transform: translateX(-100%);
+    transition: transform 260ms ease-out;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.6);
+  }
+  .cw-nav.is-open { transform: translateX(0); }
+  .cw-nav-backdrop {
+    display: none;
+    position: fixed;
+    top: 56px; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 19;
+  }
+  .cw-nav-backdrop.is-open { display: block; }
+  .cw-main { padding: 16px 0 48px; gap: 20px; }
+}
+
+@media (max-width: 560px) {
+  .cw-runhead { display: none; }
+  .cw-slide-count { font-size: 10px; letter-spacing: 0.14em; }
+}
+
+/* Print — hide web chrome, let the deck print as a deck */
+@media print {
+  .cw-topbar, .cw-nav, .cw-nav-backdrop { display: none !important; }
+  .cw-shell { display: block; }
+  .cw-main { padding: 0; gap: 0; background: white; }
+  .allpages-slot { box-shadow: none; outline: none; transform: none; margin-bottom: 0 !important; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#deck">Skip to content</a>
+
+<header class="cw-topbar">
+  <div class="cw-topbar-inner">
+    <div class="cw-volume">Volume I · Wrath · Pitch</div>
+    <div class="cw-runhead" id="runhead">Cover</div>
+    <div class="cw-topbar-right">
+      <div class="cw-slide-count" id="slideCount"><b>01</b> / 25</div>
+      <div class="cw-progress" aria-hidden="true"><div class="cw-progress-bar" id="progress"></div></div>
+      <button class="cw-nav-toggle" id="navToggle" aria-label="Toggle slide menu" aria-expanded="false">&#9776;</button>
+    </div>
+  </div>
+</header>
+
+<div class="cw-nav-backdrop" id="navBackdrop"></div>
+
+<div class="cw-shell">
+  <nav class="cw-nav" id="nav" aria-label="Slide navigation">
+    <div class="cw-nav-head">
+      <span class="cw-tau">&#8224;</span>
+      <div>
+        <div class="cw-nav-title">Wrath</div>
+        <div class="cw-nav-sub">— A Pitch —</div>
+      </div>
+    </div>
+    <div class="cw-nav-rule"></div>
+      <div class="cw-nav-label">Front</div>
+      <ol class="cw-nav-list">
+      <li class="cw-nav-item" data-target="s1"><a href="#s1"><span class="cw-nav-text">Cover</span></a></li>
+      <li class="cw-nav-item" data-target="s2"><a href="#s2"><span class="cw-nav-text">Epigraph</span></a></li>
+      <li class="cw-nav-item" data-target="s3"><a href="#s3"><span class="cw-nav-text">About</span></a></li>
+      </ol>
+      <div class="cw-nav-label">Part I — The World</div>
+      <ol class="cw-nav-list">
+      <li class="cw-nav-item" data-target="s4"><a href="#s4"><span class="cw-nav-text">Title</span></a></li>
+      <li class="cw-nav-item" data-target="s5"><a href="#s5"><span class="cw-nav-text">The Collapse is Ongoing</span></a></li>
+      <li class="cw-nav-item" data-target="s6"><a href="#s6"><span class="cw-nav-text">Sacred Over Civic</span></a></li>
+      </ol>
+      <div class="cw-nav-label">Part II — Heaven</div>
+      <ol class="cw-nav-list">
+      <li class="cw-nav-item" data-target="s7"><a href="#s7"><span class="cw-nav-text">Title</span></a></li>
+      <li class="cw-nav-item" data-target="s8"><a href="#s8"><span class="cw-nav-text">The Hierarchy</span></a></li>
+      <li class="cw-nav-item" data-target="s9"><a href="#s9"><span class="cw-nav-text">Seraphim & Ophanim</span></a></li>
+      <li class="cw-nav-item" data-target="s10"><a href="#s10"><span class="cw-nav-text">The Powers</span></a></li>
+      <li class="cw-nav-item" data-target="s11"><a href="#s11"><span class="cw-nav-text">Ensemble</span></a></li>
+      <li class="cw-nav-item" data-target="s12"><a href="#s12"><span class="cw-nav-text">Iustitia</span></a></li>
+      <li class="cw-nav-item" data-target="s13"><a href="#s13"><span class="cw-nav-text">Zelus</span></a></li>
+      <li class="cw-nav-item" data-target="s14"><a href="#s14"><span class="cw-nav-text">Vindicta</span></a></li>
+      <li class="cw-nav-item" data-target="s15"><a href="#s15"><span class="cw-nav-text">Misericordia</span></a></li>
+      <li class="cw-nav-item" data-target="s16"><a href="#s16"><span class="cw-nav-text">Dominions</span></a></li>
+      <li class="cw-nav-item" data-target="s17"><a href="#s17"><span class="cw-nav-text">Guardians</span></a></li>
+      <li class="cw-nav-item" data-target="s18"><a href="#s18"><span class="cw-nav-text">Arma Consecrata</span></a></li>
+      <li class="cw-nav-item" data-target="s19"><a href="#s19"><span class="cw-nav-text">In the Field</span></a></li>
+      </ol>
+      <div class="cw-nav-label">Part III — Hell</div>
+      <ol class="cw-nav-list">
+      <li class="cw-nav-item" data-target="s20"><a href="#s20"><span class="cw-nav-text">Title</span></a></li>
+      <li class="cw-nav-item" data-target="s21"><a href="#s21"><span class="cw-nav-text">Hell is in the Air</span></a></li>
+      <li class="cw-nav-item" data-target="s22"><a href="#s22"><span class="cw-nav-text">Three Tiers</span></a></li>
+      <li class="cw-nav-item" data-target="s23"><a href="#s23"><span class="cw-nav-text">Sacrilega</span></a></li>
+      <li class="cw-nav-item" data-target="s24"><a href="#s24"><span class="cw-nav-text">Cultists & Daemonia</span></a></li>
+      </ol>
+      <div class="cw-nav-label">Coda</div>
+      <ol class="cw-nav-list">
+      <li class="cw-nav-item" data-target="s25"><a href="#s25"><span class="cw-nav-text">Fiat.</span></a></li>
+      </ol>
+    <div class="cw-nav-rule cw-nav-rule--bot"></div>
+    <div class="cw-nav-foot">&#8224; &#8224; &#8224;</div>
+    <div class="cw-nav-imprint">
+      Private. Not for circulation.<br>
+      <a href="https://schmede-ai.github.io/">schmede-ai.github.io &#8599;</a>
+    </div>
+  </nav>
+
+  <main class="cw-main" id="deck">
+    
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 1 — COVER                                                     -->
+<!-- ================================================================== -->
+<section id="s1" class="page page--image" data-slide="s1">
+  <div class="full-bleed" style="background-image: url('../images/cover/cover.jpg');"></div>
+
+  <!-- Localized darkening bands top and bottom so type has a clean bed   -->
+  <!-- without dimming the pistol zone in the middle of the frame         -->
+  <div style="position: absolute; top: 0; left: 0; right: 0; height: 170pt;
+              background: linear-gradient(180deg,
+                rgba(0,0,0,0.72) 0%,
+                rgba(0,0,0,0.55) 40%,
+                rgba(0,0,0,0.25) 72%,
+                rgba(0,0,0,0.08) 90%,
+                rgba(0,0,0,0) 100%);
+              pointer-events: none;"></div>
+  <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 150pt;
+              background: linear-gradient(0deg,
+                rgba(0,0,0,0.80) 0%,
+                rgba(0,0,0,0.60) 35%,
+                rgba(0,0,0,0.30) 65%,
+                rgba(0,0,0,0.10) 88%,
+                rgba(0,0,0,0) 100%);
+              pointer-events: none;"></div>
+
+  <!-- Top masthead — title owns the rain-sky zone above the figure -->
+  <div style="position: absolute; top: 28pt; left: 0; right: 0; text-align: center;">
+    <div class="eyebrow"
+         style="font-size: 8.5pt; letter-spacing: 0.32em; color: #d9c890; margin-bottom: 14pt;">
+      A Cosmology in Contemporary Collapse
+    </div>
+    <div class="titleface"
+         style="font-size: 86pt; line-height: 0.95; color: #f3e8cd;
+                text-shadow: 0 2pt 10pt rgba(0,0,0,0.55);">
+      Wrath
+    </div>
+  </div>
+
+  <!-- Bottom tagline — sits in the floor/knee zone, well clear of the pistol -->
+  <div style="position: absolute; bottom: 26pt; left: 0; right: 0; text-align: center;">
+    <div class="ornament" style="color: #b0924d; font-size: 10pt; margin-bottom: 8pt;">· · ·</div>
+    <div class="caps"
+         style="font-size: 9.5pt; letter-spacing: 0.34em; color: #d9c890;">
+      Volume I &nbsp;·&nbsp; The Bible of the World
+    </div>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 2 — EPIGRAPH                                                  -->
+<!-- ================================================================== -->
+<section id="s2" class="page page--pure" data-slide="s2">
+  <div class="pad-xl h-full flex col center" style="text-align: center;">
+    <div class="eyebrow" style="margin-bottom: 40pt;">Epigraph</div>
+
+    <div class="pull pull--lg" style="max-width: 560pt; font-style: italic;">
+      “Hell is in the air.<br/>Heaven is past it.”
+    </div>
+
+    <div class="ornament" style="margin-top: 36pt;">✠</div>
+
+    <div class="small" style="max-width: 440pt; margin-top: 16pt; font-style: italic;">
+      Scriptural basis: Daniel 10; Ephesians 2:2, 6:12.
+      The demonic operates in the air adjacent to Earth.
+      Heaven is above and beyond the contested lower heavens.
+      Every answer must transit through a combat environment.
+    </div>
+  </div>
+  <div class="folio folio--right">
+    <span class="folio__title">WRATH</span><span class="folio__num">ii</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 3 — COLOPHON / ABOUT THIS DOCUMENT                            -->
+<!-- ================================================================== -->
+<section id="s3" class="page page--pure" data-slide="s3">
+  <div class="pad-xl h-full flex col between">
+    <div>
+      <div class="eyebrow">On this Document</div>
+      <hr class="rule-h rule-h--short" style="margin-top: 14pt; margin-bottom: 28pt;" />
+
+      <div class="lede" style="max-width: 560pt;">
+        <em>Wrath</em> is a contemporary grimdark universe,
+        grounded in Catholic cosmology and told primarily through
+        short-form visual work.
+      </div>
+
+      <div style="max-width: 560pt; columns: 2; column-gap: 40pt; margin-top: 28pt;">
+        <p>
+          This volume holds the working canon of the world — the rules of its sky,
+          the ordering of its choirs, the ecosystem of its enemies, the
+          vocabulary its inhabitants use. It is not a treatment, not a marketing
+          deck, not a screenplay. It is a reference object, written so that every
+          short built inside this universe inherits a world already ruled.
+        </p>
+        <p>
+          The universe has one claim it will not release: that the sacred is
+          treated with weight. No winking, no irony, no self-awareness. The
+          register is heavy by design. Readers looking for the
+          tone should expect Old Testament
+          judgment delivered through modern firearms, and a mercy that is
+          never sentimental.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex between" style="align-items: flex-end;">
+      <div class="micro">Volume I &nbsp;·&nbsp; Working Canon &nbsp;·&nbsp; Illustrated</div>
+      <div class="micro" style="text-align: right;">
+        Pages follow in four parts:<br/>
+        I. The World &nbsp; II. Heaven &nbsp; III. Hell &nbsp; IV. The Stance
+      </div>
+    </div>
+  </div>
+  <div class="folio folio--right">
+    <span class="folio__title">WRATH</span><span class="folio__num">iii</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 4 — PART I TITLE CARD                                         -->
+<!-- ================================================================== -->
+<section id="s4" class="page page--pure" data-slide="s4">
+  <div class="pad-xl h-full flex col center" style="text-align: center;">
+    <div class="caps" style="font-size: 10pt; color: #b0924d; margin-bottom: 40pt;">
+      Part the First
+    </div>
+
+    <div class="titleface titleface--light" style="font-size: 62pt; color: #f3e8cd; line-height: 1;">
+      The World
+    </div>
+
+    <hr class="rule-h rule-h--short" style="margin-top: 40pt; margin-bottom: 24pt; background: #b0924d;"/>
+
+    <div class="small italic" style="max-width: 440pt;">
+      Wards that held for generations are failing. Civil authority is in
+      visible collapse. The Emergency Alert System is still functional. The
+      language of the bulletin has not yet learned the word for what is
+      happening.
+    </div>
+  </div>
+  <div class="folio folio--right">
+    <span class="folio__title">I · The World</span><span class="folio__num">01</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 5 — THE BREACH (split — EAS gas station left, text right)     -->
+<!-- ================================================================== -->
+<section id="s5" class="page" data-slide="s5">
+  <div class="split">
+    <div class="split__img" style="background-image: url('../images/world/eas_gas.jpg');"><div class="vignette"></div>
+    </div>
+    <div class="split__text" style="padding: 56pt 60pt;">
+      <div class="eyebrow">§ 01 &nbsp;·&nbsp; The Breach</div>
+      <hr class="rule-h rule-h--short" style="margin-top: 12pt; margin-bottom: 18pt;"/>
+
+      <div class="page-title" style="font-size: 19pt; letter-spacing: 0.08em;">The Collapse is Ongoing</div>
+      <div class="page-subtitle">Not a single event. A phase.</div>
+
+      <div style="margin-top: 20pt;">
+        <p>
+          The world has been degrading for a long time. Wards dissolve at the
+          rate faith dissolves. The institutions built to hold the line —
+          sacramental volume, consecrated ground, the ordinary operation of
+          the Church — have decayed past the threshold that kept Hell from
+          physically manifesting.
+        </p>
+        <p style="margin-top: 10pt;">
+          What the audience sees is the phase where the degradation became
+          visible and unrecoverable.
+        </p>
+        <p style="margin-top: 18pt;" class="italic">
+          Prayers go up fast. Answers come down slow.
+        </p>
+      </div>
+
+      <div class="micro" style="margin-top: 28pt;">Canon · The Breach</div>
+    </div>
+  </div>
+  <div class="folio folio--right" style="color: #7d6836;">
+    <span class="folio__title">I · The World</span><span class="folio__num">02</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 6 — SACRED OVER CIVIC (St. Michael mural, mass-casualty beat)  -->
+<!-- ================================================================== -->
+<section id="s6" class="page page--image" data-slide="s6">
+  <div class="full-bleed" style="background-image: url('../images/world/mural_mass_casualty.jpg');"></div>
+
+  <!-- Feathered darkening focused on the bottom-left title block only.    -->
+  <!-- Eyebrow moves to top-left where the tile strip above the mosaic     -->
+  <!-- gives it a clean dark bed.                                          -->
+  <div style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+              background: radial-gradient(ellipse 480pt 180pt at 220pt 88%,
+                rgba(0,0,0,0.72) 0%,
+                rgba(0,0,0,0.48) 32%,
+                rgba(0,0,0,0.22) 62%,
+                rgba(0,0,0,0.06) 86%,
+                rgba(0,0,0,0) 100%);
+              pointer-events: none;"></div>
+
+  <!-- Small top-left feather for the section eyebrow -->
+  <div style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+              background: radial-gradient(ellipse 360pt 120pt at 200pt 0%,
+                rgba(0,0,0,0.60) 0%,
+                rgba(0,0,0,0.32) 40%,
+                rgba(0,0,0,0.10) 75%,
+                rgba(0,0,0,0) 100%);
+              pointer-events: none;"></div>
+
+  <div class="overlay overlay--tl" style="max-width: 440pt;">
+    <div class="eyebrow" style="color: #d9c890;">§ 02 &nbsp;·&nbsp; Surfaces of the Collapse</div>
+  </div>
+
+  <div class="overlay overlay--bl" style="width: 440pt;">
+    <div class="page-title" style="font-size: 20pt; letter-spacing: 0.08em; color: #f3e8cd;">Sacred Over Civic</div>
+    <div class="page-subtitle" style="margin-top: 8pt; color: #e6dcc6;">
+      The old paintings watch the new bodies. The iconography predates
+      the crisis and outlasts the institutions trying to manage it.
+    </div>
+    <div class="small italic" style="margin-top: 12pt; color: #d9c890; max-width: 400pt; font-size: 8.5pt;">
+      Civil order fails below a visual order that did not consent to fail.
+      Murals of St. Michael, municipal shrines, unbroken ward lines on
+      older buildings — the universe is not secular, even where its
+      occupants are.
+    </div>
+  </div>
+  <div class="folio folio--right" style="color: #f3e8cd;">
+    <span class="folio__title" style="color: #e6dcc6;">I · The World</span><span class="folio__num" style="color: #f3e8cd;">03</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 7 — PART II TITLE CARD: HEAVEN                                -->
+<!-- ================================================================== -->
+<section id="s7" class="page page--image" data-slide="s7">
+  <div class="full-bleed" style="background-image: url('../images/heaven/ophanim.jpg');"></div>
+
+  <!-- Subtle fade around the plate so it doesn't feel pasted onto the image -->
+  <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 200pt;
+              background: linear-gradient(0deg,
+                rgba(0,0,0,0.50) 0%,
+                rgba(0,0,0,0.32) 35%,
+                rgba(0,0,0,0.12) 75%,
+                rgba(0,0,0,0) 100%);
+              pointer-events: none;"></div>
+
+  <!-- Formal title plate — classical announcement. Compact, framed,        -->
+  <!-- sits above the folio with clean breathing room on both ends.         -->
+  <div style="position: absolute; bottom: 56pt; left: 50%;
+              transform: translateX(-50%);
+              width: 600pt; padding: 18pt 44pt 20pt;
+              background: rgba(8, 6, 4, 0.84);
+              border-top: 0.5pt solid rgba(176, 146, 77, 0.45);
+              border-bottom: 0.5pt solid rgba(176, 146, 77, 0.45);
+              text-align: center;
+              box-sizing: border-box;">
+    <div class="caps" style="font-size: 9pt; letter-spacing: 0.32em; color: #d9c890;">
+      Part the Second
+    </div>
+    <div class="titleface titleface--light" style="font-size: 42pt; color: #f3e8cd; line-height: 1; margin-top: 10pt;">
+      Heaven
+    </div>
+    <hr class="rule-h rule-h--short" style="margin: 12pt auto 10pt; background: #b0924d;"/>
+    <div class="small italic" style="max-width: 500pt; margin: 0 auto; color: #d9c890;">
+      A hierarchy of nine orders. One of them fights house-to-house with
+      modern firearms in medieval plate. The others wait above, or move as
+      geometry permits.
+    </div>
+  </div>
+
+  <div class="folio folio--right" style="color: #f3e8cd;">
+    <span class="folio__title" style="color: #e6dcc6;">II · Heaven</span><span class="folio__num" style="color: #f3e8cd;">04</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 8 — THE NINEFOLD ORDER                                        -->
+<!-- ================================================================== -->
+<section id="s8" class="page" data-slide="s8">
+  <div style="position: absolute; top: 40pt; left: 48pt; right: 48pt; bottom: 40pt;">
+    <div class="eyebrow">§ 03 &nbsp;·&nbsp; The Ninefold Order</div>
+    <hr class="rule-h rule-h--short" style="margin-top: 12pt; margin-bottom: 18pt;"/>
+
+    <div class="page-title">The Hierarchy</div>
+    <div class="page-subtitle">Pseudo-Dionysian. Thomistic. Three spheres, nine choirs.</div>
+
+    <div style="display: flex; gap: 36pt; margin-top: 26pt;">
+      <!-- three columns for three spheres — no highlights, no gloss lines -->
+      <div style="flex: 1;">
+        <div class="micro" style="color: #b0924d; margin-bottom: 10pt;">First Sphere</div>
+        <div class="small" style="color: #bfb29b; margin-bottom: 14pt; font-style: italic;">Closest to God. Rarely on Earth.</div>
+        <div class="caps" style="font-size: 9pt; color: #f3e8cd; line-height: 2.2;">
+          Seraphim<br/>
+          Cherubim<br/>
+          Ophanim
+        </div>
+      </div>
+      <div style="flex: 1;">
+        <div class="micro" style="color: #b0924d; margin-bottom: 10pt;">Second Sphere</div>
+        <div class="small" style="color: #bfb29b; margin-bottom: 14pt; font-style: italic;">The operational orders.</div>
+        <div class="caps" style="font-size: 9pt; color: #f3e8cd; line-height: 2.2;">
+          Dominions<br/>
+          Virtues<br/>
+          Powers
+        </div>
+      </div>
+      <div style="flex: 1;">
+        <div class="micro" style="color: #b0924d; margin-bottom: 10pt;">Third Sphere</div>
+        <div class="small" style="color: #bfb29b; margin-bottom: 14pt; font-style: italic;">Oriented toward Earth.</div>
+        <div class="caps" style="font-size: 9pt; color: #f3e8cd; line-height: 2.2;">
+          Principalities<br/>
+          Archangels<br/>
+          Guardian Angels
+        </div>
+      </div>
+    </div>
+
+    <hr class="rule-h" style="margin-top: 30pt;"/>
+
+    <div style="display: flex; gap: 32pt; margin-top: 18pt;">
+      <p class="small" style="flex: 1;">
+        Rank is not measured by power but by proximity. The lower orders
+        are operational and seen often &mdash; they move through the
+        contested sky and make Heaven&rsquo;s work visible on Earth.
+      </p>
+      <p class="small" style="flex: 1;">
+        The higher orders are rare and decisive. When one appears, it is
+        because geometry has permitted it. The register of the scene
+        changes with the arrival.
+      </p>
+    </div>
+  </div>
+  <div class="folio folio--right">
+    <span class="folio__title">II · Heaven</span><span class="folio__num">05</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 9 — FIRST SPHERE (Seraphim + Ophanim split, full-bleed)       -->
+<!-- ================================================================== -->
+<section id="s9" class="page page--image" style="background: #000;" data-slide="s9">
+
+  <!-- Left panel: Seraphim (full page height) -->
+  <div style="position: absolute; top: 0; bottom: 0; left: 0; width: 396pt;
+              overflow: hidden;
+              background-color: #000;
+              background-image: url('../images/heaven/seraphim.jpg');
+              background-size: cover;
+              background-position: center;
+              background-repeat: no-repeat;">
+    <div class="vignette"></div>
+    <!-- Bottom feathered darkening for title block -->
+    <div style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+                background: radial-gradient(ellipse 440pt 240pt at 50% 100%,
+                  rgba(0,0,0,0.82) 0%,
+                  rgba(0,0,0,0.58) 28%,
+                  rgba(0,0,0,0.30) 58%,
+                  rgba(0,0,0,0.08) 85%,
+                  rgba(0,0,0,0) 100%);
+                pointer-events: none;"></div>
+    <div style="position: absolute; bottom: 26pt; left: 34pt; right: 34pt;
+                text-shadow: 0 1pt 3pt rgba(0,0,0,0.75);">
+      <div class="titleface" style="font-size: 22pt; color: #f3e8cd;">Seraphim</div>
+      <p class="small" style="color: #e6dcc6; margin-top: 8pt;">
+        Six wings, per Isaiah 6 &mdash; two of them cover the face.
+        Monumental, composed, still. They descend when Heaven answers,
+        and the register of the scene changes on contact.
+      </p>
+    </div>
+  </div>
+
+  <!-- Right panel: Ophanim (full page height) -->
+  <div style="position: absolute; top: 0; bottom: 0; right: 0; width: 396pt;
+              overflow: hidden;
+              background-color: #000;
+              background-image: url('../images/heaven/ophanim_confronting.jpg');
+              background-size: cover;
+              background-position: center;
+              background-repeat: no-repeat;">
+    <div class="vignette"></div>
+    <div style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+                background: radial-gradient(ellipse 440pt 240pt at 50% 100%,
+                  rgba(0,0,0,0.82) 0%,
+                  rgba(0,0,0,0.58) 28%,
+                  rgba(0,0,0,0.30) 58%,
+                  rgba(0,0,0,0.08) 85%,
+                  rgba(0,0,0,0) 100%);
+                pointer-events: none;"></div>
+    <div style="position: absolute; bottom: 26pt; left: 34pt; right: 34pt;
+                text-shadow: 0 1pt 3pt rgba(0,0,0,0.75);">
+      <div class="titleface" style="font-size: 22pt; color: #f3e8cd;">Ophanim</div>
+      <p class="small" style="color: #e6dcc6; margin-top: 8pt;">
+        Concentric gold wheels full of eyes, per Ezekiel 1. The
+        Thrones&rsquo; manifestation on Earth. They operate above the
+        contested sky, in the geometry where opposition cannot reach.
+        When one appears, the outcome is already decided.
+      </p>
+    </div>
+  </div>
+
+  <!-- Top feathered darkening band — spans both panels, gives the shared   -->
+  <!-- header a clean bed without leaving dead empty space at the top.      -->
+  <div style="position: absolute; top: 0; left: 0; right: 0; height: 140pt;
+              background: linear-gradient(180deg,
+                rgba(0,0,0,0.78) 0%,
+                rgba(0,0,0,0.58) 38%,
+                rgba(0,0,0,0.28) 68%,
+                rgba(0,0,0,0.08) 88%,
+                rgba(0,0,0,0) 100%);
+              pointer-events: none;"></div>
+
+  <!-- Shared page header — floats on top of the feathered band across both panels -->
+  <div style="position: absolute; top: 32pt; left: 48pt; right: 48pt; z-index: 4;
+              text-shadow: 0 1pt 3pt rgba(0,0,0,0.7);">
+    <div class="eyebrow" style="color: #f3e8cd;">§ 04 &nbsp;·&nbsp; First Sphere</div>
+    <hr class="rule-h rule-h--short" style="margin-top: 10pt; margin-bottom: 10pt;"/>
+    <div class="small italic" style="color: #d9c890; max-width: 500pt;">
+      Closest to God. Rarely on Earth.
+    </div>
+  </div>
+
+  <div class="folio folio--right" style="color: #f3e8cd; z-index: 5;">
+    <span class="folio__title" style="color: #e6dcc6;">II · Heaven</span><span class="folio__num">06</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 9 — THE POWERS (introduction)                                 -->
+<!-- ================================================================== -->
+<section id="s10" class="page" data-slide="s10">
+  <div class="pad-xl h-full flex col center" style="text-align: center;">
+    <div class="caps" style="font-size: 10pt; color: #b0924d; margin-bottom: 32pt;">
+      &mdash; §§ 05 &mdash;
+    </div>
+
+    <div class="titleface" style="font-size: 42pt; color: #f3e8cd; line-height: 1;">
+      The Powers
+    </div>
+    <div class="page-subtitle" style="margin-top: 12pt; font-size: 12pt;">
+      <em>Exousiai</em> &nbsp;·&nbsp; the order tasked with preventing the assaults of demons
+    </div>
+
+    <hr class="rule-h rule-h--short" style="margin: 32pt auto 28pt; background: #b0924d;"/>
+
+    <div style="max-width: 560pt; margin: 0 auto;">
+      <p>
+        In <em>Ephesians 6:12</em>, Paul names the <em>exousiai</em> — the
+        Powers — as the heavenly counterpart to the demonic in the
+        contested lower heavens. Aquinas assigns them a specific office:
+        the choir whose duty is to prevent the assaults of demons.
+      </p>
+      <p style="margin-top: 10pt;">
+        In the present volume, four of them walk the Earth, each
+        bearing a classical Latin virtue as her name and her function.
+        They wear medieval plate. They carry modern firearms. They
+        can be wounded. They can be killed. They fail. They are
+        what arrives when a prayer gets through.
+      </p>
+    </div>
+
+    <div class="ornament" style="margin-top: 34pt;">
+      Iustitia &nbsp;·&nbsp; Zelus &nbsp;·&nbsp; Vindicta &nbsp;·&nbsp; Misericordia
+    </div>
+
+    <div class="small italic" style="color: #7d6836; margin-top: 10pt;">
+      Three Old Testament, one New. Ratio by design.
+    </div>
+  </div>
+  <div class="folio folio--right">
+    <span class="folio__title">II · Heaven</span><span class="folio__num">07</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 10 — ENSEMBLE REVEAL                                          -->
+<!-- ================================================================== -->
+<section id="s11" class="page page--image" data-slide="s11">
+  <div class="full-bleed" style="background-image: url('../images/cover/ensemble.jpg');"></div>
+  <div class="vignette"></div>
+  <div class="overlay overlay--bl" style="max-width: 540pt;">
+    <div class="eyebrow" style="color: #e6dcc6; margin-bottom: 10pt;">First Ensemble</div>
+    <div class="titleface" style="font-size: 26pt; color: #f3e8cd; line-height: 1.05;">
+      Left to right:<br/>
+      <span class="titleface--light" style="letter-spacing: 0.12em;">
+        Zelus &nbsp;·&nbsp; Misericordia &nbsp;·&nbsp; Vindicta &nbsp;·&nbsp; Iustitia
+      </span>
+    </div>
+    <div class="small italic" style="color: #bfb29b; margin-top: 10pt;">
+      Summary execution of a cultist in a suburban warzone.<br/>
+      Judgment is delivered in four registers, not one.
+    </div>
+  </div>
+  <div class="folio folio--right" style="color: #e6dcc6;">
+    <span class="folio__title" style="color: #bfb29b;">II · Heaven</span><span class="folio__num" style="color: #f3e8cd;">08</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 11 — IUSTITIA                                                 -->
+<!-- ================================================================== -->
+<section id="s12" class="page" data-slide="s12">
+  <div class="split">
+    <div class="split__img" style="background-image: url('../images/powers/iustitia_portrait.jpg');"></div>
+    <div class="split__text" style="padding: 44pt 56pt;">
+      <div class="eyebrow">Power I &nbsp;·&nbsp; Old Testament</div>
+      <div class="placard" style="margin-top: 14pt;">
+        <div class="placard__latin">Iustitia</div>
+        <div class="placard__english">Justice</div>
+      </div>
+
+      <div style="margin-top: 20pt;">
+        <p class="small" style="font-style: italic; color: #bfb29b;">Rendering due. The ordering virtue. Right proportion.</p>
+        <p style="margin-top: 12pt;">
+          Leader of the walking roster. In classical reading, justice is the
+          ordering virtue — the one that arranges all others in their right
+          proportion. When Iustitia arrives, she has already decided what
+          is due. The target is not yet aware that the decision has been
+          made.
+        </p>
+        <p style="margin-top: 10pt;">
+          Mercy is offered first. Sentence follows refusal. This is the
+          structural rule that makes her Old Testament judgment read as
+          <em>exhausted mercy</em> rather than arbitrary cruelty.
+        </p>
+      </div>
+
+      <div class="small" style="margin-top: 20pt; color: #b0924d; font-style: italic;">
+        Weapon: <span class="latin">Deus Vult</span> <span class="gloss">— “God wills it.”</span> &nbsp;·&nbsp;
+        Consecrated precision long-arm.
+      </div>
+    </div>
+  </div>
+  <div class="folio folio--right">
+    <span class="folio__title">II · Heaven</span><span class="folio__num">09</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 12 — ZELUS                                                    -->
+<!-- ================================================================== -->
+<section id="s13" class="page" data-slide="s13">
+  <div class="split split--flip">
+    <div class="split__img" style="background-image: url('../images/powers/zelus_portrait.jpg');"></div>
+    <div class="split__text" style="padding: 44pt 56pt;">
+      <div class="eyebrow">Power II &nbsp;·&nbsp; Old Testament</div>
+      <div class="placard" style="margin-top: 14pt;">
+        <div class="placard__latin">Zelus</div>
+        <div class="placard__english">Holy Zeal</div>
+      </div>
+
+      <div style="margin-top: 20pt;">
+        <p class="small" style="font-style: italic; color: #bfb29b;">Holy wrath. <em>Ira per zelum.</em> Passionate opposition to evil.</p>
+        <p style="margin-top: 12pt;">
+          Modern English collapses her into "fanaticism" and reads the
+          valence as negative. Classical Latin treats Zelus as
+          correctly-ordered fire: the virtue whose opposite is not
+          calmness but <em>indifference to evil</em>. She is staged as
+          righteous fire, not recklessness.
+        </p>
+        <p style="margin-top: 10pt;">
+          Where Iustitia deliberates, Zelus burns. Volume of force is her
+          register. A suburb on fire is her establishing shot.
+        </p>
+      </div>
+
+      <div class="small" style="margin-top: 20pt; color: #b0924d; font-style: italic;">
+        Weapon: <span class="latin">Consumet Eos</span> <span class="gloss">— “It shall consume them.”</span> &nbsp;·&nbsp;
+        Consecrated shotgun, high-volume carbine.
+      </div>
+    </div>
+  </div>
+  <div class="folio folio--left">
+    <span class="folio__title">II · Heaven</span><span class="folio__num">10</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 13 — VINDICTA                                                 -->
+<!-- ================================================================== -->
+<section id="s14" class="page" data-slide="s14">
+  <div class="split">
+    <div class="split__img" style="background-image: url('../images/powers/vindicta_portrait.jpg');"></div>
+    <div class="split__text" style="padding: 44pt 56pt;">
+      <div class="eyebrow">Power III &nbsp;·&nbsp; Old Testament</div>
+      <div class="placard" style="margin-top: 14pt;">
+        <div class="placard__latin">Vindicta</div>
+        <div class="placard__english">Righteous Requital</div>
+      </div>
+
+      <div style="margin-top: 20pt;">
+        <p class="small" style="font-style: italic; color: #bfb29b;">An aspect of justice. <em>Lex talionis.</em> Return of injury in kind.</p>
+        <p style="margin-top: 12pt;">
+          Modern audiences read <em>vindicta</em> as forbidden vengeance —
+          personal, corrupted, dark. Classical Latin reads it as an aspect
+          of justice: the measured return of what was given. If Iustitia
+          determines what is due, Vindicta is the register in which it is
+          repaid with a symmetry the recipient cannot miss.
+        </p>
+        <p style="margin-top: 10pt;">
+          The close-quarters Power. Precise. Personal. The mirror-return of
+          wrong.
+        </p>
+      </div>
+
+      <div class="small" style="margin-top: 20pt; color: #b0924d; font-style: italic;">
+        Weapon: <span class="latin">Mihi Vindicta</span> <span class="gloss">— “Vengeance is mine.”</span> &nbsp;·&nbsp;
+        Consecrated sidearm.
+      </div>
+    </div>
+  </div>
+  <div class="folio folio--right">
+    <span class="folio__title">II · Heaven</span><span class="folio__num">11</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 14 — MISERICORDIA                                             -->
+<!-- ================================================================== -->
+<section id="s15" class="page" data-slide="s15">
+  <div class="split split--flip">
+    <div class="split__img" style="background-image: url('../images/powers/misericordia_portrait.jpg');"></div>
+    <div class="split__text" style="padding: 44pt 56pt;">
+      <div class="eyebrow">Power IV &nbsp;·&nbsp; New Testament</div>
+      <div class="placard" style="margin-top: 14pt;">
+        <div class="placard__latin">Misericordia</div>
+        <div class="placard__english">Mercy</div>
+      </div>
+
+      <div style="margin-top: 20pt;">
+        <p class="small" style="font-style: italic; color: #bfb29b;">Heart-with-the-suffering. Response to pain, regardless of guilt.</p>
+        <p style="margin-top: 12pt;">
+          The single New Testament Power on the walking roster. She is
+          alone on her side by design — the three-to-one ratio lets her
+          bear the structural weight of grace without softening the
+          register of the whole. When she arrives, the short declares
+          itself. It is not the one where a cultist is executed. It is
+          the one where a civilian is carried out.
+        </p>
+        <p style="margin-top: 10pt;">
+          Not sentimental. Mercy in this universe is a discipline.
+        </p>
+      </div>
+
+      <div class="small" style="margin-top: 20pt; color: #b0924d; font-style: italic;">
+        Weapon: <span class="latin">Dona Requiem</span> <span class="gloss">— “Grant rest.”</span> &nbsp;·&nbsp;
+        Consecrated rifle &amp; inscribed sidearm.
+      </div>
+    </div>
+  </div>
+  <div class="folio folio--left">
+    <span class="folio__title">II · Heaven</span><span class="folio__num">12</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 15 — DOMINION (full-bleed 16:9 crop)                          -->
+<!-- ================================================================== -->
+<section id="s16" class="page page--image" data-slide="s16">
+  <div class="full-bleed" style="background-image: url('../images/heaven/dominion.jpg');"></div>
+
+  <!-- Full-page radial feathers so no rectangular darkening edge is visible. -->
+  <!-- Bottom-left ellipse for the Dominions title block                      -->
+  <div style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+              background: radial-gradient(ellipse 620pt 300pt at 300pt 100%,
+                rgba(0,0,0,0.78) 0%,
+                rgba(0,0,0,0.55) 22%,
+                rgba(0,0,0,0.32) 45%,
+                rgba(0,0,0,0.14) 70%,
+                rgba(0,0,0,0.04) 88%,
+                rgba(0,0,0,0) 100%);
+              pointer-events: none;"></div>
+  <!-- Top-left ellipse for the eyebrow -->
+  <div style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+              background: radial-gradient(ellipse 380pt 200pt at 200pt 0%,
+                rgba(0,0,0,0.60) 0%,
+                rgba(0,0,0,0.35) 30%,
+                rgba(0,0,0,0.14) 65%,
+                rgba(0,0,0,0.03) 85%,
+                rgba(0,0,0,0) 100%);
+              pointer-events: none;"></div>
+
+  <div class="overlay overlay--tl" style="max-width: 440pt;">
+    <div class="eyebrow" style="color: #d9c890;">§ 06 &nbsp;·&nbsp; Above the Powers</div>
+  </div>
+
+  <div class="overlay overlay--bl" style="max-width: 580pt;">
+    <div class="titleface" style="font-size: 28pt; color: #f3e8cd; line-height: 1.1;">
+      Dominions
+    </div>
+    <div class="small italic" style="color: #d9c890; margin-top: 8pt; max-width: 560pt;">
+      The command layer between Archangels and Thrones. They cast their shadow over the battlefields they order,
+      and are not ordinarily seen by the civilians they manage. Volume I treats them at the edge of frame;
+      later volumes may bring them in.
+    </div>
+  </div>
+  <div class="folio folio--right" style="color: #f3e8cd;">
+    <span class="folio__title" style="color: #e6dcc6;">II · Heaven</span><span class="folio__num" style="color: #f3e8cd;">13</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 16 — GUARDIAN ANGELS                                          -->
+<!-- ================================================================== -->
+<section id="s17" class="page page--image" data-slide="s17">
+  <div class="full-bleed" style="background-image: url('../images/heaven/guardians_descent.jpg');"></div>
+  <div class="vignette"></div>
+  <div class="overlay overlay--br" style="max-width: 420pt;">
+    <div class="eyebrow" style="color: #b0924d;">§ 07 &nbsp;·&nbsp; The Third Sphere</div>
+    <div class="titleface" style="font-size: 26pt; color: #f3e8cd; line-height: 1.05; margin-top: 10pt;">
+      Guardians
+    </div>
+    <p class="small" style="color: #e6dcc6; margin-top: 12pt;">
+      Common angels. Unarmed. Oriented toward individual human lives. A
+      canonical open question stands over them: they may be the order
+      that has been recalled or is no longer reliably dispatched —
+      which would explain why the Powers are the <em>de facto</em>
+      response tier in the present era.
+    </p>
+  </div>
+  <div class="folio folio--left" style="color: #e6dcc6;">
+    <span class="folio__title" style="color: #bfb29b;">II · Heaven</span><span class="folio__num" style="color: #f3e8cd;">14</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 17 — ARMA CONSECRATA                                          -->
+<!-- ================================================================== -->
+<section id="s18" class="page" data-slide="s18">
+  <div style="position: absolute; top: 40pt; left: 52pt; right: 52pt; bottom: 40pt;">
+    <div class="eyebrow">§ 08 &nbsp;·&nbsp; The Class of Blessed Arms</div>
+    <hr class="rule-h rule-h--short" style="margin-top: 12pt; margin-bottom: 14pt;"/>
+
+    <div class="page-title">Arma Consecrata</div>
+    <div class="page-subtitle">Blessed &amp; inscribed. Categorically more effective than what is not.</div>
+
+    <div style="display: flex; gap: 36pt; margin-top: 26pt; height: calc(100% - 130pt);">
+      <div style="flex: 0 0 290pt; position: relative; border: 0.5pt solid #2e2a24; overflow: hidden; background-color: #000; background-image: url('../images/powers/zelus_consumet_eos_aimed.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+        <div class="vignette"></div>
+        <div style="position: absolute; left: 14pt; right: 14pt; bottom: 14pt;">
+          <div class="micro" style="color: #b0924d;">In the Field</div>
+          <div class="caps" style="font-size: 10pt; color: #f3e8cd; margin-top: 4pt; letter-spacing: 0.14em;">Consumet Eos</div>
+          <div class="small italic" style="color: #bfb29b; font-size: 8pt;">Zelus sighting down her consecrated shotgun.</div>
+        </div>
+      </div>
+
+      <div style="flex: 1;">
+        <p>
+          Any firearm can be consecrated. Each Power carries the version
+          appropriate to her office. A blessed weapon wielded by a walking
+          Power is peak effectiveness. A blessed weapon wielded by a
+          faithful human is strong. A field-blessed conventional weapon
+          is still effective. An unblessed weapon works, but degraded. A
+          demonic attempt to wield a consecrated weapon fails or backfires.
+        </p>
+
+        <hr class="rule-h" style="margin: 16pt 0 14pt;"/>
+
+        <div class="micro" style="margin-bottom: 10pt;">Personal Inscriptions &nbsp;·&nbsp; per Power</div>
+        <table style="width: 100%; border-collapse: collapse; font-size: 9.5pt;">
+          <tr>
+            <td style="padding: 5pt 0; width: 130pt;" class="latin">Deus Vult</td>
+            <td style="padding: 5pt 0;" class="gloss">“God wills it.”</td>
+            <td style="padding: 5pt 0; text-align: right; color: #7d6836;" class="caps">Iustitia</td>
+          </tr>
+          <tr>
+            <td style="padding: 5pt 0;" class="latin">Consumet Eos</td>
+            <td style="padding: 5pt 0;" class="gloss">“It shall consume them.”</td>
+            <td style="padding: 5pt 0; text-align: right; color: #7d6836;" class="caps">Zelus</td>
+          </tr>
+          <tr>
+            <td style="padding: 5pt 0;" class="latin">Mihi Vindicta</td>
+            <td style="padding: 5pt 0;" class="gloss">“Vengeance is mine.”</td>
+            <td style="padding: 5pt 0; text-align: right; color: #7d6836;" class="caps">Vindicta</td>
+          </tr>
+          <tr>
+            <td style="padding: 5pt 0;" class="latin">Dona Requiem</td>
+            <td style="padding: 5pt 0;" class="gloss">“Grant rest.”</td>
+            <td style="padding: 5pt 0; text-align: right; color: #7d6836;" class="caps">Misericordia</td>
+          </tr>
+        </table>
+
+        <p class="small" style="margin-top: 14pt;">
+          Chaplains can bless ammunition and inscribed weapons in the
+          field. Sacramental action upgrades squad firepower — which is
+          what makes the chaplain load-bearing rather than decorative.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="folio folio--right">
+    <span class="folio__title">II · Heaven</span><span class="folio__num">15</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE — IN THE FIELD (quadriptych, four Powers, one square each)    -->
+<!-- ================================================================== -->
+<section id="s19" class="page page--image" data-slide="s19">
+
+  <!-- Top-Left: Iustitia -->
+  <div style="position: absolute; top: 0; left: 0; width: 396pt; height: 222.75pt; overflow: hidden; background-color: #000; background-image: url('../images/powers/iustitia_deus_vult.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="vignette"></div>
+    <div style="position: absolute; left: 22pt; top: 22pt;">
+      <div class="eyebrow" style="color: #b0924d;">§ 09 &nbsp;·&nbsp; In the Field</div>
+    </div>
+    <div style="position: absolute; left: 22pt; right: 22pt; bottom: 18pt;">
+      <div class="micro" style="color: #b0924d;">The Power of Justice</div>
+      <div class="caps" style="font-size: 13pt; color: #f3e8cd; letter-spacing: 0.16em; margin-top: 4pt;">Iustitia</div>
+      <div class="latin" style="font-size: 11pt; color: #d9c890; margin-top: 2pt;">Deus Vult</div>
+      <div class="small italic" style="color: #bfb29b; font-size: 8pt; margin-top: 4pt; max-width: 320pt;">
+        Holding the line with an M60. She goes where the faithful are about to be overrun.
+      </div>
+    </div>
+  </div>
+
+  <!-- Top-Right: Zelus -->
+  <div style="position: absolute; top: 0; left: 396pt; width: 396pt; height: 222.75pt; overflow: hidden; background-color: #000; background-image: url('../images/powers/zelus_consumet_eos.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="vignette"></div>
+    <div style="position: absolute; left: 22pt; right: 22pt; bottom: 18pt;">
+      <div class="micro" style="color: #b0924d;">The Power of Zeal</div>
+      <div class="caps" style="font-size: 13pt; color: #f3e8cd; letter-spacing: 0.16em; margin-top: 4pt;">Zelus</div>
+      <div class="latin" style="font-size: 11pt; color: #d9c890; margin-top: 2pt;">Consumet Eos</div>
+      <div class="small italic" style="color: #bfb29b; font-size: 8pt; margin-top: 4pt; max-width: 320pt;">
+        Shotgun work at close range in a burning cul-de-sac. She arrives where cleansing must be total.
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom-Left: Vindicta -->
+  <div style="position: absolute; top: 222.75pt; left: 0; width: 396pt; height: 222.75pt; overflow: hidden; background-color: #000; background-image: url('../images/powers/vindicta_mihi_vindicta.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="vignette"></div>
+    <div style="position: absolute; left: 22pt; right: 22pt; bottom: 18pt;">
+      <div class="micro" style="color: #b0924d;">The Power of Vengeance</div>
+      <div class="caps" style="font-size: 13pt; color: #f3e8cd; letter-spacing: 0.16em; margin-top: 4pt;">Vindicta</div>
+      <div class="latin" style="font-size: 11pt; color: #d9c890; margin-top: 2pt;">Mihi Vindicta</div>
+      <div class="small italic" style="color: #bfb29b; font-size: 8pt; margin-top: 4pt; max-width: 320pt;">
+        Pistol work in the rain, outside the warehouse where the ritual was attempted. The debt is always settled.
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom-Right: Misericordia -->
+  <div style="position: absolute; top: 222.75pt; left: 396pt; width: 396pt; height: 222.75pt; overflow: hidden; background-color: #000; background-image: url('../images/powers/misericordia_subway.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="vignette"></div>
+    <div style="position: absolute; left: 22pt; right: 22pt; bottom: 18pt;">
+      <div class="micro" style="color: #b0924d;">The Power of Mercy</div>
+      <div class="caps" style="font-size: 13pt; color: #f3e8cd; letter-spacing: 0.16em; margin-top: 4pt;">Misericordia</div>
+      <div class="latin" style="font-size: 11pt; color: #d9c890; margin-top: 2pt;">Dona Requiem</div>
+      <div class="small italic" style="color: #bfb29b; font-size: 8pt; margin-top: 4pt; max-width: 320pt;">
+        Subway column, point-blank. When the possessed cannot be saved, her mercy is the bullet.
+      </div>
+    </div>
+  </div>
+
+  <div class="folio folio--right" style="color: #f3e8cd;">
+    <span class="folio__title">II · Heaven</span><span class="folio__num">16</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE — PART III TITLE CARD: HELL                                   -->
+<!-- ================================================================== -->
+<section id="s20" class="page page--pure" data-slide="s20">
+  <div class="pad-xl h-full flex col center" style="text-align: center;">
+    <div class="caps" style="font-size: 10pt; color: #b0924d; margin-bottom: 34pt;">
+      Part the Third
+    </div>
+    <div class="titleface titleface--light" style="font-size: 62pt; color: #f3e8cd; line-height: 1;">
+      Hell
+    </div>
+    <hr class="rule-h rule-h--short" style="margin: 32pt auto 20pt; background: #6a0f0f;"/>
+    <div class="small italic" style="max-width: 460pt;">
+      Not a place beneath the Earth. A place adjacent to it.
+      Closer than Heaven, by geometry. Organized by an inversion of the
+      virtues it has rejected.
+    </div>
+  </div>
+  <div class="folio folio--right">
+    <span class="folio__title">III · Hell</span><span class="folio__num">17</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 20 — COSMOLOGY (split, portrait-diagram left / text right)    -->
+<!-- ================================================================== -->
+<section id="s21" class="page" data-slide="s21">
+  <div class="split split--4060">
+    <div class="split__img split__img--portrait"
+         style="padding: 14pt;
+                background-color: #0a0908;
+                background-image: url('../images/world/cosmology.png');
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-origin: content-box;">
+    </div>
+    <div class="split__text" style="padding: 48pt 56pt;">
+      <div class="eyebrow">§ 10 &nbsp;·&nbsp; Cosmology</div>
+      <hr class="rule-h rule-h--short" style="margin-top: 12pt; margin-bottom: 16pt;"/>
+
+      <div class="page-title" style="font-size: 19pt; letter-spacing: 0.08em;">Hell is in the Air</div>
+      <div class="page-subtitle"><em>Caelum · Caelum Inferius · Terra.</em></div>
+
+      <p style="margin-top: 16pt;">
+        Daniel 10 — when Daniel prays, the angel sent in response is delayed
+        twenty-one days by opposition in the air above Earth. Paul, in
+        Ephesians, confirms the architecture: <em>principalities, powers,
+        rulers of darkness in high places.</em> Satan is named
+        <em>the prince of the power of the air.</em>
+      </p>
+      <p style="margin-top: 10pt;">
+        The practical implication: the demonic operates directly adjacent to
+        the human world. Hell&rsquo;s access is near-instantaneous. Heaven is
+        above and beyond the contested lower heavens. Every response must
+        transit a combat environment.
+      </p>
+
+      <div class="micro" style="margin-top: 20pt;">Canon · Cosmology</div>
+    </div>
+  </div>
+  <div class="folio folio--right">
+    <span class="folio__title">III · Hell</span><span class="folio__num">18</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 21 — THE ANTAGONIST ECOSYSTEM                                 -->
+<!-- ================================================================== -->
+<section id="s22" class="page" data-slide="s22">
+  <div style="position: absolute; top: 40pt; left: 52pt; right: 52pt; bottom: 40pt;">
+    <div class="eyebrow">§ 11 &nbsp;·&nbsp; The Ecosystem</div>
+    <hr class="rule-h rule-h--short" style="margin-top: 12pt; margin-bottom: 14pt;"/>
+
+    <div class="page-title">Three Tiers of Opposition</div>
+    <div class="page-subtitle">The enemy is organized. It is not uniform.</div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24pt; margin-top: 30pt;">
+      <div style="border: 0.5pt solid #2e2a24; padding: 18pt; background: #141210;">
+        <div class="micro" style="color: #b0924d;">Commander tier</div>
+        <div class="titleface" style="font-size: 14pt; color: #f3e8cd; margin-top: 6pt;">Fallen Powers</div>
+        <hr class="rule-h rule-h--short" style="margin: 10pt 0;"/>
+        <p class="small">
+          Named antagonists. Inverted-virtue Latin nomenclature
+          (<em>Sacrilega</em>, <em>Crudelitas</em>, <em>Perfidia</em>…)
+          They mirror the walking Powers structurally. The Seven Deadly
+          Sins are off the table as names, by authorial rule.
+        </p>
+      </div>
+
+      <div style="border: 0.5pt solid #2e2a24; padding: 18pt; background: #141210;">
+        <div class="micro" style="color: #b0924d;">Human infantry</div>
+        <div class="titleface" style="font-size: 14pt; color: #f3e8cd; margin-top: 6pt;">Cultists</div>
+        <hr class="rule-h rule-h--short" style="margin: 10pt 0;"/>
+        <p class="small">
+          Hooded, armed, modern. Red demonic sigil on tactical gear. Serve
+          the fallen willingly. Human weaknesses — they bleed and fall to
+          conventional fire. The interior of the problem that the EAS
+          cannot quite name on broadcast.
+        </p>
+      </div>
+
+      <div style="border: 0.5pt solid #2e2a24; padding: 18pt; background: #141210;">
+        <div class="micro" style="color: #b0924d;">Shock troops</div>
+        <div class="titleface" style="font-size: 14pt; color: #f3e8cd; margin-top: 6pt;">
+          Daemonia
+        </div>
+        <hr class="rule-h rule-h--short" style="margin: 10pt 0;"/>
+        <p class="small">
+          Lesser demons. Red-skinned, horned, cloven-hoofed.
+          Vulgate Latin for the demons Christ casts out — singular
+          <em>daemonium</em>. Pack behavior. Easily killed by a Power.
+          Dangerous to humans in numbers.
+        </p>
+      </div>
+    </div>
+
+    <div class="ornament" style="margin-top: 26pt;">· · ·</div>
+    <p class="small italic" style="text-align: center; color: #bfb29b; max-width: 500pt; margin: 0 auto;">
+      Princes of Hell &mdash; Lucifer, Beelzebub, Asmodeus, Leviathan &mdash;
+      exist in the universe but are held in reserve for rare, high-tier use.
+    </p>
+  </div>
+  <div class="folio folio--right">
+    <span class="folio__title">III · Hell</span><span class="folio__num">19</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 22 — FALLEN POWERS · SACRILEGA (full-bleed w/ right column)   -->
+<!-- ================================================================== -->
+<section id="s23" class="page page--image" data-slide="s23">
+  <div class="full-bleed" style="background-image: url('../images/hell/sacrilega_kitchen.jpg');"></div>
+
+  <!-- Strong feathered darkening on the LEFT side, where the image is     -->
+  <!-- compositionally quieter (doorway / sideboard / wall). Keeps         -->
+  <!-- Sacrilega, the Bible, and the dead man's hand fully visible.        -->
+  <!-- Extended reach + boosted mid-stops so the right edge of the text    -->
+  <!-- column still sits on a properly dark bed.                           -->
+  <div style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+              background: radial-gradient(ellipse 560pt 620pt at 0% 50%,
+                rgba(0,0,0,0.94) 0%,
+                rgba(0,0,0,0.82) 18%,
+                rgba(0,0,0,0.65) 38%,
+                rgba(0,0,0,0.42) 58%,
+                rgba(0,0,0,0.20) 78%,
+                rgba(0,0,0,0.06) 92%,
+                rgba(0,0,0,0) 100%);
+              pointer-events: none;"></div>
+
+  <!-- Text column, left edge. Narrower so the right edge of each line     -->
+  <!-- still sits in the strong-opacity zone of the gradient.              -->
+  <div style="position: absolute; top: 40pt; left: 42pt; width: 310pt;
+              text-shadow: 0 1pt 3pt rgba(0,0,0,0.75);">
+    <div class="eyebrow" style="color: #d9c890;">First Named Fallen</div>
+
+    <div class="placard"
+         style="margin-top: 12pt; border-color: #6a0f0f;
+                background: rgba(106, 15, 15, 0.18);
+                padding: 12pt 14pt;">
+      <div class="placard__latin" style="color: #d8432a; font-size: 22pt;">Sacrilega</div>
+      <div class="placard__english" style="margin-top: 6pt; font-size: 9pt; color: #e6dcc6;">
+        She who defiles what was sacred
+      </div>
+    </div>
+
+    <p class="small italic" style="margin-top: 14pt; color: #d9c890; font-size: 9pt;">
+      The inversion of Pietas. Reverence turned to defiance.
+    </p>
+    <p style="margin-top: 12pt; font-size: 9pt; color: #f0e7d1; line-height: 1.55;">
+      Fallen Powers take their names from the Latin inversion of the
+      virtue they reject. Sacrilega is the first &mdash; the warrior&rsquo;s
+      oath broken. Black feathered wings, horns, black armor, a red
+      sigil on her breastplate. She smokes cigarettes. The detail is
+      kept.
+    </p>
+    <p style="margin-top: 9pt; font-size: 9pt; color: #f0e7d1; line-height: 1.55;">
+      She is a peer to the walking Powers. To kill one like her, an
+      ophanim may have to appear.
+    </p>
+
+    <div class="small italic"
+         style="margin-top: 14pt; color: #bfa057; font-size: 7.5pt; line-height: 1.45;">
+      Additional slots open within the framework &mdash; named as
+      shorts require them.
+    </div>
+  </div>
+
+  <div class="folio folio--right" style="color: #f3e8cd;">
+    <span class="folio__title" style="color: #e6dcc6;">III · Hell</span><span class="folio__num">20</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE 23 — CULTISTS + DAEMONIA                                      -->
+<!-- ================================================================== -->
+<section id="s24" class="page" style="background: #000;" data-slide="s24">
+  <div style="position: absolute; top: 0; bottom: 0; left: 0; width: 396pt; overflow: hidden; background-image: url('../images/hell/cultists.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="vignette"></div>
+    <div style="position: absolute; bottom: 28pt; left: 34pt; right: 34pt;">
+      <div class="eyebrow" style="color: #b0924d;">Human infantry</div>
+      <div class="titleface" style="font-size: 22pt; color: #f3e8cd; margin-top: 6pt;">Cultists</div>
+      <p class="small" style="color: #e6dcc6; margin-top: 8pt;">
+        Burlap hoods, black tactical kit, AK-pattern rifles. The
+        <em>Sigillum Sulphuris</em> &mdash; the sulphur sigil &mdash;
+        spray-painted on their plate carriers in blood-red. Nobody
+        issued them the mark; they put it on themselves.
+      </p>
+    </div>
+  </div>
+  <div style="position: absolute; top: 0; bottom: 0; right: 0; width: 396pt; overflow: hidden; background-image: url('../images/hell/daemonia.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="vignette"></div>
+    <div style="position: absolute; bottom: 28pt; left: 34pt; right: 34pt;">
+      <div class="eyebrow" style="color: #b0924d;">Shock troops</div>
+      <div class="titleface" style="font-size: 22pt; color: #f3e8cd; margin-top: 6pt;">Daemonia</div>
+      <p class="small" style="color: #e6dcc6; margin-top: 8pt;">
+        Lesser demons &mdash; quadrupedal, knee-height, wet-flesh
+        crimson. Reptilian heads, curved horns, claws. A pack, not a
+        vanguard &mdash; they flank and swarm rather than hold a line.
+        A Power cuts through them as crowd-clearing. Unaided civilians
+        cannot.
+      </p>
+    </div>
+  </div>
+  <div class="folio folio--left" style="color: #bfb29b; z-index: 3;">
+    <span class="folio__title" style="color: #bfb29b;">III · Hell</span><span class="folio__num" style="color: #f3e8cd;">21</span>
+  </div>
+</section>
+</div>
+<div class="allpages-slot">
+<!-- ================================================================== -->
+<!-- PAGE — BACK / COLOPHON                                             -->
+<!-- ================================================================== -->
+<section id="s25" class="page page--pure" data-slide="s25">
+  <div class="pad-xl h-full flex col between">
+    <div style="flex: 1; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center;">
+      <div class="titleface" style="font-size: 56pt; color: #f3e8cd; line-height: 1;">
+        Wrath
+      </div>
+      <div class="caps" style="font-size: 8pt; color: #b0924d; margin-top: 16pt;">
+        A Cosmology in Contemporary Collapse
+      </div>
+      <div class="ornament" style="margin-top: 28pt; color: #7d6836;">✠</div>
+
+      <div class="small italic" style="max-width: 420pt; margin-top: 20pt; color: #bfb29b;">
+        Prayers go up fast. Answers come down slow.<br/>
+        The faithful that remain are the remnant who kept believing when
+        belief was no longer socially or evidentially justified. They are,
+        by default, people of unusual will.
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+      <div class="micro">
+        Working canon &middot; v0.1 &middot; private reference object
+      </div>
+      <div class="micro" style="text-align: right;">
+        Volume I &nbsp;·&nbsp; The Bible of the World
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+  </main>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var titles = {"s1":"Cover","s2":"Epigraph","s3":"About","s4":"Part I — The World","s5":"The Collapse is Ongoing","s6":"Sacred Over Civic","s7":"Part II — Heaven","s8":"The Hierarchy","s9":"Seraphim & Ophanim","s10":"The Powers","s11":"Ensemble","s12":"Iustitia","s13":"Zelus","s14":"Vindicta","s15":"Misericordia","s16":"Dominions","s17":"Guardians","s18":"Arma Consecrata","s19":"In the Field","s20":"Part III — Hell","s21":"Hell is in the Air","s22":"Three Tiers","s23":"Sacrilega","s24":"Cultists & Daemonia","s25":"Coda"};
+
+  // Sidebar mobile toggle
+  var nav = document.getElementById('nav');
+  var backdrop = document.getElementById('navBackdrop');
+  var navToggle = document.getElementById('navToggle');
+  function setNavOpen(open) {
+    nav.classList.toggle('is-open', open);
+    backdrop.classList.toggle('is-open', open);
+    navToggle.setAttribute('aria-expanded', String(open));
+  }
+  navToggle.addEventListener('click', function () {
+    setNavOpen(!nav.classList.contains('is-open'));
+  });
+  backdrop.addEventListener('click', function () { setNavOpen(false); });
+  nav.querySelectorAll('.cw-nav-item a').forEach(function (a) {
+    a.addEventListener('click', function () {
+      if (window.matchMedia('(max-width: 960px)').matches) setNavOpen(false);
+    });
+  });
+
+  // Scroll-spy — highlight the current slide
+  var navItems = Array.from(nav.querySelectorAll('.cw-nav-item'));
+  var slides = Array.from(document.querySelectorAll('[data-slide]'));
+  var runhead = document.getElementById('runhead');
+  var slideCount = document.getElementById('slideCount');
+  var progress = document.getElementById('progress');
+
+  function currentSlideIndex() {
+    var top = window.scrollY + window.innerHeight * 0.35;
+    var idx = 0;
+    for (var i = 0; i < slides.length; i++) {
+      // allpages-slot wraps the section; use its bounding box
+      var slot = slides[i].closest('.allpages-slot') || slides[i];
+      var rect = slot.getBoundingClientRect();
+      var yTop = window.scrollY + rect.top;
+      if (yTop <= top) idx = i;
+      else break;
+    }
+    return idx;
+  }
+  function onScroll() {
+    var idx = currentSlideIndex();
+    var cur = slides[idx];
+    var sid = cur.getAttribute('data-slide');
+    // Highlight sidebar
+    navItems.forEach(function (li) { li.classList.remove('is-active'); });
+    var active = navItems.find(function (li) { return li.getAttribute('data-target') === sid; });
+    if (active) active.classList.add('is-active');
+    // Runhead
+    runhead.textContent = titles[sid] || '';
+    // Count
+    var n = idx + 1;
+    slideCount.innerHTML = '<b>' + (n < 10 ? '0' + n : n) + '</b> / ' + slides.length;
+    // Progress bar
+    var h = document.documentElement;
+    var pct = Math.min(100, Math.max(0, (h.scrollTop / ((h.scrollHeight - h.clientHeight) || 1)) * 100));
+    progress.style.width = pct.toFixed(2) + '%';
+  }
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      window.requestAnimationFrame(function () {
+        onScroll();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  onScroll();
+
+  // Smooth scroll with offset
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var hash = a.getAttribute('href');
+      if (hash === '#' || hash === '') return;
+      var target = document.querySelector(hash);
+      if (!target) return;
+      e.preventDefault();
+      var slot = target.closest('.allpages-slot') || target;
+      window.scrollTo({ top: slot.offsetTop - 72, behavior: 'smooth' });
+      history.replaceState(null, '', hash);
+    });
+  });
+
+  // Keyboard — arrow keys navigate between slides
+  function jumpTo(idx) {
+    idx = Math.max(0, Math.min(slides.length - 1, idx));
+    var slot = slides[idx].closest('.allpages-slot') || slides[idx];
+    window.scrollTo({ top: slot.offsetTop - 72, behavior: 'smooth' });
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); jumpTo(currentSlideIndex() - 1); }
+    else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+      e.preventDefault(); jumpTo(currentSlideIndex() + 1);
+    }
+    else if (e.key === 'Home') { e.preventDefault(); jumpTo(0); }
+    else if (e.key === 'End') { e.preventDefault(); jumpTo(slides.length - 1); }
+  });
+})();
+</script>
+</body>
+</html>
