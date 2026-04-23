@@ -2,93 +2,329 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light only">
-<title>Wrath — A Codex</title>
+<title>Wrath — A Codex (Web Edition)</title>
+<meta name="description" content="Wrath — A Codex, Volume I. An illuminated field-manual to a cosmological war.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ————————————————————————————————————————————
-   Wrath — A Codex
-   Print-first stylesheet.
-   ———————————————————————————————————————————— */
-
 :root {
   color-scheme: light only;
-  --ink:         #181410;
-  --ink-soft:    #3a3027;
-  --rubric:      #7a1818;
-  --rubric-soft: #9a2a2a;
-  --vellum:      #f3ead7;
+
+  /* Inks */
+  --ink: #181410;
+  --ink-soft: #3a3027;
+  --ink-quiet: #6b5d4a;
+
+  /* Vellum */
+  --vellum: #f3ead7;
   --vellum-edge: #e4d7b7;
-  --gilt:        #a07a24;
+  --vellum-warm: #d8cbac;
 
-  --serif:    "EB Garamond", "Cormorant Garamond", Garamond, "Adobe Garamond Pro", "Goudy Old Style", Georgia, serif;
-  --display:  "Cormorant Garamond", "EB Garamond", Garamond, serif;
-  --fraktur:  "Cinzel", "Trajan Pro", "EB Garamond", Garamond, serif;
+  /* Shadow / dark surfaces */
+  --shadow: #120e08;
+  --shadow-soft: #1a150f;
+  --shadow-warm: #261a14;
+  --shadow-ink: #2a2016;
+
+  /* Text on dark */
+  --vellum-text: #d8c9a8;
+  --vellum-muted: #9a8968;
+  --vellum-high: #e8d9b8;
+
+  /* Accents */
+  --rubric: #7a1818;
+  --rubric-soft: #9a2a2a;
+  --gilt: #a07a24;
+  --gilt-bright: #d9b56a;
+  --gilt-dim: #e8c274;
+
+  /* Semantic */
+  --border: rgba(0,0,0,0.15);
+  --border-dark: rgba(0,0,0,0.6);
+
+  /* Typefaces */
+  --serif: "EB Garamond", "Cormorant Garamond", Garamond, "Adobe Garamond Pro", "Goudy Old Style", Georgia, serif;
+  --display: "Cormorant Garamond", "EB Garamond", Garamond, serif;
+  --fraktur: "Cinzel", "Trajan Pro", "EB Garamond", Garamond, serif;
 }
 
-@page { size: 6in 9in; margin: 0.85in 0.80in 0.95in 0.80in; }
-@page :first { margin-top: 1.4in; }
-
-@media print {
-  html, body { background: white; }
-  .no-print { display: none !important; }
-  .page { box-shadow: none !important; margin: 0 !important; }
-}
-
-html { background: #1a150f; }
+/* ============================================================
+   Reset / base
+   ============================================================ */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
 body {
-  margin: 0; padding: 0;
   font-family: var(--serif);
-  font-size: 11.5pt; line-height: 1.48;
+  background: var(--shadow-soft);
   color: var(--ink);
-  text-rendering: optimizeLegibility;
-  font-feature-settings: "onum", "liga", "kern";
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "onum","liga","kern";
 }
 
-@media screen {
-  body { padding: 40px 20px; }
-  .page {
-    background: var(--vellum);
-    background-image:
-      radial-gradient(ellipse at 20% 30%, rgba(120,80,30,0.05), transparent 60%),
-      radial-gradient(ellipse at 80% 70%, rgba(120,80,30,0.06), transparent 55%),
-      radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.4), transparent 70%);
-    width: 6in; min-height: 9in;
-    margin: 0 auto 28px;
-    padding: 0.85in 0.80in 0.95in 0.80in;
-    box-sizing: border-box;
-    box-shadow:
-      0 0 0 1px rgba(0,0,0,0.08),
-      0 12px 40px rgba(0,0,0,0.55),
-      inset 0 0 60px rgba(120,80,30,0.08);
-    position: relative;
-    overflow: hidden;
-  }
-  .page::after {
-    content: ""; position: absolute; inset: 0; pointer-events: none;
-    background:
-      radial-gradient(ellipse 70% 100% at 0% 50%, rgba(80,50,20,0.08), transparent 50%),
-      radial-gradient(ellipse 70% 100% at 100% 50%, rgba(80,50,20,0.08), transparent 50%);
-  }
+/* Accessible skip link */
+.skip-link {
+  position: absolute; left: -9999px; top: 0;
+  background: var(--shadow-ink); color: var(--gilt-bright);
+  padding: 10px 16px; font-variant: small-caps; letter-spacing: 0.2em;
+  font-size: 12px; z-index: 200;
+}
+.skip-link:focus { left: 0; }
+
+/* ============================================================
+   Top running bar
+   ============================================================ */
+.cw-topbar {
+  position: sticky; top: 0; z-index: 30;
+  background: var(--shadow-ink);
+  border-bottom: 1px solid var(--border-dark);
+  color: var(--vellum-text);
+}
+.cw-topbar-inner {
+  display: grid;
+  grid-template-columns: 300px 1fr auto;
+  align-items: center;
+  height: 56px;
+  gap: 24px;
+  padding-right: 24px;
+}
+.cw-volume {
+  font-family: var(--fraktur);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: var(--gilt-bright);
+  text-transform: uppercase;
+  padding-left: 32px;
+  white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.cw-runhead {
+  text-align: center;
+  font-variant: small-caps;
+  letter-spacing: 0.22em;
+  font-size: 12px;
+  color: var(--vellum-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cw-topbar-right {
+  display: flex; align-items: center; gap: 20px;
+}
+.cw-progress {
+  width: 140px; height: 2px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+.cw-progress-bar {
+  height: 100%; width: 0%;
+  background: var(--gilt-bright);
+  transition: width 120ms linear;
+}
+.cw-nav-toggle {
+  display: none;
+  background: none; border: none;
+  color: var(--gilt-bright);
+  font-size: 22px; line-height: 1;
+  cursor: pointer;
+  padding: 6px 10px;
+  font-family: var(--serif);
 }
 
-.page { page-break-after: always; break-after: page; position: relative; }
-.page:last-child { page-break-after: auto; break-after: auto; }
+/* ============================================================
+   Shell layout
+   ============================================================ */
+.cw-shell {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  background: var(--shadow-soft);
+  min-height: calc(100vh - 56px);
+}
 
-p { margin: 0; text-indent: 1.2em; text-align: justify; hyphens: auto; orphans: 2; widows: 2; }
-p + p { margin-top: 0; }
-p.first, p.no-indent { text-indent: 0; }
-p.first::first-line { font-variant: small-caps; letter-spacing: 0.04em; }
+/* ============================================================
+   Left sidebar — chapter nav
+   ============================================================ */
+.cw-nav {
+  position: sticky;
+  top: 56px;
+  height: calc(100vh - 56px);
+  align-self: start;
+  background: var(--shadow);
+  border-right: 1px solid var(--border-dark);
+  color: var(--vellum-text);
+  padding: 32px 24px 24px;
+  overflow-y: auto;
+  z-index: 20;
+}
+.cw-nav-head {
+  display: flex; align-items: flex-start; gap: 14px;
+  margin-bottom: 18px;
+}
+.cw-tau {
+  font-family: var(--fraktur);
+  font-size: 30px;
+  color: var(--rubric-soft);
+  line-height: 1;
+}
+.cw-nav-title {
+  font-family: var(--fraktur);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--vellum-high);
+  line-height: 1;
+}
+.cw-nav-sub {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--vellum-muted);
+  margin-top: 3px;
+}
+.cw-nav-rule {
+  height: 1px;
+  background: var(--gilt);
+  opacity: 0.5;
+  margin: 16px 0;
+}
+.cw-nav-rule--bot { margin-top: 24px; }
+.cw-nav-label {
+  font-variant: small-caps;
+  letter-spacing: 0.28em;
+  font-size: 10px;
+  color: var(--gilt-bright);
+  margin-bottom: 12px;
+}
+.cw-nav-list {
+  list-style: none;
+  padding: 0; margin: 0;
+}
+.cw-nav-item a {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  align-items: baseline;
+  padding: 7px 0;
+  font-size: 13px;
+  color: var(--vellum-text);
+  text-decoration: none;
+  transition: color 150ms linear;
+}
+.cw-nav-item a:hover { color: var(--gilt-bright); }
+.cw-nav-item.is-active a { color: var(--gilt-bright); }
+.cw-nav-item.is-active .cw-nav-roman { color: var(--rubric-soft); }
+.cw-nav-roman {
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  color: var(--vellum-muted);
+  font-family: var(--serif);
+}
+.cw-nav-text {
+  font-variant: small-caps;
+  letter-spacing: 0.10em;
+  font-family: var(--serif);
+}
+.cw-nav-foot {
+  color: var(--gilt);
+  opacity: 0.7;
+  letter-spacing: 0.6em;
+  font-size: 11px;
+  text-align: center;
+}
+.cw-nav-imprint {
+  margin-top: 24px;
+  text-align: center;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 11px;
+  color: var(--vellum-muted);
+  line-height: 1.5;
+}
+.cw-nav-imprint a { color: var(--gilt-bright); text-decoration: none; }
+.cw-nav-imprint a:hover { color: var(--gilt-glow); }
 
-em, i { font-style: italic; }
-strong, b { font-weight: 600; }
-.smallcaps { font-variant: small-caps; letter-spacing: 0.06em; }
-.allcaps   { text-transform: uppercase; letter-spacing: 0.12em; }
+/* ============================================================
+   Main column (dark frame holding the vellum page)
+   ============================================================ */
+.cw-main {
+  background: var(--shadow-soft);
+  padding: 32px 32px 80px;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
 
-.dropcap::first-letter {
+/* ============================================================
+   Reader — the vellum page
+   ============================================================ */
+.cw-reader {
+  width: 100%;
+  max-width: 720px;
+  background: var(--vellum);
+  background-image:
+    radial-gradient(ellipse at 20% 30%, rgba(120,80,30,0.05), transparent 60%),
+    radial-gradient(ellipse at 80% 70%, rgba(120,80,30,0.06), transparent 55%),
+    radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.4), transparent 70%);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 12px 40px rgba(0,0,0,0.55), inset 0 0 60px rgba(120,80,30,0.08);
+  padding: 64px 64px 80px;
+  position: relative;
+}
+.cw-reader::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 100% at 0% 50%, rgba(80,50,20,0.08), transparent 50%),
+    radial-gradient(ellipse 70% 100% at 100% 50%, rgba(80,50,20,0.08), transparent 50%);
+}
+
+/* Each migrated <section class="page"> flows inline within the reader. */
+.cw-reader .page {
+  position: relative;
+  z-index: 1;
+  padding: 0;
+  margin: 0 0 24px;
+}
+.cw-reader .page + .page { margin-top: 32px; }
+
+/* Front matter sections center their content vertically within a hero block */
+.cw-reader .page.title-page,
+.cw-reader .page.colophon,
+.cw-reader .page.epigraph {
+  text-align: center;
+  padding: 80px 0 60px;
+}
+.cw-reader .page.contents {
+  padding: 40px 0 60px;
+}
+
+/* ============================================================
+   Typography for codex content (derived from print codex CSS,
+   tuned for screen)
+   ============================================================ */
+.cw-reader p {
+  margin: 0;
+  text-indent: 1.2em;
+  text-align: justify;
+  hyphens: auto;
+  orphans: 2; widows: 2;
+  font-size: 17px;
+  line-height: 1.62;
+  color: var(--ink);
+  position: relative; z-index: 1;
+}
+.cw-reader p + p { margin-top: 0; }
+.cw-reader p.first, .cw-reader p.no-indent { text-indent: 0; }
+.cw-reader p.first::first-line { font-variant: small-caps; letter-spacing: 0.04em; }
+.cw-reader em, .cw-reader i { font-style: italic; }
+.cw-reader strong, .cw-reader b { font-weight: 600; }
+
+.cw-reader .smallcaps { font-variant: small-caps; letter-spacing: 0.06em; }
+.cw-reader .allcaps { text-transform: uppercase; letter-spacing: 0.12em; }
+
+.cw-reader .dropcap::first-letter {
   font-family: var(--display);
   font-weight: 600;
   font-size: 4.2em;
@@ -99,178 +335,553 @@ strong, b { font-weight: 600; }
   color: var(--rubric);
 }
 
-.folio {
-  position: absolute; bottom: 0.45in; left: 0; right: 0;
+/* Folios & runheads inside each page — hide on web (we use the sticky top bar). */
+.cw-reader .folio, .cw-reader .runhead { display: none; }
+
+/* Title page */
+.cw-reader .title-page .mark {
+  font-family: var(--fraktur);
+  font-weight: 600;
+  font-size: 40px;
+  letter-spacing: 0.18em;
+  color: var(--rubric);
+  margin-bottom: 28px;
+  text-transform: uppercase;
+}
+.cw-reader .title-page h1 {
+  font-family: var(--fraktur);
+  font-weight: 700;
+  font-size: 80px;
+  line-height: 1.05;
+  letter-spacing: 0.06em;
+  margin: 0 0 10px;
+  color: var(--ink);
+  text-transform: uppercase;
+}
+.cw-reader .title-page .subtitle {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--ink-soft);
+  margin-bottom: 60px;
+}
+.cw-reader .title-page .rule {
+  width: 40%; height: 1px;
+  background: var(--gilt);
+  margin: 20px auto;
+}
+.cw-reader .title-page .volume {
+  font-variant: small-caps;
+  letter-spacing: 0.32em;
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin-bottom: 14px;
+}
+.cw-reader .title-page .imprint {
+  font-family: var(--display);
+  font-size: 14px;
+  font-style: italic;
+  color: var(--ink-soft);
+  margin-top: 48px;
+}
+
+/* Colophon / epigraph */
+.cw-reader .colophon p {
+  text-indent: 0;
   text-align: center;
-  font-variant: small-caps; letter-spacing: 0.18em;
-  font-size: 9pt; color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink-soft);
 }
-.folio .num { letter-spacing: 0; }
-.runhead {
-  position: absolute; top: 0.40in; left: 0.8in; right: 0.8in;
-  text-align: center;
-  font-variant: small-caps; letter-spacing: 0.22em;
-  font-size: 9pt; color: var(--ink-soft);
+.cw-reader .colophon .stub {
+  font-style: italic;
+  color: var(--ink-soft);
+  margin-top: 32px;
 }
-.runhead::before, .runhead::after {
-  content: "·"; display: inline-block; margin: 0 0.9em; color: var(--gilt);
+.cw-reader .epigraph {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.5;
+  max-width: 500px;
+  margin-left: auto; margin-right: auto;
 }
-
-.title-page {
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  text-align: center; padding-top: 1.2in;
-}
-.title-page .mark { font-family: var(--fraktur); font-weight: 600; font-size: 22pt; letter-spacing: 0.18em; color: var(--rubric); margin-bottom: 0.4in; text-transform: uppercase; }
-.title-page h1 { font-family: var(--fraktur); font-weight: 700; font-size: 56pt; line-height: 1.05; letter-spacing: 0.06em; margin: 0 0 0.15em; color: var(--ink); text-transform: uppercase; }
-.title-page .subtitle { font-family: var(--display); font-style: italic; font-size: 16pt; color: var(--ink-soft); margin-bottom: 1.2in; }
-.title-page .rule { width: 40%; height: 1px; background: var(--gilt); margin: 0.3in 0; }
-.title-page .volume { font-variant: small-caps; letter-spacing: 0.32em; font-size: 11pt; color: var(--ink-soft); margin-bottom: 0.2in; }
-.title-page .imprint { position: absolute; bottom: 1in; left: 0; right: 0; font-family: var(--display); font-size: 11pt; font-style: italic; color: var(--ink-soft); }
-
-.colophon, .epigraph { text-align: center; padding-top: 2.6in; }
-.colophon p { text-indent: 0; text-align: center; font-size: 10.5pt; line-height: 1.7; color: var(--ink-soft); }
-.colophon .stub { font-style: italic; color: var(--ink-soft); margin-top: 0.4in; }
-
-.epigraph .verse {
-  font-family: var(--display); font-style: italic;
-  font-size: 14pt; line-height: 1.5;
-  max-width: 4in; margin: 0 auto 0.25in;
-  text-align: center;
-}
-.epigraph .cite { font-variant: small-caps; letter-spacing: 0.16em; font-size: 10pt; color: var(--rubric); }
-.epigraph .tau { font-family: var(--display); color: var(--rubric); letter-spacing: 0.5em; margin-top: 1em; }
-
-.contents h2 { font-family: var(--fraktur); font-weight: 700; font-size: 26pt; letter-spacing: 0.14em; color: var(--ink); text-align: center; margin: 0 0 0.6in; text-transform: uppercase; }
-.contents ol { list-style: none; padding: 0; margin: 0 auto; max-width: 4.2in; }
-.contents li { display: flex; align-items: baseline; font-size: 12pt; margin: 0.18em 0; }
-.contents .label { font-variant: small-caps; letter-spacing: 0.10em; }
-.contents .dots { flex: 1; margin: 0 0.5em; border-bottom: 1px dotted var(--ink-soft); transform: translateY(-0.25em); }
-.contents .pg { font-family: var(--display); font-style: italic; color: var(--ink-soft); min-width: 1.5em; text-align: right; }
-.contents .roman { font-variant: small-caps; color: var(--rubric); margin-right: 0.7em; letter-spacing: 0.08em; min-width: 2.2em; display: inline-block; }
-
-.chapter-opener { text-align: center; padding-top: 1.1in; }
-.chapter-opener .num { font-variant: small-caps; letter-spacing: 0.4em; font-size: 11pt; color: var(--rubric); margin-bottom: 0.35in; }
-.chapter-opener h1 { font-family: var(--fraktur); font-weight: 700; font-size: 36pt; line-height: 1.1; letter-spacing: 0.08em; margin: 0 0 0.2in; color: var(--ink); text-transform: uppercase; }
-.chapter-opener .tagline { font-family: var(--display); font-style: italic; font-size: 13pt; color: var(--ink-soft); max-width: 4in; margin: 0 auto 0.6in; }
-.chapter-opener .scripture { font-family: var(--display); font-style: italic; font-size: 13pt; line-height: 1.45; max-width: 3.8in; margin: 0 auto 0.18in; text-align: center; }
-.chapter-opener .scripture-cite { font-variant: small-caps; letter-spacing: 0.18em; font-size: 10pt; color: var(--rubric); }
-.chapter-opener .orn { margin: 0.7in auto 0; color: var(--gilt); font-size: 14pt; letter-spacing: 0.8em; }
-
-h2.section { font-variant: small-caps; letter-spacing: 0.24em; font-size: 12pt; text-align: center; color: var(--ink); margin: 1.8em 0 0.8em; font-weight: 500; }
-h3.subsection { font-variant: small-caps; letter-spacing: 0.14em; font-size: 10.5pt; color: var(--rubric); text-align: left; margin: 1.4em 0 0.2em; font-weight: 500; }
-
-.dinkus { text-align: center; color: var(--gilt); letter-spacing: 0.6em; margin: 1.1em 0 0.9em; font-size: 11pt; }
-.dinkus::before { content: "† † †"; }
-
-.seal { margin: 1.6em auto 0; text-align: center; font-family: var(--display); font-style: italic; font-size: 12.5pt; color: var(--rubric); max-width: 4in; line-height: 1.5; }
-.seal .cite { display: block; font-family: var(--serif); font-style: normal; font-variant: small-caps; font-size: 9pt; color: var(--ink-soft); letter-spacing: 0.16em; margin-top: 0.4em; }
-
-blockquote.latin {
-  margin: 1.1em 0.3in; padding: 0.2em 0 0.2em 0.35em;
-  border-left: 2px solid var(--gilt);
-  font-family: var(--display); font-style: italic;
-  font-size: 11pt; line-height: 1.5; color: var(--ink-soft);
-}
-blockquote.latin .cite {
+.cw-reader .epigraph .cite {
+  font-family: var(--serif);
+  font-style: normal;
+  font-variant: small-caps;
+  letter-spacing: 0.16em;
+  font-size: 12px;
+  color: var(--rubric);
   display: block;
-  font-family: var(--serif); font-style: normal; font-variant: small-caps;
-  font-size: 9pt; letter-spacing: 0.14em; color: var(--rubric); margin-top: 0.3em;
+  margin-top: 16px;
+}
+.cw-reader .epigraph .tau {
+  font-family: var(--display);
+  color: var(--rubric);
+  letter-spacing: 0.5em;
+  margin-top: 16px;
+  display: block;
 }
 
-figure.plate { margin: 1.2em 0; page-break-inside: avoid; break-inside: avoid; }
-figure.plate img { display: block; width: 100%; height: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.25); filter: saturate(0.92) contrast(1.02); }
-figure.plate figcaption { font-family: var(--display); font-style: italic; font-size: 9.5pt; line-height: 1.4; color: var(--ink-soft); text-align: left; margin-top: 0.5em; padding: 0 0.1in; text-indent: 0; }
-figure.plate figcaption .label { font-family: var(--serif); font-style: normal; font-variant: small-caps; letter-spacing: 0.14em; color: var(--rubric); margin-right: 0.4em; }
-
-figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
-.plate-page {
-  padding: 0 !important;
-  display: flex; flex-direction: column;
-  justify-content: center; align-items: stretch;
-  background: #120e08 !important;
+/* Contents list */
+.cw-reader .contents h2 {
+  font-family: var(--fraktur);
+  font-weight: 700;
+  font-size: 36px;
+  letter-spacing: 0.14em;
+  color: var(--ink);
+  text-align: center;
+  margin: 0 0 48px;
+  text-transform: uppercase;
 }
-.plate-page .frame { flex: 1; display: flex; align-items: center; justify-content: center; padding: 0.6in 0.5in 0.25in; }
-.plate-page .frame img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 4px 24px rgba(0,0,0,0.8); }
-.plate-page figure.plate figcaption { color: #d8c9a8; padding: 0.15in 0.7in 0.5in; text-align: center; font-family: var(--display); font-style: italic; font-size: 10pt; line-height: 1.4; }
-.plate-page figure.plate figcaption .label { font-family: var(--serif); font-style: normal; font-variant: small-caps; letter-spacing: 0.2em; color: #e8c274; display: block; margin-bottom: 0.3em; font-size: 10pt; }
-.plate-page .folio { color: #9a8968; }
+.cw-reader .contents .row {
+  display: flex;
+  align-items: baseline;
+  padding: 6px 0;
+  font-size: 16px;
+}
+.cw-reader .contents .roman {
+  font-variant: small-caps;
+  color: var(--rubric);
+  margin-right: 14px;
+  letter-spacing: 0.08em;
+  min-width: 44px;
+  display: inline-block;
+}
+.cw-reader .contents .dots {
+  flex: 1;
+  margin: 0 0.5em;
+  border-bottom: 1px dotted var(--ink-quiet);
+  transform: translateY(-0.25em);
+}
+.cw-reader .contents .pg {
+  font-family: var(--display);
+  font-style: italic;
+  color: var(--ink-soft);
+  min-width: 28px;
+  text-align: right;
+}
 
-.placard {
-  margin: 0.5em auto 0.8em; padding: 0.4em 0.8em;
-  max-width: 3.5in; text-align: center;
-  background: #d8cbac;
+/* Chapter opener */
+.cw-reader .chapter-opener {
+  text-align: center;
+  padding: 80px 0 48px;
+  margin-top: 0;
+}
+.cw-reader .chapter-opener .num {
+  font-variant: small-caps;
+  letter-spacing: 0.4em;
+  font-size: 13px;
+  color: var(--rubric);
+  margin-bottom: 28px;
+}
+.cw-reader .chapter-opener h1 {
+  font-family: var(--fraktur);
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 1.1;
+  letter-spacing: 0.08em;
+  margin: 0 0 20px;
+  color: var(--ink);
+  text-transform: uppercase;
+}
+.cw-reader .chapter-opener .tagline {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--ink-soft);
+  max-width: 360px;
+  margin: 0 auto 40px;
+  line-height: 1.5;
+}
+.cw-reader .chapter-opener .scripture {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.5;
+  max-width: 440px;
+  margin: 0 auto 10px;
+  color: var(--ink-soft);
+}
+.cw-reader .chapter-opener .scripture-cite {
+  font-variant: small-caps;
+  letter-spacing: 0.18em;
+  font-size: 11px;
+  color: var(--rubric);
+}
+.cw-reader .chapter-opener .orn {
+  color: var(--gilt);
+  font-size: 15px;
+  letter-spacing: 0.8em;
+  margin-top: 40px;
+}
+
+/* Section heads */
+.cw-reader h2.section {
+  font-variant: small-caps;
+  letter-spacing: 0.24em;
+  font-size: 15px;
+  text-align: center;
+  color: var(--ink);
+  margin: 44px 0 8px;
+  font-weight: 500;
+}
+.cw-reader h3.subsection {
+  font-variant: small-caps;
+  letter-spacing: 0.14em;
+  font-size: 13px;
+  color: var(--rubric);
+  text-align: left;
+  margin: 28px 0 6px;
+  font-weight: 500;
+}
+
+/* Dinkus */
+.cw-reader .dinkus {
+  text-align: center;
+  color: var(--gilt);
+  letter-spacing: 0.6em;
+  margin: 28px 0;
+  font-size: 14px;
+}
+.cw-reader .dinkus::before { content: "† † †"; }
+
+/* Seal */
+.cw-reader .seal {
+  margin: 28px auto 0;
+  text-align: center;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--rubric);
+  max-width: 440px;
+  line-height: 1.5;
+}
+.cw-reader .seal .cite {
+  display: block;
+  font-family: var(--serif);
+  font-style: normal;
+  font-variant: small-caps;
+  font-size: 11px;
+  color: var(--ink-soft);
+  letter-spacing: 0.16em;
+  margin-top: 10px;
+}
+
+/* Latin inscription */
+.cw-reader .inscription {
+  font-family: var(--fraktur);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--rubric);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 20px 0;
+  display: block;
+}
+
+/* Pull quote */
+.cw-reader .pull-quote {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  text-align: center;
+  margin: 24px 30px;
+}
+
+/* ============================================================
+   Placards
+   ============================================================ */
+.cw-reader .placard {
+  margin: 14px auto 20px;
+  padding: 12px 20px;
+  max-width: 420px;
+  text-align: center;
+  background: var(--vellum-warm);
   background-image:
     radial-gradient(ellipse at 30% 30%, rgba(0,0,0,0.08), transparent 60%),
     radial-gradient(ellipse at 70% 70%, rgba(0,0,0,0.10), transparent 60%);
   border-top: 1px solid rgba(0,0,0,0.15);
   border-bottom: 1px solid rgba(0,0,0,0.15);
   color: #2b2418;
-  font-family: "Trajan Pro", var(--display);
-  letter-spacing: 0.18em; text-transform: uppercase;
+  font-family: var(--display);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
-.placard .latin { font-size: 14pt; font-weight: 600; }
-.placard .divider { color: var(--gilt); margin: 0 0.4em; }
-.placard .english { font-size: 11pt; letter-spacing: 0.26em; }
-.placard .line2 {
-  display: block; margin-top: 0.5em; font-size: 9pt; letter-spacing: 0.22em;
-  font-variant: small-caps; text-transform: none; color: #4a3e2a; font-family: var(--serif);
+.cw-reader .placard .latin { font-size: 18px; font-weight: 600; }
+.cw-reader .placard .divider { color: var(--gilt); margin: 0 0.4em; }
+.cw-reader .placard .english { font-size: 12px; letter-spacing: 0.26em; }
+.cw-reader .placard .line2 {
+  display: block; margin-top: 8px; font-size: 10px; letter-spacing: 0.22em;
+  font-variant: small-caps; text-transform: none; color: #4a3e2a;
+  font-family: var(--serif);
 }
-.placard.fallen {
-  background: #261a14;
+.cw-reader .placard.fallen {
+  background: var(--shadow-warm);
   background-image:
     radial-gradient(ellipse at 30% 30%, rgba(0,0,0,0.35), transparent 60%),
     radial-gradient(ellipse at 70% 70%, rgba(120,20,20,0.20), transparent 60%);
-  color: #e8d9b8;
+  color: var(--vellum-high);
   border-top-color: rgba(0,0,0,0.6);
   border-bottom-color: rgba(0,0,0,0.6);
 }
-.placard.fallen .divider { color: #7a1818; }
-.placard.fallen .line2 { color: #a88a6a; }
+.cw-reader .placard.fallen .divider { color: var(--rubric); }
+.cw-reader .placard.fallen .line2 { color: #a88a6a; }
 
-.inscription { font-family: var(--fraktur); font-weight: 600; font-size: 13pt; color: var(--rubric); letter-spacing: 0.12em; text-transform: uppercase; }
-
-.pull-quote {
-  font-family: var(--display); font-style: italic;
-  font-size: 13pt; line-height: 1.45;
-  color: var(--ink-soft); text-align: center;
-  margin: 1.2em 0.4in;
+/* ============================================================
+   Plates
+   ============================================================ */
+.cw-reader figure.plate {
+  margin: 40px -16px;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
+.cw-reader figure.plate.full-bleed {
+  margin-left: -64px;
+  margin-right: -64px;
+}
+.cw-reader figure.plate .frame {
+  background: var(--shadow);
+  padding: 24px;
+  cursor: zoom-in;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.55);
+  transition: transform 180ms ease-out;
+}
+.cw-reader figure.plate .frame:hover { transform: translateY(-2px); }
+.cw-reader figure.plate .frame img,
+.cw-reader figure.plate > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: saturate(0.92) contrast(1.02);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+/* When a plate lacks a .frame wrapper (figure.plate > img direct) */
+.cw-reader figure.plate > img {
+  cursor: zoom-in;
+  padding: 0;
+}
+.cw-reader figure.plate figcaption {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  margin-top: 14px;
+  padding: 0 16px;
+  text-indent: 0;
+  text-align: left;
+}
+.cw-reader figure.plate figcaption .label {
+  font-family: var(--serif);
+  font-style: normal;
+  font-variant: small-caps;
+  letter-spacing: 0.14em;
+  color: var(--rubric);
+  margin-right: 0.4em;
+  font-size: 12px;
 }
 
-.print-bar {
-  position: fixed; top: 14px; right: 14px;
-  background: #2a2016; color: #f3ead7;
-  font-family: var(--serif); font-size: 12px;
-  padding: 8px 14px; border: 1px solid #5a4428;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.5);
-  z-index: 999; border-radius: 2px;
+/* Full-bleed plate page variant — used in the print codex for standalone plates.
+   On web we still render them inline within the reading column. */
+.cw-reader section.plate-page {
+  padding: 0;
+  margin: 48px 0;
+  background: var(--shadow);
+  color: var(--vellum-text);
+  border-radius: 0;
 }
-.print-bar b { font-family: var(--fraktur); font-weight: 600; letter-spacing: 0.08em; color: #d9b56a; text-transform: uppercase; }
-.print-bar button {
-  margin-left: 10px; background: #d9b56a; color: #2a2016; border: 0;
-  padding: 5px 10px; cursor: pointer;
-  font-family: var(--serif); font-weight: 600;
-  letter-spacing: 0.06em; border-radius: 2px;
+.cw-reader section.plate-page figure.plate.full-bleed {
+  margin: 0;
+  padding: 0;
 }
-.print-bar button:hover { background: #f0cc80; }
+.cw-reader section.plate-page .frame {
+  padding: 40px 40px 20px;
+}
+.cw-reader section.plate-page figure.plate figcaption {
+  color: var(--vellum-text);
+  padding: 12px 40px 32px;
+  text-align: center;
+}
+.cw-reader section.plate-page figure.plate figcaption .label {
+  color: var(--gilt-bright);
+  display: block;
+  margin-bottom: 6px;
+  letter-spacing: 0.2em;
+}
 
-.lead-smallcaps { font-variant: small-caps; letter-spacing: 0.06em; }
+/* ============================================================
+   Plate lightbox viewer
+   ============================================================ */
+.cw-viewer {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(10,7,4,0.96);
+  display: none;
+  flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 40px;
+  cursor: zoom-out;
+  animation: fadein 300ms ease-out;
+}
+.cw-viewer.open { display: flex; }
+@keyframes fadein { from { opacity: 0 } to { opacity: 1 } }
+.cw-viewer img {
+  max-width: 92vw;
+  max-height: 78vh;
+  box-shadow: 0 8px 48px rgba(0,0,0,0.9);
+  filter: saturate(0.92) contrast(1.02);
+  cursor: default;
+}
+.cw-viewer-cap {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--vellum-text);
+  max-width: 620px;
+  text-align: center;
+  margin-top: 24px;
+  line-height: 1.5;
+}
+.cw-viewer-label {
+  display: block;
+  font-family: var(--serif);
+  font-style: normal;
+  font-variant: small-caps;
+  letter-spacing: 0.3em;
+  color: var(--gilt-dim);
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+.cw-viewer-close {
+  position: absolute;
+  top: 18px; right: 26px;
+  background: none; border: none;
+  color: var(--gilt-bright);
+  font-family: var(--fraktur);
+  font-size: 32px; line-height: 1;
+  cursor: pointer;
+  letter-spacing: 0;
+  padding: 4px 12px;
+}
+.cw-viewer-close:hover { color: var(--gilt-glow); }
 
+/* ============================================================
+   Responsive — collapse sidebar to drawer on narrow screens
+   ============================================================ */
+@media (max-width: 960px) {
+  .cw-topbar-inner {
+    grid-template-columns: auto 1fr auto;
+    padding-right: 16px;
+  }
+  .cw-volume { padding-left: 16px; font-size: 11px; }
+  .cw-progress { width: 80px; }
+  .cw-nav-toggle { display: inline-block; }
+
+  .cw-shell { grid-template-columns: 1fr; }
+  .cw-nav {
+    position: fixed;
+    top: 56px; left: 0;
+    width: 280px;
+    max-width: 80vw;
+    height: calc(100vh - 56px);
+    transform: translateX(-100%);
+    transition: transform 260ms ease-out;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.6);
+  }
+  .cw-nav.is-open { transform: translateX(0); }
+  .cw-nav-backdrop {
+    display: none;
+    position: fixed;
+    top: 56px; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 19;
+  }
+  .cw-nav-backdrop.is-open { display: block; }
+
+  .cw-main { padding: 16px 8px 60px; }
+  .cw-reader { padding: 36px 28px 60px; }
+  .cw-reader .title-page h1 { font-size: 54px; }
+  .cw-reader .chapter-opener h1 { font-size: 34px; }
+  .cw-reader figure.plate.full-bleed {
+    margin-left: -28px; margin-right: -28px;
+  }
+}
+
+@media (max-width: 560px) {
+  .cw-runhead { display: none; }
+  .cw-reader { padding: 28px 20px 48px; }
+  .cw-reader .title-page h1 { font-size: 44px; }
+  .cw-reader .title-page .subtitle { font-size: 18px; }
+  .cw-reader .chapter-opener h1 { font-size: 28px; }
+  .cw-reader p { font-size: 16px; }
+}
+
+/* Print — if someone prints this page, hide the web chrome. */
+@media print {
+  .cw-topbar, .cw-nav, .cw-nav-backdrop, .cw-viewer { display: none !important; }
+  .cw-shell { display: block; }
+  .cw-main { padding: 0; background: white; }
+  .cw-reader { box-shadow: none; max-width: 100%; padding: 0.5in; }
+}
 </style>
 </head>
 <body>
+<a class="skip-link" href="#reader">Skip to content</a>
 
-<div class="print-bar no-print">
-  <b>Wrath — A Codex</b> &nbsp;·&nbsp; press <b>⌘/Ctrl&nbsp;P</b> to save as PDF
-  <button onclick="window.print()">Print</button>
-</div>
+<header class="cw-topbar">
+  <div class="cw-topbar-inner">
+    <div class="cw-volume">Volume I · Wrath</div>
+    <div class="cw-runhead" id="runhead">Title Page</div>
+    <div class="cw-topbar-right">
+      <div class="cw-progress" aria-hidden="true"><div class="cw-progress-bar" id="progress"></div></div>
+      <button class="cw-nav-toggle" id="navToggle" aria-label="Toggle chapter menu" aria-expanded="false">&#9776;</button>
+    </div>
+  </div>
+</header>
 
-<!-- Body will be injected via chapter includes below -->
-<main id="book">
+<div class="cw-nav-backdrop" id="navBackdrop"></div>
 
+<div class="cw-shell">
+  <nav class="cw-nav" id="nav" aria-label="Chapter navigation">
+    <div class="cw-nav-head">
+      <span class="cw-tau">&#8224;</span>
+      <div>
+        <div class="cw-nav-title">Wrath</div>
+        <div class="cw-nav-sub">— A Codex —</div>
+      </div>
+    </div>
+    <div class="cw-nav-rule"></div>
+    <div class="cw-nav-label">Contents</div>
+    <ol class="cw-nav-list">
+      <li class="cw-nav-item"><a href="#prologue"><span class="cw-nav-roman">·</span><span class="cw-nav-text">Prologue</span></a></li>
+      <li class="cw-nav-item"><a href="#ch-ninefold"><span class="cw-nav-roman">I</span><span class="cw-nav-text">The Ninefold Order</span></a></li>
+      <li class="cw-nav-item"><a href="#ch-powers"><span class="cw-nav-roman">II</span><span class="cw-nav-text">The Powers</span></a></li>
+      <li class="cw-nav-item"><a href="#ch-guardians"><span class="cw-nav-roman">III</span><span class="cw-nav-text">The Guardians</span></a></li>
+      <li class="cw-nav-item"><a href="#ch-fallen"><span class="cw-nav-roman">IV</span><span class="cw-nav-text">The Fallen</span></a></li>
+      <li class="cw-nav-item"><a href="#ch-enemy-below"><span class="cw-nav-roman">V</span><span class="cw-nav-text">The Enemy Below</span></a></li>
+      <li class="cw-nav-item"><a href="#ch-language"><span class="cw-nav-roman">VI</span><span class="cw-nav-text">Language &amp; Liturgy</span></a></li>
+      <li class="cw-nav-item"><a href="#ch-hour"><span class="cw-nav-roman">VII</span><span class="cw-nav-text">The Hour at Street Level</span></a></li>
+      <li class="cw-nav-item"><a href="#authors-note"><span class="cw-nav-roman">·</span><span class="cw-nav-text">Author's Note</span></a></li>
+      <li class="cw-nav-item"><a href="#appendix"><span class="cw-nav-roman">·</span><span class="cw-nav-text">Appendix</span></a></li>
+    </ol>
+    <div class="cw-nav-rule cw-nav-rule--bot"></div>
+    <div class="cw-nav-foot">&#8224; &#8224; &#8224;</div>
+    <div class="cw-nav-imprint">
+      Private. Not for circulation.<br>
+      <a href="https://schmede-ai.github.io/">schmede-ai.github.io &#8599;</a>
+    </div>
+  </nav>
+
+  <main class="cw-main" id="reader">
+    <article class="cw-reader">
 <!-- ═══════════════ 00_front_prologue.html ═══════════════ -->
 <!-- FRONT MATTER -->
-<section class="page title-page">
+<section class="page title-page" id="title">
   <div class="mark">†</div>
   <div class="volume">Volume I</div>
   <h1>Wrath</h1>
@@ -282,7 +893,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
   <div class="imprint">Private. Not for circulation.</div>
 </section>
 
-<section class="page colophon">
+<section class="page colophon" id="colophon">
   <div style="color: var(--rubric); font-family: var(--fraktur); font-size: 36pt; margin-bottom: 0.6in;">†</div>
   <p><span class="smallcaps">Wrath — A Codex</span></p>
   <p>Working text, v1 — Prologue, Chapters I–VII, with back matter.</p>
@@ -296,7 +907,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
   <p class="stub">— colophon —</p>
 </section>
 
-<section class="page contents">
+<section class="page contents" id="contents">
   <div style="padding-top: 0.4in;"></div>
   <h2>Contents</h2>
   <ol>
@@ -314,7 +925,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
   <div style="text-align:center; color: var(--gilt); margin-top: 1.2in; letter-spacing: 0.6em;">† † †</div>
 </section>
 
-<section class="page epigraph">
+<section class="page epigraph" id="epigraph">
   <div class="verse">
     For we wrestle not against flesh and blood,<br>
     but against principalities, against powers,<br>
@@ -327,7 +938,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <!-- ═══ PROLOGUE ═══ -->
 
-<section class="page chapter-opener">
+<section class="page chapter-opener" id="prologue">
   <div class="num">Prologue</div>
   <h1 style="font-size: 54pt;">Hell is in the air.<br>Heaven is past it.</h1>
   <div class="orn">† † †</div>
@@ -343,7 +954,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/01_st_michael_mural.jpg" alt="Saint Michael mural over a ruined street"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/01_st_michael_mural.jpg" alt="Saint Michael mural over a ruined street"></div>
     <figcaption>
       <span class="label">Plate I</span>
       The mural and what lies beneath it. A parish wall of St. Michael, unchanged; the street, changed.
@@ -368,7 +979,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/02a_cosmological_diagram.jpg" alt="De ordine caelorum"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/02a_cosmological_diagram.jpg" alt="De ordine caelorum"></div>
     <figcaption>
       <span class="label">Plate II-á · De Ordine Caelorum</span>
       A thirteenth-century Gothic schema, restored. <em>Caelum</em> above; <em>Caelum Inferius,</em> glossed <em>Potestas Aeris,</em> at the middle; <em>Terra</em> below.
@@ -387,7 +998,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/02_ophanim_sky.jpg" alt="Ophanim glimpsed in the sky"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/02_ophanim_sky.jpg" alt="Ophanim glimpsed in the sky"></div>
     <figcaption>
       <span class="label">Plate II</span>
       Ophanim glimpsed in the sky above a contested district. What is overhead is not rare in Heaven; it is rare on arrival.
@@ -409,7 +1020,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/03_sacrilega_kitchen.jpg" alt="Sacrilega at rest"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/03_sacrilega_kitchen.jpg" alt="Sacrilega at rest"></div>
     <figcaption>
       <span class="label">Plate III</span>
       Sacrilega at rest. A faithful household, ended without ceremony; the Bible held upside down, the feet at leisure. The desecration is casual. That is the register.
@@ -430,7 +1041,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/04_guardians_descent.jpg" alt="Guardians in transit"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/04_guardians_descent.jpg" alt="Guardians in transit"></div>
     <figcaption>
       <span class="label">Plate IV</span>
       Guardians in transit. Dispatched in numbers; arriving in few. The eye the reader is being asked to develop is the eye that counts the ones who are no longer in the frame.
@@ -448,7 +1059,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/05_guardian_peril.jpg" alt="A guardian in peril"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/05_guardian_peril.jpg" alt="A guardian in peril"></div>
     <figcaption>
       <span class="label">Plate V</span>
       One of the seventy-nine. The viewer is asked to weigh the arrival by the cost of the transit, not the composure of the figure who reached the floor.
@@ -468,7 +1079,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/06_four_powers.jpg" alt="The four Powers"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/06_four_powers.jpg" alt="The four Powers"></div>
     <figcaption>
       <span class="label">Plate VI · The Four</span>
       Left to right: Zelus, Misericordia, Vindicta, Iustitia. A summary execution in a suburban warzone. This is the register the Prologue ends on.
@@ -494,7 +1105,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
   <p>What the book does not contain — direct depiction of the Trinity, of Christ, of the named Archangels, of canonized saints — is not absent by oversight. They are present by invocation, command, scripture, and effect, and their refusal to appear in figure is, in the book's understanding of its own material, the correct refusal. <em>The old rule holds: the holy is shown by what it does, not by its face.</em></p>
 
   <figure class="plate" style="margin: 1.5em 0 0.8em;">
-    <img src="assets/plates/07_iustitia_dove.jpg" alt="Iustitia with a dove">
+    <img src="../wrath-codex/assets/plates/07_iustitia_dove.jpg" alt="Iustitia with a dove">
     <figcaption><span class="label">Plate VII</span>Iustitia and a dove. Sentence and peace belong, in the classical tradition, to the same figure. The reader will find this more often than the genre has prepared him for.</figcaption>
   </figure>
   <div class="folio"><span class="num">16</span></div>
@@ -513,7 +1124,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 <!-- ═══════════════ 01_ch1_ninefold.html ═══════════════ -->
 <!-- ═══ CHAPTER I — THE NINEFOLD ORDER ═══ -->
 
-<section class="page chapter-opener">
+<section class="page chapter-opener" id="ch-ninefold">
   <div class="num">Chapter I</div>
   <h1>The Ninefold Order</h1>
   <div class="scripture">
@@ -559,7 +1170,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/ophanim_puddle.jpg" alt="Ophanim in a puddle reflection"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/ophanim_puddle.jpg" alt="Ophanim in a puddle reflection"></div>
     <figcaption>
       <span class="label">Plate VIII</span>
       A cultist at a puddle. The Ophanim is present in the reflection and is returning the look. The composition keeps the man's back to us and hands the direct gaze to the choir.
@@ -589,7 +1200,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/dominion_shadow.jpg" alt="Dominion's shadow over a contested city"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/dominion_shadow.jpg" alt="Dominion's shadow over a contested city"></div>
     <figcaption>
       <span class="label">Plate IX</span>
       A Dominion over a contested city. The figure is not in the battlespace; the shadow is. The silhouette is crowned and winged in the classical vocabulary; the jurisdiction extends as a darkening across rooftops, tanks, and a ruined parish.
@@ -613,7 +1224,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/painting_iustitia.jpg" alt="Iustitia altarpiece"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/painting_iustitia.jpg" alt="Iustitia altarpiece"></div>
     <figcaption>
       <span class="label">Plate X</span>
       Iustitia in the main nave of the refuge compound. The altarpiece predates the arrival by four centuries; the figure it shows is the figure the next chapter will meet operational.
@@ -645,7 +1256,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/seraphim_approach.jpg" alt="Seraphim descending to a Power"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/seraphim_approach.jpg" alt="Seraphim descending to a Power"></div>
     <figcaption>
       <span class="label">Plate XI</span>
       Seraphim descending into the presence of a Power. Hierarchical contact between spheres is figured, never abstracted. This is the register the book will keep.
@@ -669,7 +1280,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 <!-- ═══════════════ 02_ch2_powers.html ═══════════════ -->
 <!-- ═══ CHAPTER II — THE POWERS ═══ -->
 
-<section class="page chapter-opener">
+<section class="page chapter-opener" id="ch-powers">
   <div class="num">Chapter II</div>
   <h1>The Powers</h1>
   <div class="tagline">Second Sphere · Virtutes · the warrior choir</div>
@@ -702,7 +1313,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 <!-- IUSTITIA -->
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/painting_iustitia.jpg" alt="Iustitia altarpiece"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/painting_iustitia.jpg" alt="Iustitia altarpiece"></div>
     <figcaption>
       <span class="label">Plate XII — Iustitia</span>
       Oil on panel, Reni lineage. Sword at the vertical, dove above, the covenantal calm of a figure who has already decided.
@@ -725,7 +1336,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/iustitia_on_wall.jpg" alt="Iustitia operational"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/iustitia_on_wall.jpg" alt="Iustitia operational"></div>
     <figcaption>
       <span class="label">Plate XIII — Iustitia, operational</span>
       The same figure, the same face, the same armor; the weapon is an M60, engraved <span style="font-family:var(--fraktur);">DEUS VULT</span> in blackletter. The Reni calm is intact. The verdict is the same verdict.
@@ -737,7 +1348,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 <!-- ZELUS -->
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/painting_zelus.jpg" alt="Zelus altarpiece"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/painting_zelus.jpg" alt="Zelus altarpiece"></div>
     <figcaption>
       <span class="label">Plate XIV — Zelus</span>
       Oil on panel, late Baroque treatment. Fire rendered as correctly-ordered light rather than as chaos.
@@ -760,7 +1371,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/zelus_on_wall.jpg" alt="Zelus operational"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/zelus_on_wall.jpg" alt="Zelus operational"></div>
     <figcaption>
       <span class="label">Plate XV — Zelus, operational</span>
       Burning suburb, shotgun with <span style="font-family:var(--fraktur);">CONSUMET EOS</span> engraved across the receiver. The fire is hers; the fire is not disordered.
@@ -772,7 +1383,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 <!-- VINDICTA -->
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/painting_vindicta.jpg" alt="Vindicta altarpiece"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/painting_vindicta.jpg" alt="Vindicta altarpiece"></div>
     <figcaption>
       <span class="label">Plate XVI — Vindicta</span>
       Oil on panel, Gentileschi lineage. The figure does not rage. She calibrates.
@@ -795,7 +1406,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/vindicta_rain.jpg" alt="Vindicta operational"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/vindicta_rain.jpg" alt="Vindicta operational"></div>
     <figcaption>
       <span class="label">Plate XVII — Vindicta, operational</span>
       Sidearm engraved <span style="font-family:var(--fraktur);">MIHI VINDICTA</span>, in rain. She does not escalate. She answers.
@@ -807,7 +1418,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 <!-- MISERICORDIA -->
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/painting_misericordia.jpg" alt="Misericordia altarpiece"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/painting_misericordia.jpg" alt="Misericordia altarpiece"></div>
     <figcaption>
       <span class="label">Plate XVIII — Misericordia</span>
       Oil on panel, Piero della Francesca compositional template. The Power kneels inside a vaulted chapel, wings swept forward in place of the Madonna's cloak to shelter a wounded civilian woman; the sword is laid down on the stone at her side.
@@ -830,7 +1441,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/misericordia_on_wall.jpg" alt="Misericordia operational"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/misericordia_on_wall.jpg" alt="Misericordia operational"></div>
     <figcaption>
       <span class="label">Plate XIX — Misericordia, operational</span>
       Subway column, sidearm leveled; the weapon engraved <span style="font-family:var(--fraktur);">DONA REQUIEM</span>. The line is from the Requiem Mass — <em>requiem aeternam dona eis, Domine</em> — and is the form her mercy takes when rescue has become impossible.
@@ -867,7 +1478,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 <!-- ═══════════════ 03_ch3_guardians.html ═══════════════ -->
 <!-- ═══ CHAPTER III — THE GUARDIANS ═══ -->
 
-<section class="page chapter-opener">
+<section class="page chapter-opener" id="ch-guardians">
   <div class="num">Chapter III</div>
   <h1>The Guardians</h1>
   <div class="tagline">Ninth Choir · Angeli · the nearest to us</div>
@@ -889,7 +1500,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/guardian_peril_new.jpg" alt="Guardians in peril"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/guardian_peril_new.jpg" alt="Guardians in peril"></div>
     <figcaption>
       <span class="label">Plate XX — Guardians in Peril</span>
       The composition the book will return to: an angel interposing, wings half-forward, between a contested human figure and what is moving toward her. Note the posture. The Guardian does not charge. The Guardian holds position.
@@ -918,7 +1529,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/guardian_arrival_wounded.jpg" alt="Guardian wounded on arrival"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/guardian_arrival_wounded.jpg" alt="Guardian wounded on arrival"></div>
     <figcaption>
       <span class="label">Plate XXI — Descent</span>
       A Guardian on arrival at its assigned charge, wounded from the passage. The wings are still folded inward around the body it is now inside the room with. This is what a completed arrival looks like in the opening days of the war.
@@ -984,7 +1595,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 <!-- ═══════════════ 04_ch4_fallen.html ═══════════════ -->
 <!-- ═══ CHAPTER IV — THE FALLEN ═══ -->
 
-<section class="page chapter-opener">
+<section class="page chapter-opener" id="ch-fallen">
   <div class="num">Chapter IV</div>
   <h1>The Fallen</h1>
   <div class="tagline">Former Powers · angels in apostasy · the mirror-match tier</div>
@@ -1033,7 +1644,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/03_sacrilega_kitchen.jpg" alt="Sacrilega"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/03_sacrilega_kitchen.jpg" alt="Sacrilega"></div>
     <figcaption>
       <span class="label">Plate XXII — Sacrilega</span>
       The signature register. A faithful household, the inhabitants dead out of frame; the Fallen seated at the kitchen table, feet up, reading the family Bible upside down, amusing herself. The atrocity is not performed. It is done with. What the frame holds is the boredom that followed.
@@ -1099,7 +1710,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 <!-- ═══════════════ 05_ch5_enemy.html ═══════════════ -->
 <!-- ═══ CHAPTER V — THE ENEMY BELOW ═══ -->
 
-<section class="page chapter-opener">
+<section class="page chapter-opener" id="ch-enemy-below">
   <div class="num">Chapter V</div>
   <h1>The Enemy Below</h1>
   <div class="tagline">Cultus et Daemonia · the human volunteers and the scriptural demons</div>
@@ -1121,7 +1732,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/cultist_refsheet.jpg" alt="Cult turnaround"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/cultist_refsheet.jpg" alt="Cult turnaround"></div>
     <figcaption>
       <span class="label">Plate XXIII — The Cult</span>
       Four-panel turnaround. Burlap hood fully occluding the face, black tactical kit scavenged rather than issued, AK-pattern rifle, the <em>Sigillum Sulphuris</em> crudely stenciled in blood-red on the plate carrier. The figure is anonymous by construction. The faceless uniformity is the whole design.
@@ -1147,7 +1758,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/cultist_squad_demons.jpg" alt="Cult squad with Daemonia"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/cultist_squad_demons.jpg" alt="Cult squad with Daemonia"></div>
     <figcaption>
       <span class="label">Plate XXIV — Combined Infantry</span>
       Cult squad advancing through a ruined district, Daemonia flanking at ground level. The camera position is deliberate: the cult is always photographed from behind or from the side, because the cult does not have a face to show.
@@ -1167,7 +1778,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/daemonium_anatomy.jpg" alt="Daemonium anatomy"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/daemonium_anatomy.jpg" alt="Daemonium anatomy"></div>
     <figcaption>
       <span class="label">Plate XXV — Daemonium anatomy</span>
       Quadrupedal, knee-height to a human, elongated lean body, wide flat reptilian head with wide-set curved horns, gaping mouth with irregular fang rows, thin whip tail with spade tip, low ground-hugging crouch, broad clawed paws. Dark crimson wet-flesh skin. Pack-hunter coded at every stage of the design.
@@ -1185,7 +1796,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/daemonia_subway.jpg" alt="Daemonia in subway tunnel"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/daemonia_subway.jpg" alt="Daemonia in subway tunnel"></div>
     <figcaption>
       <span class="label">Plate XXVI</span>
       Daemonia prowling a subway tunnel, shotgun POV. The camera is below eye-level because the threat is below eye-level. The lead pack-member is inside the beam of the flashlight. The second, the third, and the fourth are in the dark beyond it.
@@ -1222,7 +1833,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 <!-- ═══════════════ 06_ch6_language.html ═══════════════ -->
 <!-- ═══ CHAPTER VI — LANGUAGE AND LITURGY ═══ -->
 
-<section class="page chapter-opener">
+<section class="page chapter-opener" id="ch-language">
   <div class="num">Chapter VI</div>
   <h1>Language &amp; Liturgy</h1>
   <div class="tagline">Sermo et Ritus · the working language of the book</div>
@@ -1334,7 +1945,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 <!-- ═══════════════ 07_ch7_hour.html ═══════════════ -->
 <!-- ═══ CHAPTER VII — THE HOUR AT STREET LEVEL ═══ -->
 
-<section class="page chapter-opener">
+<section class="page chapter-opener" id="ch-hour">
   <div class="num">Chapter VII</div>
   <h1>The Hour at Street Level</h1>
   <div class="tagline">In Saeculo · the civilian surface, the state's inability to name, and the world the Powers walk through</div>
@@ -1358,7 +1969,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/eas_gas_station.jpg" alt="EAS broadcast in abandoned gas station"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/eas_gas_station.jpg" alt="EAS broadcast in abandoned gas station"></div>
     <figcaption>
       <span class="label">Plate XXVII — The State in Its Hour</span>
       An abandoned gas-station convenience store, early collapse. The Civil Emergency Message broadcasts on the wall-mounted screen in the format the Federal Emergency Management Agency has used for routine civic hazards for decades. The register of the screen is bureaucratic. The register of the room is civilian.
@@ -1402,7 +2013,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <section class="page plate-page">
   <figure class="plate full-bleed">
-    <div class="frame"><img src="assets/plates/01_st_michael_mural.jpg" alt="Saint Michael mural over casualty scene"></div>
+    <div class="frame"><img src="../wrath-codex/assets/plates/01_st_michael_mural.jpg" alt="Saint Michael mural over casualty scene"></div>
     <figcaption>
       <span class="label">Plate XXVIII — Civic and Sacred on the Same Wall</span>
       A chapel mural of Saint Michael survives over the mass-casualty scene that followed. The civic surface the book writes into is everywhere marked with inheritance of the sacred register. The mural is older than the collapse. The casualty is newer. The wall holds them in the same frame.
@@ -1427,7 +2038,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 <!-- ═══════════════ 08_backmatter.html ═══════════════ -->
 <!-- ═══ AUTHOR'S NOTE + PLATES CATALOGUE + COLOPHON ═══ -->
 
-<section class="page chapter-opener">
+<section class="page chapter-opener" id="authors-note">
   <div class="num">Author's Note</div>
   <h1>On the Registers This Book Is Written In</h1>
   <div class="orn">† † †</div>
@@ -1487,7 +2098,7 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
 
 <!-- ═══ PLATES CATALOGUE ═══ -->
 
-<section class="page chapter-opener">
+<section class="page chapter-opener" id="appendix">
   <div class="num">Appendix</div>
   <h1>A Record of What the Images Descend From</h1>
   <div class="tagline">the principal plates, their lineages, and their scriptural warrants</div>
@@ -1634,9 +2245,204 @@ figure.plate.full-bleed { margin: 0; width: 100%; height: 100%; }
     <div class="orn">† † †</div>
   </div>
 </section>
+    </article>
+  </main>
+</div>
 
+<div class="cw-viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Plate viewer">
+  <button class="cw-viewer-close" id="viewerClose" aria-label="Close viewer">&times;</button>
+  <img class="cw-viewer-img" id="viewerImg" alt="">
+  <div class="cw-viewer-cap">
+    <span class="cw-viewer-label" id="viewerLabel"></span>
+    <span id="viewerCaption"></span>
+  </div>
+</div>
 
-</main>
+<script>
+(function () {
+  'use strict';
 
+  // ————————————————————————————————————
+  // Nav — sidebar toggle (mobile)
+  // ————————————————————————————————————
+  var nav = document.getElementById('nav');
+  var backdrop = document.getElementById('navBackdrop');
+  var navToggle = document.getElementById('navToggle');
+  function setNavOpen(open) {
+    nav.classList.toggle('is-open', open);
+    backdrop.classList.toggle('is-open', open);
+    navToggle.setAttribute('aria-expanded', String(open));
+  }
+  navToggle.addEventListener('click', function () {
+    setNavOpen(!nav.classList.contains('is-open'));
+  });
+  backdrop.addEventListener('click', function () { setNavOpen(false); });
+
+  // Close nav after clicking a link (on mobile)
+  var navLinks = nav.querySelectorAll('.cw-nav-item a');
+  navLinks.forEach(function (a) {
+    a.addEventListener('click', function () {
+      if (window.matchMedia('(max-width: 960px)').matches) setNavOpen(false);
+    });
+  });
+
+  // ————————————————————————————————————
+  // Scroll-spy — highlight current chapter in sidebar
+  // + update runhead in the top bar
+  // ————————————————————————————————————
+  var navItems = Array.from(nav.querySelectorAll('.cw-nav-item'));
+  var runhead = document.getElementById('runhead');
+
+  // Map section IDs to nav <li> and runhead labels
+  var sections = [];
+  navItems.forEach(function (li) {
+    var link = li.querySelector('a');
+    if (!link) return;
+    var id = link.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if (el) {
+      sections.push({
+        id: id,
+        el: el,
+        item: li,
+        label: link.querySelector('.cw-nav-text').textContent
+      });
+    }
+  });
+
+  function onScrollSpy() {
+    var top = window.scrollY + 120; // offset for sticky bar
+    var current = sections[0];
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].el.offsetTop <= top) current = sections[i];
+      else break;
+    }
+    navItems.forEach(function (li) { li.classList.remove('is-active'); });
+    if (current) {
+      current.item.classList.add('is-active');
+      runhead.textContent = current.label;
+    }
+  }
+
+  // ————————————————————————————————————
+  // Progress bar — shows scroll position through the document
+  // ————————————————————————————————————
+  var progress = document.getElementById('progress');
+  function onScrollProgress() {
+    var h = document.documentElement;
+    var scrolled = h.scrollTop;
+    var max = (h.scrollHeight - h.clientHeight) || 1;
+    var pct = Math.min(100, Math.max(0, (scrolled / max) * 100));
+    progress.style.width = pct.toFixed(2) + '%';
+  }
+
+  // rAF-throttled scroll handler
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      window.requestAnimationFrame(function () {
+        onScrollSpy();
+        onScrollProgress();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+  onScrollSpy();
+  onScrollProgress();
+
+  // ————————————————————————————————————
+  // Keyboard nav — left/right between sections, Esc closes viewer
+  // ————————————————————————————————————
+  function currentSectionIndex() {
+    var top = window.scrollY + 120;
+    for (var i = sections.length - 1; i >= 0; i--) {
+      if (sections[i].el.offsetTop <= top) return i;
+    }
+    return 0;
+  }
+  function jumpTo(index) {
+    index = Math.max(0, Math.min(sections.length - 1, index));
+    var el = sections[index].el;
+    window.scrollTo({ top: el.offsetTop - 60, behavior: 'smooth' });
+  }
+  document.addEventListener('keydown', function (e) {
+    // Skip if typing in an input
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+    if (e.key === 'ArrowLeft') { e.preventDefault(); jumpTo(currentSectionIndex() - 1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); jumpTo(currentSectionIndex() + 1); }
+  });
+
+  // ————————————————————————————————————
+  // Plate lightbox
+  // ————————————————————————————————————
+  var viewer = document.getElementById('viewer');
+  var viewerImg = document.getElementById('viewerImg');
+  var viewerLabel = document.getElementById('viewerLabel');
+  var viewerCaption = document.getElementById('viewerCaption');
+  var viewerClose = document.getElementById('viewerClose');
+
+  function openViewer(imgEl) {
+    var src = imgEl.getAttribute('src');
+    var alt = imgEl.getAttribute('alt') || '';
+    // Find the caption and label from the parent figure
+    var fig = imgEl.closest('figure.plate');
+    var label = '';
+    var captionText = alt;
+    if (fig) {
+      var cap = fig.querySelector('figcaption');
+      if (cap) {
+        var lbl = cap.querySelector('.label');
+        if (lbl) label = lbl.textContent;
+        // Caption text = figcaption text minus label
+        var txt = cap.textContent.trim();
+        if (lbl) txt = txt.replace(lbl.textContent, '').trim();
+        captionText = txt;
+      }
+    }
+    viewerImg.src = src;
+    viewerImg.alt = alt;
+    viewerLabel.textContent = label;
+    viewerCaption.textContent = captionText;
+    viewer.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeViewer() {
+    viewer.classList.remove('open');
+    viewerImg.src = '';
+    document.body.style.overflow = '';
+  }
+  // Click any plate image
+  document.querySelectorAll('figure.plate img').forEach(function (img) {
+    img.style.cursor = 'zoom-in';
+    img.addEventListener('click', function (e) {
+      e.preventDefault();
+      openViewer(img);
+    });
+  });
+  viewer.addEventListener('click', function (e) {
+    if (e.target === viewer) closeViewer();
+  });
+  viewerClose.addEventListener('click', closeViewer);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && viewer.classList.contains('open')) closeViewer();
+  });
+
+  // ————————————————————————————————————
+  // Smooth scroll with offset for sticky top bar (for direct anchor links)
+  // ————————————————————————————————————
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var hash = a.getAttribute('href');
+      if (hash === '#' || hash === '') return;
+      var target = document.querySelector(hash);
+      if (!target) return;
+      e.preventDefault();
+      window.scrollTo({ top: target.offsetTop - 60, behavior: 'smooth' });
+      history.replaceState(null, '', hash);
+    });
+  });
+})();
+</script>
 </body>
 </html>
