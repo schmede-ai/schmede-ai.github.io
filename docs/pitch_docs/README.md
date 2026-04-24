@@ -1,6 +1,6 @@
-# Wrath — Pitch (Web)
+# Wrath — Frontispiece (Web)
 
-Standalone web version of the Wrath pitch. Designed to be dropped under `/docs/` on a GitHub repo for GitHub Pages serving.
+Standalone web version of the Wrath frontispiece. Designed to be dropped under `/docs/` on a GitHub repo for GitHub Pages serving.
 
 ## Structure
 
