@@ -226,18 +226,31 @@ body { padding: 0 !important; background: var(--shadow-soft) !important; }
 }
 
 /* ————————————————————————————————————
-   Slide frame — preserves the fixed 792pt x 445.5pt aspect
+   Slide frame — preserves the fixed 792pt x 445.5pt aspect.
+   Fluid scaling via container queries: the slide inside renders at its
+   designed 1056 x 594 px and scales to fill whatever inline width the
+   slot has. No horizontal overflow, no per-breakpoint transform tuning.
    ———————————————————————————————————— */
 .allpages-slot {
+  container-type: inline-size;
+  width: 100%;
+  max-width: 1056px;       /* = 792pt native */
+  aspect-ratio: 1056 / 594;
   margin: 0 auto !important;
-  width: 792pt;          /* = 1056px at 96dpi */
+  overflow: hidden;
+  position: relative;
+  background: #0a0908;
   box-shadow: 0 8px 36px rgba(0,0,0,0.55);
   outline: 1px solid #2e2a24;
-  background: #0a0908;
-  transform-origin: top center;
-  transition: transform 180ms ease, margin-bottom 180ms ease;
 }
 .allpages-slot .page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1056px;
+  height: 594px;
+  transform: scale(calc(100cqw / 1056px));
+  transform-origin: top left;
   page-break-after: auto !important;
   display: block;
 }
@@ -245,24 +258,6 @@ body { padding: 0 !important; background: var(--shadow-soft) !important; }
 /* Scroll-offset so anchor scrolls don't hide behind the sticky top bar */
 .page[id^="s"] { scroll-margin-top: 76px; }
 .allpages-slot { scroll-margin-top: 76px; }
-
-/* Responsive slide scaling — we scale the whole slot and compensate
-   margin-bottom to reclaim the lost height */
-@media (max-width: 1180px) {
-  .allpages-slot { transform: scale(0.85); margin-bottom: -66px !important; }
-}
-@media (max-width: 1020px) {
-  .allpages-slot { transform: scale(0.72); margin-bottom: -124px !important; }
-}
-@media (max-width: 860px) {
-  .allpages-slot { transform: scale(0.58); margin-bottom: -186px !important; }
-}
-@media (max-width: 700px) {
-  .allpages-slot { transform: scale(0.46); margin-bottom: -240px !important; }
-}
-@media (max-width: 560px) {
-  .allpages-slot { transform: scale(0.34); margin-bottom: -294px !important; }
-}
 
 /* ————————————————————————————————————
    Responsive — collapse sidebar to drawer
