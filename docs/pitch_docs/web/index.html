@@ -53,8 +53,9 @@ html { scroll-behavior: smooth; }
 html, body { margin: 0; padding: 0; }
 body { background: #14100c; }
 
-/* Override the source's body padding/background — we handle layout in the shell */
-body { padding: 0 !important; background: var(--shadow-soft) !important; }
+/* Override the source's body padding/background — we handle layout in the shell.
+   Top padding compensates for the fixed topbar so content below isn't hidden under it. */
+body { padding: 56px 0 0 0 !important; background: var(--shadow-soft) !important; }
 
 /* Skip link */
 .skip-link {
@@ -69,11 +70,14 @@ body { padding: 0 !important; background: var(--shadow-soft) !important; }
    Top running bar
    ———————————————————————————————————— */
 .cw-topbar {
-  position: sticky; top: 0; z-index: 30;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 30;
   background: var(--shadow-ink);
   border-bottom: 1px solid var(--border-dark);
   color: var(--vellum-text);
   font-family: var(--serif-web);
+  isolation: isolate;
 }
 .cw-topbar-inner {
   display: grid;
@@ -289,6 +293,7 @@ body { padding: 0 !important; background: var(--shadow-soft) !important; }
    ———————————————————————————————————— */
 @media (max-width: 960px) and (orientation: landscape) {
   html, body { overflow: hidden; }
+  body { padding-top: 40px !important; }
 
   .cw-topbar { height: 40px; }
   .cw-topbar-inner { height: 40px; grid-template-columns: auto 1fr auto; padding-right: 12px; }
