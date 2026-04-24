@@ -292,7 +292,6 @@ body { padding: 56px 0 0 0 !important; background: var(--shadow-soft) !important
    them with scroll-snap. This matches the instinct of "rotate to read".
    ———————————————————————————————————— */
 @media (max-width: 960px) and (orientation: landscape) {
-  html, body { overflow: hidden; }
   body { padding-top: 40px !important; }
 
   .cw-topbar { height: 40px; }
@@ -301,48 +300,22 @@ body { padding: 56px 0 0 0 !important; background: var(--shadow-soft) !important
   .cw-progress { width: 60px; }
   .cw-slide-count { font-size: 10px; }
 
-  .cw-shell {
-    height: calc(100dvh - 40px);
-    min-height: 0;
-    grid-template-columns: 1fr;
-  }
+  .cw-shell { grid-template-columns: 1fr; }
+  .cw-main { padding: 0; gap: 0; }
 
-  .cw-main {
-    height: 100%;
-    padding: 0;
-    gap: 0;
-    overflow-y: auto;
-    scroll-snap-type: y mandatory;
-    -webkit-overflow-scrolling: touch;
-  }
-
+  /* Each slide fits the landscape viewport at its 1056:594 aspect ratio.
+     Slot width = min(full viewport width, width that would make the slide
+     fit vertically within the available height below the topbar).
+     The container-query-driven scale on .page (set in the base rule) then
+     scales the 1056×594 page down to exactly fill this slot. No transforms,
+     no scroll-snap — just a correctly-sized slot and letterboxing. */
   .allpages-slot {
-    width: 100vw;
+    width: min(100vw, calc((100dvh - 40px) * 1056 / 594));
     max-width: 100vw;
-    height: calc(100dvh - 40px);
-    aspect-ratio: auto;
-    margin: 0 !important;
-    box-shadow: none;
-    outline: none;
-    overflow: hidden;
-    position: relative;
-    display: block;
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-    container-type: normal;  /* disable the inline-size scaling, we'll override */
+    margin: 0 auto !important;
   }
 
-  .allpages-slot .page {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 1056px;
-    height: 594px;
-    transform: translate(-50%, -50%) scale(min(calc(100vw / 1056px), calc((100dvh - 40px) / 594px)));
-    transform-origin: center center;
-  }
-
-  /* Keep the sidebar drawer working; nudge it to match new topbar height */
+  /* Sidebar drawer anchors to the thinner topbar */
   .cw-nav { top: 40px; height: calc(100dvh - 40px); }
   .cw-nav-backdrop { top: 40px; }
 }
