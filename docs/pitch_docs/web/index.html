@@ -260,6 +260,67 @@ body { padding: 0 !important; background: var(--shadow-soft) !important; }
 .allpages-slot { scroll-margin-top: 76px; }
 
 /* ————————————————————————————————————
+   Landscape mobile — paginated, one-slide-per-screen view.
+   When the phone rotates to landscape (the natural posture for these
+   16:9 slides), each slide fills the viewport and you swipe between
+   them with scroll-snap. This matches the instinct of "rotate to read".
+   ———————————————————————————————————— */
+@media (max-width: 960px) and (orientation: landscape) {
+  html, body { overflow: hidden; }
+
+  .cw-topbar { height: 40px; }
+  .cw-topbar-inner { height: 40px; grid-template-columns: auto 1fr auto; padding-right: 12px; }
+  .cw-volume { padding-left: 12px; font-size: 10px; }
+  .cw-progress { width: 60px; }
+  .cw-slide-count { font-size: 10px; }
+
+  .cw-shell {
+    height: calc(100dvh - 40px);
+    min-height: 0;
+    grid-template-columns: 1fr;
+  }
+
+  .cw-main {
+    height: 100%;
+    padding: 0;
+    gap: 0;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .allpages-slot {
+    width: 100vw;
+    max-width: 100vw;
+    height: calc(100dvh - 40px);
+    aspect-ratio: auto;
+    margin: 0 !important;
+    box-shadow: none;
+    outline: none;
+    overflow: hidden;
+    position: relative;
+    display: block;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    container-type: normal;  /* disable the inline-size scaling, we'll override */
+  }
+
+  .allpages-slot .page {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1056px;
+    height: 594px;
+    transform: translate(-50%, -50%) scale(min(calc(100vw / 1056), calc((100dvh - 40px) / 594)));
+    transform-origin: center center;
+  }
+
+  /* Keep the sidebar drawer working; nudge it to match new topbar height */
+  .cw-nav { top: 40px; height: calc(100dvh - 40px); }
+  .cw-nav-backdrop { top: 40px; }
+}
+
+/* ————————————————————————————————————
    Responsive — collapse sidebar to drawer
    ———————————————————————————————————— */
 @media (max-width: 960px) {
@@ -1571,39 +1632,60 @@ body { padding: 0 !important; background: var(--shadow-soft) !important; }
   var slideCount = document.getElementById('slideCount');
   var progress = document.getElementById('progress');
 
+  // In landscape-mobile mode, the scroll container is .cw-main (not window).
+  // Detect dynamically and listen to both.
+  var cwMain = document.querySelector('.cw-main');
+
   function currentSlideIndex() {
-    var top = window.scrollY + window.innerHeight * 0.35;
+    var top = window.innerHeight * 0.35;
     var idx = 0;
     for (var i = 0; i < slides.length; i++) {
-      // allpages-slot wraps the section; use its bounding box
       var slot = slides[i].closest('.allpages-slot') || slides[i];
-      var rect = slot.getBoundingClientRect();
-      var yTop = window.scrollY + rect.top;
-      if (yTop <= top) idx = i;
+      // rect.top is relative to the viewport regardless of which container scrolls
+      var y = slot.getBoundingClientRect().top;
+      if (y <= top) idx = i;
       else break;
     }
     return idx;
+  }
+  function progressPct() {
+    // Which container is actually scrolling? Pick whichever has content.
+    var h = document.documentElement;
+    var mainScrolled = cwMain && cwMain.scrollTop > 0;
+    var winScrolled = h.scrollTop > 0;
+    var el, max, cur;
+    if (mainScrolled && !winScrolled) {
+      cur = cwMain.scrollTop;
+      max = cwMain.scrollHeight - cwMain.clientHeight;
+    } else if (winScrolled) {
+      cur = h.scrollTop;
+      max = h.scrollHeight - h.clientHeight;
+    } else {
+      // Neither has scrolled — pick whichever has overflow
+      if (cwMain && cwMain.scrollHeight > cwMain.clientHeight) {
+        cur = cwMain.scrollTop;
+        max = cwMain.scrollHeight - cwMain.clientHeight;
+      } else {
+        cur = h.scrollTop;
+        max = h.scrollHeight - h.clientHeight;
+      }
+    }
+    return Math.min(100, Math.max(0, (cur / (max || 1)) * 100));
   }
   function onScroll() {
     var idx = currentSlideIndex();
     var cur = slides[idx];
     var sid = cur.getAttribute('data-slide');
-    // Highlight sidebar
     navItems.forEach(function (li) { li.classList.remove('is-active'); });
     var active = navItems.find(function (li) { return li.getAttribute('data-target') === sid; });
     if (active) active.classList.add('is-active');
-    // Runhead
     runhead.textContent = titles[sid] || '';
-    // Count
     var n = idx + 1;
     slideCount.innerHTML = '<b>' + (n < 10 ? '0' + n : n) + '</b> / ' + slides.length;
-    // Progress bar
-    var h = document.documentElement;
-    var pct = Math.min(100, Math.max(0, (h.scrollTop / ((h.scrollHeight - h.clientHeight) || 1)) * 100));
-    progress.style.width = pct.toFixed(2) + '%';
+    progress.style.width = progressPct().toFixed(2) + '%';
   }
   var ticking = false;
-  window.addEventListener('scroll', function () {
+  function scheduleScroll() {
     if (!ticking) {
       window.requestAnimationFrame(function () {
         onScroll();
@@ -1611,11 +1693,22 @@ body { padding: 0 !important; background: var(--shadow-soft) !important; }
       });
       ticking = true;
     }
-  }, { passive: true });
-  window.addEventListener('resize', onScroll, { passive: true });
+  }
+  window.addEventListener('scroll', scheduleScroll, { passive: true });
+  if (cwMain) cwMain.addEventListener('scroll', scheduleScroll, { passive: true });
+  window.addEventListener('resize', scheduleScroll, { passive: true });
+  window.addEventListener('orientationchange', function () {
+    // Wait for the viewport to settle, then recalc
+    setTimeout(scheduleScroll, 250);
+  });
   onScroll();
 
-  // Smooth scroll with offset
+  // Smooth scroll with offset — uses scrollIntoView so it works regardless
+  // of which container is actually scrolling (window vs cw-main).
+  function scrollToSlot(slot) {
+    if (!slot) return;
+    slot.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
   document.querySelectorAll('a[href^="#"]').forEach(function (a) {
     a.addEventListener('click', function (e) {
       var hash = a.getAttribute('href');
@@ -1623,8 +1716,7 @@ body { padding: 0 !important; background: var(--shadow-soft) !important; }
       var target = document.querySelector(hash);
       if (!target) return;
       e.preventDefault();
-      var slot = target.closest('.allpages-slot') || target;
-      window.scrollTo({ top: slot.offsetTop - 72, behavior: 'smooth' });
+      scrollToSlot(target.closest('.allpages-slot') || target);
       history.replaceState(null, '', hash);
     });
   });
@@ -1632,8 +1724,7 @@ body { padding: 0 !important; background: var(--shadow-soft) !important; }
   // Keyboard — arrow keys navigate between slides
   function jumpTo(idx) {
     idx = Math.max(0, Math.min(slides.length - 1, idx));
-    var slot = slides[idx].closest('.allpages-slot') || slides[idx];
-    window.scrollTo({ top: slot.offsetTop - 72, behavior: 'smooth' });
+    scrollToSlot(slides[idx].closest('.allpages-slot') || slides[idx]);
   }
   document.addEventListener('keydown', function (e) {
     if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
