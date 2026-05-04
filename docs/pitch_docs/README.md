@@ -1,35 +1,29 @@
 # Wrath — Frontispiece (Web)
 
-Standalone web version of the Wrath frontispiece. Designed to be dropped under `/docs/` on a GitHub repo for GitHub Pages serving.
+Standalone web version of the Wrath frontispiece. Drops into `/docs/` on
+the GitHub Pages repo as the replacement for the previous pitch deck.
 
 ## Structure
 
 ```
-pitch_docs/
-├── index.html          single scrollable deck; all 25 pages stacked
+frontispiece_docs/
+├── index.html          single scrollable deck; all 17 pages stacked
 ├── css/
 │   └── base.css
-├── fonts/
-│   ├── Cinzel-Regular.ttf
-│   ├── Cinzel-Bold.ttf
-│   ├── EBGaramond-Regular.ttf
-│   ├── EBGaramond-Italic.ttf
-│   ├── CormorantGaramond.ttf
-│   └── UnifrakturMaguntia.ttf
-└── images/
-    ├── cover/
-    ├── heaven/
-    ├── hell/
-    ├── powers/
-    └── world/              (cosmology.png preserved; others JPEG q85)
+├── fonts/              Cinzel, EB Garamond, Cormorant, Unifraktur (TTF)
+└── images/             cover, world, heaven, powers, paintings, hell
 ```
 
-Total size: ~20 MB.
+## Deploy
 
-## Deployment
+Drop the entire folder into your GitHub repo at the same path the previous
+pitch deck lived (e.g. `docs/wrath-pitch/`), overwriting. The URL path
+stays the same so any inbound links continue to work.
 
-Drop the entire folder into your repo under `docs/` (or wherever GitHub Pages is configured to serve from). No build step required — static HTML + CSS + assets.
+## Notes
 
-## Editing
-
-All layout is driven by `css/base.css`. Per-page HTML is inlined in `index.html` — open that file to edit any page's content.
+- The cover hosts a lazy YouTube embed for the trailer (video ID
+  `RcJJOw__tIc`). Embed only works once the video is public AND the page
+  is served over HTTPS (i.e. live on GitHub Pages, not local file://).
+- Each page section has an anchor id (`#cover`, `#epigraph`, `#powers`,
+  `#sacrilega`, etc.) so a future sidebar can deep-link into the deck.
