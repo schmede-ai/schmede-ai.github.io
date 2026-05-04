@@ -441,16 +441,17 @@ body { padding: 56px 0 0 0 !important; background: var(--shadow-soft) !important
 
 <div class="allpages-slot">
 <!-- ================================================================== -->
-<!-- PAGE 1 — COVER (trailer thumbnail with lazy YouTube embed)         -->
+<!-- PAGE 1 — COVER (trailer thumbnail + lightbox modal player)         -->
 <!-- ================================================================== -->
 <section class="page page--image" id="cover" style="background: #000;" data-slide="cover">
 
-  <!-- Lazy YouTube embed: thumbnail by default; click reveals iframe.    -->
-  <!-- The interactive behavior is in a <script> block below — WeasyPrint -->
-  <!-- ignores scripts, so the PDF renders just the static thumbnail.     -->
-  <!-- TODO: replace YOUTUBE_VIDEO_ID with the real ID once published.    -->
+  <!-- Cover thumbnail. Click → opens modal. WeasyPrint ignores the      -->
+  <!-- script and renders the static thumbnail as the PDF cover.         -->
   <div id="cover-trailer"
        data-yt-id="RcJJOw__tIc"
+       role="button"
+       tabindex="0"
+       aria-label="Play Wrath trailer"
        style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;
               cursor: pointer;
               background-color: #000;
@@ -459,37 +460,168 @@ body { padding: 56px 0 0 0 !important; background: var(--shadow-soft) !important
               background-position: center;
               background-repeat: no-repeat;">
 
-    <div class="cover-play-hint"
-         style="position: absolute; bottom: 32pt; right: 36pt;
-                font-family: 'Cinzel', serif; font-weight: 700;
-                font-size: 11pt; letter-spacing: 0.28em;
-                color: rgba(243, 232, 205, 0);
-                text-shadow: 0 1pt 4pt rgba(0,0,0,0.85);
-                transition: color 220ms ease;
-                pointer-events: none;
-                user-select: none;">
-      &#9654;&nbsp;&nbsp;WATCH THE TRAILER
+    <!-- Hover veil — invisible by default; fades in on hover/focus.     -->
+    <!-- Using opacity (not a 0-alpha color + text-shadow) so there's    -->
+    <!-- no text-shadow smudge bleeding through when the cover is idle.  -->
+    <div class="cover-veil" aria-hidden="true">
+      <div class="cover-play-badge">
+        <div class="cover-play-icon">&#9654;</div>
+        <div class="cover-play-label">PLAY TRAILER</div>
+      </div>
     </div>
   </div>
 
+  <!-- Lightbox modal. Lives here in source for ergonomics, but the      -->
+  <!-- script below relocates it to <body> on init so position:fixed     -->
+  <!-- isn't trapped by a transformed ancestor (.page has scale() in     -->
+  <!-- the codex web view).                                              -->
+  <div class="trailer-modal" id="trailer-modal" hidden>
+    <button class="trailer-modal__close" type="button" aria-label="Close trailer">&times;</button>
+    <div class="trailer-modal__frame" id="trailer-iframe-mount"></div>
+  </div>
+
   <style>
-    #cover-trailer:hover .cover-play-hint { color: rgba(243, 232, 205, 0.92); }
-    @media print { .cover-play-hint { display: none; } }
+    /* ==================== Hover veil ==================== */
+    #cover-trailer .cover-veil {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0);
+      opacity: 0;
+      transition: opacity 220ms ease, background 220ms ease;
+      pointer-events: none;
+    }
+    #cover-trailer:hover .cover-veil,
+    #cover-trailer:focus-visible .cover-veil {
+      opacity: 1;
+      background: rgba(0,0,0,0.32);
+    }
+
+    .cover-play-badge {
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      color: #f3e8cd;
+      transform: translateY(6pt);
+      transition: transform 220ms ease;
+    }
+    #cover-trailer:hover .cover-play-badge,
+    #cover-trailer:focus-visible .cover-play-badge {
+      transform: translateY(0);
+    }
+
+    .cover-play-icon {
+      width: 64pt; height: 64pt;
+      border: 1.5pt solid #f3e8cd;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22pt;
+      margin: 0 auto;
+      padding-left: 4pt;     /* optical centering of the play triangle */
+      background: rgba(0,0,0,0.40);
+      box-shadow: 0 0 24pt rgba(0,0,0,0.55);
+    }
+    .cover-play-label {
+      margin-top: 12pt;
+      font-size: 11pt;
+      letter-spacing: 0.32em;
+      font-weight: 600;
+    }
+
+    /* ==================== Modal lightbox ==================== */
+    .trailer-modal {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.92);
+      display: flex; align-items: center; justify-content: center;
+      animation: trailer-fade 180ms ease-out;
+    }
+    .trailer-modal[hidden] { display: none; }
+    @keyframes trailer-fade {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .trailer-modal__close {
+      position: absolute; top: 16px; right: 22px;
+      background: none; border: none;
+      color: #f3e8cd;
+      font-family: 'Cinzel', serif; font-weight: 300;
+      font-size: 36px; line-height: 1;
+      cursor: pointer; padding: 4px 12px;
+      opacity: 0.85; transition: opacity 150ms ease;
+      z-index: 2;
+    }
+    .trailer-modal__close:hover { opacity: 1; }
+    .trailer-modal__frame {
+      width: 90vw; max-width: 1280px;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.7);
+    }
+    .trailer-modal__frame iframe {
+      width: 100%; height: 100%; border: 0; display: block;
+    }
+    /* Mobile: full-screen player */
+    @media (max-width: 720px) {
+      .trailer-modal__frame {
+        width: 100vw; height: 100vh; max-width: none;
+        aspect-ratio: auto;
+      }
+      .trailer-modal__close { top: 8px; right: 12px; font-size: 32px; }
+    }
+
+    @media print {
+      .cover-veil, .trailer-modal { display: none !important; }
+    }
   </style>
 
   <script>
     (function () {
-      var el = document.getElementById('cover-trailer');
-      if (!el) return;
-      el.addEventListener('click', function () {
-        var id = el.getAttribute('data-yt-id');
+      var trigger = document.getElementById('cover-trailer');
+      var modal   = document.getElementById('trailer-modal');
+      if (!trigger || !modal) return;
+
+      // Relocate modal to <body> so position:fixed isn't trapped inside
+      // a transformed .page ancestor (the codex web view scales .page
+      // via CSS transform, which makes it the containing block for any
+      // fixed descendant).
+      if (modal.parentNode !== document.body) {
+        document.body.appendChild(modal);
+      }
+
+      var mount = modal.querySelector('#trailer-iframe-mount');
+      var close = modal.querySelector('.trailer-modal__close');
+
+      function openModal() {
+        var id = trigger.getAttribute('data-yt-id');
         var f = document.createElement('iframe');
-        f.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1';
-        f.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:0;';
-        f.setAttribute('allow', 'autoplay; encrypted-media; fullscreen');
+        f.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0';
+        f.setAttribute('allow', 'autoplay; encrypted-media; fullscreen; picture-in-picture');
         f.setAttribute('allowfullscreen', 'true');
-        el.innerHTML = '';
-        el.appendChild(f);
+        f.setAttribute('title', 'Wrath — Trailer');
+        mount.innerHTML = '';
+        mount.appendChild(f);
+        modal.hidden = false;
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+      }
+      function closeModal() {
+        mount.innerHTML = '';   // unloading the iframe stops playback
+        modal.hidden = true;
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+      }
+
+      trigger.addEventListener('click', openModal);
+      trigger.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault(); openModal();
+        }
+      });
+      close.addEventListener('click', closeModal);
+      modal.addEventListener('click', function (e) {
+        // Click on the dim backdrop (not the player frame) closes.
+        if (e.target === modal) closeModal();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.hidden) closeModal();
       });
     })();
   </script>
