@@ -1024,6 +1024,26 @@
     background: linear-gradient(180deg, rgba(19, 19, 26, 0.4), rgba(19, 19, 26, 0));
   }
 
+  /* Subsection eyebrow inside a section (e.g., "Recent Shorts" / "Original Work — Wrath") */
+  .subsection-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin: 0 0 12px;
+  }
+  .video-grid + .subsection-label {
+    margin-top: 36px;
+  }
+  /* Anchor wrapping a feat-thumb (e.g., the Frontispiece tile that opens an external page).
+     Ensures the link doesn't inherit default underline/color and lets the inner thumb's hover state win. */
+  .feat-thumb-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
   /* Click-to-load Featured Work thumbs */
   .feat-thumb {
     position: relative;
@@ -1306,11 +1326,27 @@
       </div>
     </div>
 
-    <!-- Click opens a modal; iframe only mounts when the user commits. -->
+    <!-- Recent Shorts: existing 3 short-film tiles -->
+    <div class="subsection-label">Recent Shorts</div>
     <div class="video-grid">
       <div class="feat-thumb" data-yt="NwMVHjgSSSE" style="background-image:url('https://img.youtube.com/vi/NwMVHjgSSSE/maxresdefault.jpg')" role="button" tabindex="0" aria-label="Play Featured Work 01"></div>
       <div class="feat-thumb" data-yt="oY-X9vwLRtY" style="background-image:url('https://img.youtube.com/vi/oY-X9vwLRtY/maxresdefault.jpg')" role="button" tabindex="0" aria-label="Play Featured Work 02"></div>
       <div class="feat-thumb" data-yt="_6YD1V-w9Fc" style="background-image:url('https://img.youtube.com/vi/_6YD1V-w9Fc/maxresdefault.jpg')" role="button" tabindex="0" aria-label="Play Featured Work 03"></div>
+    </div>
+
+    <!-- Original Work — Wrath: trailer + Frontispiece, As-Seen-On-style 2-up with captions -->
+    <div class="subsection-label">Original Work — Wrath</div>
+    <div class="video-grid">
+      <div>
+        <div class="feat-thumb" data-yt="RcJJOw__tIc" style="background-image:url('wrath_trailer_thumb.jpg')" role="button" tabindex="0" aria-label="Play Wrath trailer"></div>
+        <div class="video-label">Wrath // Trailer</div>
+      </div>
+      <div>
+        <a class="feat-thumb-link" href="docs/pitch_docs/web/" rel="noopener" aria-label="Open the Wrath Frontispiece">
+          <div class="feat-thumb" style="background-image:url('wrath_frontispiece_thumb.png');background-size:cover;background-position:center;"></div>
+        </a>
+        <div class="video-label">Wrath // Frontispiece</div>
+      </div>
     </div>
 
   </div>
@@ -1901,18 +1937,18 @@
     // Manual snapshots. Public API doesn't expose:
     //  - user-level follower / generation totals
     //  - articles (/api/v1/articles 404s; /api/trpc has no CORS header from github.io)
-    // Update these when the profile moves meaningfully. Last updated: 2026-04-15.
+    // Update these when the profile moves meaningfully. Last updated: 2026-05-05.
     // downloads/modelCount are used as ultimate fallback if both live API
     // AND localStorage cache are unavailable (e.g. first-time visitor during outage).
     const MANUAL = {
-      followers: 13400,
-      generations: 296100,
-      reactions: 776300,
-      downloads: 62500,       // ultimate fallback — snapshot of total model downloads
-      modelCount: 42,         // ultimate fallback — snapshot of published model count
+      followers: 13900,
+      generations: 302300,
+      reactions: 795700,
+      downloads: 46900,       // ultimate fallback — snapshot of total model downloads
+      modelCount: 103,        // ultimate fallback — snapshot of published model count
       articleCount: 28,
       articleViews: 27026,
-      asOf: 'Apr 2026'
+      asOf: 'May 2026'
     };
 
     // Hand-curated top models — snapshot of the top 10 by downloads at the time
