@@ -444,48 +444,95 @@ body { padding: 56px 0 0 0 !important; background: var(--shadow-soft) !important
 
 <div class="allpages-slot">
 <!-- ================================================================== -->
-<!-- PAGE 1 — COVER (trailer thumbnail + lightbox modal player)         -->
+<!-- PAGE 1 — COVER (Ophanim full-bleed + episode thumbnail grid)       -->
 <!-- ================================================================== -->
 <section id="s1" class="page page--image" style="background: #000;" data-slide="s1">
 
-  <!-- Cover thumbnail. Click → opens modal. WeasyPrint ignores the      -->
-  <!-- script and renders the static thumbnail as the PDF cover.         -->
-  <div id="cover-trailer"
-       data-yt-id="RcJJOw__tIc"
-       role="button"
-       tabindex="0"
-       aria-label="Play Wrath trailer"
-       style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-              cursor: pointer;
-              background-color: #000;
-              background-image: url('../images/cover/wrath_thumb.jpg');
-              background-size: cover;
-              background-position: center;
-              background-repeat: no-repeat;">
+  <!-- Full-bleed background: Ophanim over a small-town street. -->
+  <div class="full-bleed" style="background-image: url('../images/cover/ophanim_cover.jpg');"></div>
 
-    <!-- Hover veil — invisible by default; fades in on hover/focus.     -->
-    <!-- Using opacity (not a 0-alpha color + text-shadow) so there's    -->
-    <!-- no text-shadow smudge bleeding through when the cover is idle.  -->
-    <div class="cover-veil" aria-hidden="true">
-      <div class="cover-play-badge">
-        <div class="cover-play-icon">&#9654;</div>
-        <div class="cover-play-label">PLAY TRAILER</div>
+  <!-- Subtle darkening overlay for text + thumbnail tile legibility.    -->
+  <!-- Image is already moody — light hand here so the Ophanim breathes. -->
+  <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+              background: rgba(0,0,0,0.32);
+              pointer-events: none;"></div>
+
+  <!-- Title block: top-left, asymmetric. Leaves the Ophanim (upper-right) -->
+  <!-- unobstructed and uses the open-sky negative space on the image's   -->
+  <!-- left side. Lets .titleface and .eyebrow inherit their canonical    -->
+  <!-- letter-spacing / weight from base.css for consistency with the     -->
+  <!-- rest of the deck.                                                   -->
+  <div style="position: absolute; top: 38pt; left: 56pt; z-index: 2;
+              text-shadow: 0 1pt 4pt rgba(0,0,0,0.85);">
+    <div class="eyebrow" style="color: #d9c890;">
+      A Cosmology in Contemporary Collapse
+    </div>
+    <div class="titleface" style="color: #f3e8cd; font-size: 64pt; line-height: 1; margin-top: 14pt;">
+      Wrath
+    </div>
+  </div>
+
+  <!-- Episode/asset grid: bottom-anchored, 2 tiles to start, expands as  -->
+  <!-- new episodes drop. Each tile is a click-to-play YouTube thumb that -->
+  <!-- opens the shared lightbox modal below.                             -->
+  <div style="position: absolute; bottom: 32pt; left: 60pt; right: 60pt; z-index: 2;
+              display: grid; grid-template-columns: 1fr 1fr; gap: 28pt;">
+    <div>
+      <div class="cover-thumb" data-yt-id="RcJJOw__tIc" role="button" tabindex="0"
+           aria-label="Play Wrath trailer"
+           style="aspect-ratio: 16/9; background-color: #000;
+                  background-image: url('../images/cover/wrath_thumb.jpg');
+                  background-size: cover; background-position: center;">
+        <div class="cover-thumb-veil" aria-hidden="true">
+          <div class="cover-play-icon-small">&#9654;</div>
+        </div>
+      </div>
+      <div class="eyebrow" style="text-align: center; margin-top: 10pt; color: #d9c890;
+                                   text-shadow: 0 1pt 3pt rgba(0,0,0,0.85);">
+        Wrath &middot; Trailer
+      </div>
+    </div>
+
+    <div>
+      <div class="cover-thumb" data-yt-id="wffear3y12k" role="button" tabindex="0"
+           aria-label="Play Iustitia, episode one"
+           style="aspect-ratio: 16/9; background-color: #000;
+                  background-image: url('../images/cover/iustitia_ep01_thumb.jpg');
+                  background-size: cover; background-position: center;">
+        <div class="cover-thumb-veil" aria-hidden="true">
+          <div class="cover-play-icon-small">&#9654;</div>
+        </div>
+      </div>
+      <div class="eyebrow" style="text-align: center; margin-top: 10pt; color: #d9c890;
+                                   text-shadow: 0 1pt 3pt rgba(0,0,0,0.85);">
+        I &middot; Iustitia &middot; Justice
       </div>
     </div>
   </div>
 
-  <!-- Lightbox modal. Lives here in source for ergonomics, but the      -->
-  <!-- script below relocates it to <body> on init so position:fixed     -->
-  <!-- isn't trapped by a transformed ancestor (.page has scale() in     -->
-  <!-- the codex web view).                                              -->
+  <!-- Lightbox modal. Same infrastructure as before — relocated to <body> -->
+  <!-- by the script so position:fixed isn't trapped by a transformed      -->
+  <!-- .page ancestor in the web view.                                     -->
   <div class="trailer-modal" id="trailer-modal" hidden>
-    <button class="trailer-modal__close" type="button" aria-label="Close trailer">&times;</button>
+    <button class="trailer-modal__close" type="button" aria-label="Close">&times;</button>
     <div class="trailer-modal__frame" id="trailer-iframe-mount"></div>
   </div>
 
   <style>
-    /* ==================== Hover veil ==================== */
-    #cover-trailer .cover-veil {
+    /* ==================== Cover thumbnail tiles ==================== */
+    .cover-thumb {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1pt solid rgba(58, 48, 39, 0.7);
+      transition: border-color 220ms ease, transform 220ms ease;
+    }
+    .cover-thumb:hover, .cover-thumb:focus-visible {
+      border-color: #d9c890;
+      transform: translateY(-1.5pt);
+      outline: none;
+    }
+    .cover-thumb-veil {
       position: absolute; inset: 0;
       display: flex; align-items: center; justify-content: center;
       background: rgba(0,0,0,0);
@@ -493,40 +540,18 @@ body { padding: 56px 0 0 0 !important; background: var(--shadow-soft) !important
       transition: opacity 220ms ease, background 220ms ease;
       pointer-events: none;
     }
-    #cover-trailer:hover .cover-veil,
-    #cover-trailer:focus-visible .cover-veil {
-      opacity: 1;
-      background: rgba(0,0,0,0.32);
-    }
-
-    .cover-play-badge {
-      text-align: center;
-      font-family: 'Cinzel', serif;
-      color: #f3e8cd;
-      transform: translateY(6pt);
-      transition: transform 220ms ease;
-    }
-    #cover-trailer:hover .cover-play-badge,
-    #cover-trailer:focus-visible .cover-play-badge {
-      transform: translateY(0);
-    }
-
-    .cover-play-icon {
-      width: 64pt; height: 64pt;
-      border: 1.5pt solid #f3e8cd;
+    .cover-thumb:hover .cover-thumb-veil,
+    .cover-thumb:focus-visible .cover-thumb-veil { opacity: 1; background: rgba(0,0,0,0.30); }
+    .cover-play-icon-small {
+      width: 44pt; height: 44pt;
+      border: 1.3pt solid #f3e8cd;
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 22pt;
-      margin: 0 auto;
-      padding-left: 4pt;     /* optical centering of the play triangle */
+      font-family: 'Cinzel', serif;
+      color: #f3e8cd;
+      font-size: 14pt;
+      padding-left: 3pt;     /* optical centering of the play triangle */
       background: rgba(0,0,0,0.40);
-      box-shadow: 0 0 24pt rgba(0,0,0,0.55);
-    }
-    .cover-play-label {
-      margin-top: 12pt;
-      font-size: 11pt;
-      letter-spacing: 0.32em;
-      font-weight: 600;
     }
 
     /* ==================== Modal lightbox ==================== */
@@ -577,14 +602,12 @@ body { padding: 56px 0 0 0 !important; background: var(--shadow-soft) !important
 
   <script>
     (function () {
-      var trigger = document.getElementById('cover-trailer');
-      var modal   = document.getElementById('trailer-modal');
-      if (!trigger || !modal) return;
+      var modal = document.getElementById('trailer-modal');
+      if (!modal) return;
 
       // Relocate modal to <body> so position:fixed isn't trapped inside
-      // a transformed .page ancestor (the codex web view scales .page
-      // via CSS transform, which makes it the containing block for any
-      // fixed descendant).
+      // a transformed .page ancestor (the web view scales .page via CSS
+      // transform, which would make it the containing block for fixed).
       if (modal.parentNode !== document.body) {
         document.body.appendChild(modal);
       }
@@ -592,13 +615,12 @@ body { padding: 56px 0 0 0 !important; background: var(--shadow-soft) !important
       var mount = modal.querySelector('#trailer-iframe-mount');
       var close = modal.querySelector('.trailer-modal__close');
 
-      function openModal() {
-        var id = trigger.getAttribute('data-yt-id');
+      function openModal(ytId, title) {
         var f = document.createElement('iframe');
-        f.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0';
+        f.src = 'https://www.youtube.com/embed/' + ytId + '?autoplay=1&rel=0';
         f.setAttribute('allow', 'autoplay; encrypted-media; fullscreen; picture-in-picture');
         f.setAttribute('allowfullscreen', 'true');
-        f.setAttribute('title', 'Wrath — Trailer');
+        f.setAttribute('title', title || 'Wrath');
         mount.innerHTML = '';
         mount.appendChild(f);
         modal.hidden = false;
@@ -612,15 +634,22 @@ body { padding: 56px 0 0 0 !important; background: var(--shadow-soft) !important
         document.body.style.overflow = '';
       }
 
-      trigger.addEventListener('click', openModal);
-      trigger.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault(); openModal();
-        }
+      // Wire every cover thumbnail (trailer, ep01, future episodes) to
+      // the shared modal — each tile carries its own data-yt-id.
+      document.querySelectorAll('.cover-thumb[data-yt-id]').forEach(function (t) {
+        t.addEventListener('click', function () {
+          openModal(t.getAttribute('data-yt-id'), t.getAttribute('aria-label'));
+        });
+        t.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openModal(t.getAttribute('data-yt-id'), t.getAttribute('aria-label'));
+          }
+        });
       });
+
       close.addEventListener('click', closeModal);
       modal.addEventListener('click', function (e) {
-        // Click on the dim backdrop (not the player frame) closes.
         if (e.target === modal) closeModal();
       });
       document.addEventListener('keydown', function (e) {
