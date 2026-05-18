@@ -79,11 +79,11 @@
     </div>
   </div>
 
-  <!-- Episode/asset grid: bottom-anchored, 2 tiles to start, expands as  -->
-  <!-- new episodes drop. Each tile is a click-to-play YouTube thumb that -->
-  <!-- opens the shared lightbox modal below.                             -->
+  <!-- Episode/asset grid: bottom-anchored, expands as new episodes drop.  -->
+  <!-- Each tile is a click-to-play YouTube thumb that opens the shared    -->
+  <!-- lightbox modal below.                                               -->
   <div style="position: absolute; bottom: 32pt; left: 60pt; right: 60pt; z-index: 2;
-              display: grid; grid-template-columns: 1fr 1fr; gap: 28pt;">
+              display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20pt;">
     <div>
       <div class="cover-thumb" data-yt-id="RcJJOw__tIc" role="button" tabindex="0"
            aria-label="Play Wrath trailer"
@@ -113,6 +113,22 @@
       <div class="eyebrow" style="text-align: center; margin-top: 10pt; color: #d9c890;
                                    text-shadow: 0 1pt 3pt rgba(0,0,0,0.85);">
         I &middot; Iustitia &middot; Justice
+      </div>
+    </div>
+
+    <div>
+      <div class="cover-thumb" data-yt-id="E3eOjuLJmz4" role="button" tabindex="0"
+           aria-label="Play Caritas, episode two"
+           style="aspect-ratio: 16/9; background-color: #000;
+                  background-image: url('images/cover/caritas_ep02_thumb.jpg');
+                  background-size: cover; background-position: center;">
+        <div class="cover-thumb-veil" aria-hidden="true">
+          <div class="cover-play-icon-small">&#9654;</div>
+        </div>
+      </div>
+      <div class="eyebrow" style="text-align: center; margin-top: 10pt; color: #d9c890;
+                                   text-shadow: 0 1pt 3pt rgba(0,0,0,0.85);">
+        II &middot; Caritas &middot; Love
       </div>
     </div>
   </div>
