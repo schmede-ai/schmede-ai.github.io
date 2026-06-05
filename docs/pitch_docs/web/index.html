@@ -476,70 +476,95 @@ body { padding: 56px 0 0 0 !important; background: var(--shadow-soft) !important
   <!-- Each tile is a click-to-play YouTube thumb that opens the shared    -->
   <!-- lightbox modal below.                                               -->
   <div style="position: absolute; bottom: 32pt; left: 60pt; right: 60pt; z-index: 2;
-              display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16pt;">
-    <div>
-      <div class="cover-thumb" data-yt-id="RcJJOw__tIc" role="button" tabindex="0"
-           aria-label="Play Wrath trailer"
-           style="aspect-ratio: 16/9; background-color: #000;
-                  background-image: url('../images/cover/wrath_thumb.jpg');
-                  background-size: cover; background-position: center;">
-        <div class="cover-thumb-veil" aria-hidden="true">
-          <div class="cover-play-icon-small">&#9654;</div>
+              display: flex; flex-direction: column; gap: 16pt;">
+
+    <!-- Trailer hero (centered, sized to sit in the dark channel between
+         the WRATH headline and the Ophanim ring) -->
+    <div style="display: flex; justify-content: center;">
+      <div style="width: 200pt;">
+        <div class="cover-thumb" data-yt-id="RcJJOw__tIc" role="button" tabindex="0"
+             aria-label="Play Wrath trailer"
+             style="aspect-ratio: 16/9; background-color: #000;
+                    background-image: url('../images/cover/wrath_thumb.jpg');
+                    background-size: cover; background-position: center;">
+          <div class="cover-thumb-veil" aria-hidden="true">
+            <div class="cover-play-icon-small">&#9654;</div>
+          </div>
         </div>
-      </div>
-      <div class="eyebrow" style="text-align: center; margin-top: 10pt; color: #d9c890;
-                                   text-shadow: 0 1pt 3pt rgba(0,0,0,0.85);">
-        Wrath &middot; Trailer
+        <div class="eyebrow" style="text-align: center; margin-top: 8pt; color: #d9c890;
+                                     text-shadow: 0 1pt 3pt rgba(0,0,0,0.85);">
+          Wrath &middot; Trailer
+        </div>
       </div>
     </div>
 
-    <div>
-      <div class="cover-thumb" data-yt-id="wffear3y12k" role="button" tabindex="0"
-           aria-label="Play Iustitia, episode one"
-           style="aspect-ratio: 16/9; background-color: #000;
-                  background-image: url('../images/cover/iustitia_ep01_thumb.jpg');
-                  background-size: cover; background-position: center;">
-        <div class="cover-thumb-veil" aria-hidden="true">
-          <div class="cover-play-icon-small">&#9654;</div>
+    <!-- Episodes row (4-across) -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 14pt;">
+      <div>
+        <div class="cover-thumb" data-yt-id="wffear3y12k" role="button" tabindex="0"
+             aria-label="Play Iustitia, episode one"
+             style="aspect-ratio: 16/9; background-color: #000;
+                    background-image: url('../images/cover/iustitia_ep01_thumb.jpg');
+                    background-size: cover; background-position: center;">
+          <div class="cover-thumb-veil" aria-hidden="true">
+            <div class="cover-play-icon-small">&#9654;</div>
+          </div>
+        </div>
+        <div class="eyebrow" style="text-align: center; margin-top: 10pt; color: #d9c890;
+                                     text-shadow: 0 1pt 3pt rgba(0,0,0,0.85);">
+          I &middot; Iustitia &middot; Justice
         </div>
       </div>
-      <div class="eyebrow" style="text-align: center; margin-top: 10pt; color: #d9c890;
-                                   text-shadow: 0 1pt 3pt rgba(0,0,0,0.85);">
-        I &middot; Iustitia &middot; Justice
+
+      <div>
+        <div class="cover-thumb" data-yt-id="E3eOjuLJmz4" role="button" tabindex="0"
+             aria-label="Play Caritas, episode two"
+             style="aspect-ratio: 16/9; background-color: #000;
+                    background-image: url('../images/cover/caritas_ep02_thumb.jpg');
+                    background-size: cover; background-position: center;">
+          <div class="cover-thumb-veil" aria-hidden="true">
+            <div class="cover-play-icon-small">&#9654;</div>
+          </div>
+        </div>
+        <div class="eyebrow" style="text-align: center; margin-top: 10pt; color: #d9c890;
+                                     text-shadow: 0 1pt 3pt rgba(0,0,0,0.85);">
+          II &middot; Caritas &middot; Love
+        </div>
+      </div>
+
+      <div>
+        <div class="cover-thumb" data-yt-id="iTmcAVKpfUU" role="button" tabindex="0"
+             aria-label="Play Vindicta, episode three"
+             style="aspect-ratio: 16/9; background-color: #000;
+                    background-image: url('../images/cover/vindicta_ep03_thumb.jpg');
+                    background-size: cover; background-position: center;">
+          <div class="cover-thumb-veil" aria-hidden="true">
+            <div class="cover-play-icon-small">&#9654;</div>
+          </div>
+        </div>
+        <div class="eyebrow" style="text-align: center; margin-top: 10pt; color: #d9c890;
+                                     text-shadow: 0 1pt 3pt rgba(0,0,0,0.85);">
+          III &middot; Vindicta &middot; Vengeance
+        </div>
+      </div>
+
+      <div>
+        <div class="cover-thumb" data-yt-id="sdL_cwn_eBk" role="button" tabindex="0"
+             aria-label="Play Zelus, episode four"
+             style="aspect-ratio: 16/9; background-color: #000;
+                    background-image: url('../images/cover/zelus_ep04_thumb.jpg');
+                    background-size: cover; background-position: center;">
+          <div class="cover-thumb-veil" aria-hidden="true">
+            <div class="cover-play-icon-small">&#9654;</div>
+          </div>
+        </div>
+        <div class="eyebrow" style="text-align: center; margin-top: 10pt; color: #d9c890;
+                                     text-shadow: 0 1pt 3pt rgba(0,0,0,0.85);">
+          IV &middot; Zelus &middot; Zeal
+        </div>
       </div>
     </div>
 
-    <div>
-      <div class="cover-thumb" data-yt-id="E3eOjuLJmz4" role="button" tabindex="0"
-           aria-label="Play Caritas, episode two"
-           style="aspect-ratio: 16/9; background-color: #000;
-                  background-image: url('../images/cover/caritas_ep02_thumb.jpg');
-                  background-size: cover; background-position: center;">
-        <div class="cover-thumb-veil" aria-hidden="true">
-          <div class="cover-play-icon-small">&#9654;</div>
-        </div>
-      </div>
-      <div class="eyebrow" style="text-align: center; margin-top: 10pt; color: #d9c890;
-                                   text-shadow: 0 1pt 3pt rgba(0,0,0,0.85);">
-        II &middot; Caritas &middot; Love
-      </div>
-    </div>
-
-    <div>
-      <div class="cover-thumb" data-yt-id="iTmcAVKpfUU" role="button" tabindex="0"
-           aria-label="Play Vindicta, episode three"
-           style="aspect-ratio: 16/9; background-color: #000;
-                  background-image: url('../images/cover/vindicta_ep03_thumb.jpg');
-                  background-size: cover; background-position: center;">
-        <div class="cover-thumb-veil" aria-hidden="true">
-          <div class="cover-play-icon-small">&#9654;</div>
-        </div>
-      </div>
-      <div class="eyebrow" style="text-align: center; margin-top: 10pt; color: #d9c890;
-                                   text-shadow: 0 1pt 3pt rgba(0,0,0,0.85);">
-        III &middot; Vindicta &middot; Vengeance
-      </div>
-    </div>
   </div>
 
   <!-- Lightbox modal. Same infrastructure as before — relocated to <body> -->
